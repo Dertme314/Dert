@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Portfolio - YourName.dev</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Custom Colors: Blue, Black, White */
+            --primary-blue: #00bfff; /* Bright Blue for accents and neon */
+            --secondary-accent: #ffffff; /* White/Light color for contrast */
+            --dark-bg: #030303; 
+            --mid-dark: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+        }
+
+        /* --- Background Effect: Subtle Star/Particle Vibe --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Creating a subtle dark texture/starfield */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        /* --- Animations --- */
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { text-shadow: var(--neon-glow); }
+            20%, 24%, 55% { text-shadow: none; opacity: 0.8; }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 5px rgba(0, 191, 255, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(0, 191, 255, 0.8), 0 0 30px rgba(0, 191, 255, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(0, 191, 255, 0.3); }
+        }
+
+        /* --- Custom Neon/Glow Effects (Now Blue) --- */
+        .neon-text {
+            --neon-glow: 
+                0 0 10px rgba(0, 191, 255, 0.9),
+                0 0 25px rgba(0, 191, 255, 0.6),
+                0 0 40px rgba(0, 191, 255, 0.3);
+            color: var(--primary-blue);
+            text-shadow: var(--neon-glow);
+            animation: neonFlicker 8s infinite alternate; /* Subtle, non-distracting flicker */
+        }
+
+        .glow-box-border {
+            /* Combined Blue and White glow effect for the bio box */
+            background: var(--mid-dark);
+            border-radius: 0.75rem; 
+            padding: 3px;
+            background-clip: padding-box;
+            border: 3px solid transparent;
+            
+            /* Gradient border effect */
+            border-image: linear-gradient(to right, var(--primary-blue) 30%, var(--secondary-accent) 70%);
+            border-image-slice: 1;
+            
+            /* Adding internal glow for depth */
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8),
+                        0 0 15px rgba(0, 191, 255, 0.3), /* External subtle glow (Blue) */
+                        0 0 15px rgba(255, 255, 255, 0.2); /* Secondary glow (White) */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glow-box-border:hover {
+            transform: scale(1.01);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9),
+                        0 0 30px rgba(0, 191, 255, 0.6), 
+                        0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-link-item:hover {
+            color: white;
+            box-shadow: 0 0 8px var(--primary-blue);
+            background-color: rgba(0, 191, 255, 0.15); /* Blue background hover */
+        }
+
+        .skill-tag {
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4); /* Blue hover glow */
+        }
+
+        .expertise-button {
+             animation: pulseGlow 2s infinite;
+             box-shadow: 0 0 10px rgba(0, 191, 255, 0.6); /* Blue pulse */
+        }
+
+        .expertise-button:hover {
+            animation: none;
+        }
+    </style>
+</head>
+<body class="pt-20">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="fixed top-0 left-0 w-full flex justify-center z-50 bg-gray-900/80 backdrop-blur-sm p-3 border-b border-gray-800">
+        <div class="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl space-y-2 md:space-y-0">
+            
+            <!-- Nav Links (Rounded Capsule) -->
+            <div class="flex items-center space-x-2 p-1 bg-gray-900 border border-gray-700 rounded-full shadow-2xl shadow-black">
+                <a href="#home" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Home</a>
+                <a href="#about" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">About</a>
+                <a href="#projects" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Projects</a>
+                <a href="#skills" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Skills</a>
+                <a href="#contact" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Contact</a>
+            </div>
+
+            <!-- Social Icons (Updated Links) -->
+            <div class="flex space-x-4">
+                <a href="https://discord.com/users/817078537366143026" target="_blank" class="text-gray-400 hover:text-primary-blue transition duration-300 p-2 rounded-full hover:shadow-lg hover:shadow-primary-blue/50">
+                    <i class="fab fa-discord text-xl"></i>
+                </a>
+                <a href="https://github.com/dertme314" target="_blank" class="text-gray-400 hover:text-white transition duration-300 p-2 rounded-full hover:shadow-lg hover:shadow-white/50">
+                    <i class="fab fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container mx-auto px-4 py-16">
+
+        <!-- HERO SECTION (High-impact neon title - Text Updated) -->
+        <section id="home" class="text-center mb-32">
+            <h1 class="text-6xl sm:text-8xl font-black tracking-tighter mb-4 neon-text">
+                DERT.VERCEL.APP
+            </h1>
+            <p class="text-xl sm:text-3xl text-gray-400 font-light italic mb-12">
+                - Where Imagination and Creation come together -
+            </p>
+
+            <!-- CTA Buttons (Links & Logic Updated) -->
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8">
+                <a href="#skills" class="expertise-button bg-primary-blue/20 border border-primary-blue text-white font-bold py-3 px-8 rounded-xl transition duration-300 text-lg hover:bg-primary-blue/40 hover:scale-[1.03]">
+                    Explore Expertise 🔥
+                </a>
+                <a href="https://guns.lol/dertme314" target="_blank" class="bg-transparent border border-gray-600 text-white font-semibold py-3 px-8 rounded-xl transition duration-300 hover:border-white hover:bg-white/10 hover:shadow-md hover:shadow-gray-500/30">
+                    My Bio Link
+                </a>
+            </div>
+        </section>
+
+        <!-- ABOUT / BIO SECTION (Framed with the split-color glow) -->
+        <section id="about" class="flex justify-center mb-24">
+            <div class="w-full max-w-5xl p-1 lg:p-10">
+                <div class="flex flex-col lg:flex-row items-center p-8 glow-box-border rounded-xl">
+                    
+                    <!-- Avatar & Intro (Updated Color) -->
+                    <div class="flex-shrink-0 mb-6 lg:mb-0 lg:mr-10 text-center">
+                        <!-- Placeholder Avatar with strong blue shadow -->
+                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=AVATAR" alt="Profile Avatar" class="w-36 h-36 object-cover rounded-full border-4 border-primary-blue mx-auto shadow-2xl shadow-primary-blue/70 transition duration-500 hover:scale-105">
+                        <h2 class="text-3xl font-bold mt-4 text-white tracking-wider">The Creator</h2>
+                    </div>
+
+                    <!-- Bio Text (Updated to sound more human and relate to fun projects) -->
+                    <div class="text-lg text-left">
+                        <p class="mb-4 text-gray-300">
+                            Hey there! I'm Dert, and honestly, I just love messing around with code and building cool stuff for fun. If I can think it up, I try to make it work.
+                        </p>
+                        <p class="text-gray-300">
+                            My focus is on turning random ideas into working projects- whether that's transforming video into ASCII art, building small desktop apps with Electron, or just keeping my personal websites running smoothly. This whole site is basically a sandbox for my hobbies. Let's see what breaks next!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- PROJECTS SECTION (New Projects and Descriptions) -->
+        <section id="projects" class="mt-24 text-center">
+            <h2 class="text-5xl font-bold text-gray-100 mb-16 relative">
+                <span class="border-b-4 border-primary-blue pb-1">PROJECTS</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
+                
+                <!-- Project Card 1: dert-ascii -->
+                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">dert-ascii</h3>
+                        <p class="text-gray-400 text-sm mb-3">Converts MP4 video files into ASCII art representations.</p>
+                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, JavaScript (Public)</span>
+                    </div>
+                    <a href="https://github.com/dertme314/dert-ascii" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
+                        View Code <i class="fab fa-github ml-1 text-xl"></i>
+                    </a>
+                </div>
+                
+                <!-- Project Card 2: Dertme314.github.io -->
+                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">Dertme314.github.io</h3>
+                        <p class="text-gray-400 text-sm mb-3">The personal portfolio and web presence site.</p>
+                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, CSS, JavaScript (Public)</span>
+                    </div>
+                    <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
+                        View Code <i class="fab fa-github ml-1 text-xl"></i>
+                    </a>
+                </div>
+                
+                <!-- Project Card 3: xeno-fixes -->
+                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">xeno-fixes</h3>
+                        <p class="text-gray-400 text-sm mb-3">A collection of fixes for the Xeno project.</p>
+                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, CSS, JavaScript (Public)</span>
+                    </div>
+                    <a href="https://github.com/dertme314/xeno-fixes" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
+                        View Code <i class="fab fa-github ml-1 text-xl"></i>
+                    </a>
+                </div>
+
+                <!-- Project Card 4: Xylo.Download -->
+                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">Xylo.Download</h3>
+                        <p class="text-gray-400 text-sm mb-3">A dedicated website for installing the Xylo application.</p>
+                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, Web Design (Public)</span>
+                    </div>
+                    <a href="https://github.com/dertme314/Xylo.Download" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
+                        View Code <i class="fab fa-github ml-1 text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Project Card 5: ZaplyAPI (Added as a separate row due to space) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 mt-8">
+                 <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between md:col-span-1 lg:col-span-1">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">ZaplyAPI</h3>
+                        <p class="text-gray-400 text-sm mb-3">An application programming interface for Zaply.</p>
+                        <span class="text-xs text-gray-500 block">Tech Stack: API Development (Public)</span>
+                    </div>
+                    <a href="https://github.com/dertme314/ZaplyAPI" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
+                        View Code <i class="fab fa-github ml-1 text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION (Updated skills and Blue/White theme) -->
+        <section id="skills" class="mt-32 text-center">
+            <h2 class="text-5xl font-bold text-gray-100 mb-16 relative">
+                <span class="border-b-4 border-primary-blue pb-1">SKILLS STACK</span>
+            </h2>
+            <div class="flex flex-wrap justify-center gap-6 px-4">
+                <!-- New Skills / Blue Primary -->
+                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
+                    <i class="fab fa-html5 mr-2"></i> HTML5
+                </span>
+                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
+                    <i class="fab fa-css3-alt mr-2"></i> CSS3 / Tailwind
+                </span>
+                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
+                    <i class="fab fa-react mr-2"></i> React / Next.js
+                </span>
+                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
+                    <i class="fab fa-node-js mr-2"></i> Node / Express
+                </span>
+                <!-- Electron (Neutral/White Accent) -->
+                <span class="skill-tag px-6 py-3 rounded-xl bg-gray-700/50 border border-white/50 text-white font-medium shadow-lg shadow-white/30">
+                    <i class="fas fa-desktop mr-2"></i> Electron
+                </span>
+                <!-- Blue Primary -->
+                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
+                    <i class="fas fa-database mr-2"></i> MongoDB / Firebase
+                </span>
+                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
+                    <i class="fas fa-code mr-2"></i> TypeScript / Python
+                </span>
+                <!-- White Accent -->
+                <span class="skill-tag px-6 py-3 rounded-xl bg-gray-700/50 border border-white/50 text-gray-300 font-medium shadow-lg shadow-gray-700/40">
+                    <i class="fas fa-puzzle-piece mr-2"></i> UI/UX Design
+                </span>
+            </div>
+        </section>
+        
+        <!-- CONTACT SECTION (Updated Link & Color) -->
+        <section id="contact" class="mt-32 text-center p-16 bg-gray-900 rounded-3xl border border-gray-800 shadow-2xl shadow-black/70">
+            <h2 class="text-5xl font-bold text-white mb-4 tracking-tight">
+                LET'S CONNECT
+            </h2>
+            <p class="text-xl text-gray-400 mb-10">
+                Have a project idea? Need a collaborator? I'm always open to new connections.
+            </p>
+            <a href="https://discord.com/users/817078537366143026" target="_blank" class="inline-block bg-primary-blue text-white font-bold py-4 px-12 rounded-full text-xl transition duration-300 hover:bg-blue-600 shadow-2xl shadow-primary-blue/70 hover:scale-105">
+                <i class="fab fa-discord mr-3"></i> Direct Message (Discord)
+            </a>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-8 border-t border-gray-800 mt-20 bg-gray-900/50">
+        <p class="text-gray-600 text-sm tracking-wider">&copy; 2025 DERT.VERCEL.APP - Code is Poetry</p>
+    </footer>
+
+</body>
+</html>
