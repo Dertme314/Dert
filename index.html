@@ -1,326 +1,496 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Portfolio - YourName.dev</title>
+    <title>Developer Portfolio - Dert</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <!-- Load Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#00bfff',
+                            dark: '#050505',
+                            card: 'rgba(20, 20, 20, 0.6)'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         :root {
-            /* Custom Colors: Blue, Black, White */
-            --primary-blue: #00bfff; /* Bright Blue for accents and neon */
-            --secondary-accent: #ffffff; /* White/Light color for contrast */
-            --dark-bg: #030303; 
-            --mid-dark: #1a1a1a;
+            --primary-blue: #00bfff;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--dark-bg);
+            background-color: #050505;
             color: #e0e0e0;
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+            overflow-x: hidden;
         }
 
-        /* --- Background Effect: Subtle Star/Particle Vibe --- */
-        body::before {
-            content: '';
+        /* --- Canvas Background --- */
+        #bgCanvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Creating a subtle dark texture/starfield */
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
             z-index: -1;
-            opacity: 0.5;
         }
 
-        /* --- Animations --- */
-        @keyframes neonFlicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { text-shadow: var(--neon-glow); }
-            20%, 24%, 55% { text-shadow: none; opacity: 0.8; }
+        /* --- Scrollbar Customization --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue);
+        }
+
+        /* --- Text Gradients --- */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- Glass Cards --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--primary-blue);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px -10px rgba(0, 191, 255, 0.3);
+        }
+
+        /* --- Neon Glow Animation --- */
+        .neon-text-pulse {
+            text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+            animation: pulseGlow 3s infinite alternate;
         }
 
         @keyframes pulseGlow {
-            0% { box-shadow: 0 0 5px rgba(0, 191, 255, 0.3); }
-            50% { box-shadow: 0 0 15px rgba(0, 191, 255, 0.8), 0 0 30px rgba(0, 191, 255, 0.4); }
-            100% { box-shadow: 0 0 5px rgba(0, 191, 255, 0.3); }
+            0% { text-shadow: 0 0 10px rgba(0, 191, 255, 0.5); }
+            100% { text-shadow: 0 0 25px rgba(0, 191, 255, 0.9), 0 0 50px rgba(0, 191, 255, 0.4); }
         }
 
-        /* --- Custom Neon/Glow Effects (Now Blue) --- */
-        .neon-text {
-            --neon-glow: 
-                0 0 10px rgba(0, 191, 255, 0.9),
-                0 0 25px rgba(0, 191, 255, 0.6),
-                0 0 40px rgba(0, 191, 255, 0.3);
-            color: var(--primary-blue);
-            text-shadow: var(--neon-glow);
-            animation: neonFlicker 8s infinite alternate; /* Subtle, non-distracting flicker */
+        /* --- Scroll Reveal Classes --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
-
-        .glow-box-border {
-            /* Combined Blue and White glow effect for the bio box */
-            background: var(--mid-dark);
-            border-radius: 0.75rem; 
-            padding: 3px;
-            background-clip: padding-box;
-            border: 3px solid transparent;
-            
-            /* Gradient border effect */
-            border-image: linear-gradient(to right, var(--primary-blue) 30%, var(--secondary-accent) 70%);
-            border-image-slice: 1;
-            
-            /* Adding internal glow for depth */
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8),
-                        0 0 15px rgba(0, 191, 255, 0.3), /* External subtle glow (Blue) */
-                        0 0 15px rgba(255, 255, 255, 0.2); /* Secondary glow (White) */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .glow-box-border:hover {
-            transform: scale(1.01);
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9),
-                        0 0 30px rgba(0, 191, 255, 0.6), 
-                        0 0 30px rgba(255, 255, 255, 0.5);
-        }
-
-        .nav-link-item:hover {
-            color: white;
-            box-shadow: 0 0 8px var(--primary-blue);
-            background-color: rgba(0, 191, 255, 0.15); /* Blue background hover */
-        }
-
-        .skill-tag {
-            transition: all 0.3s ease;
-            cursor: default;
-        }
-
-        .skill-tag:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 191, 255, 0.4); /* Blue hover glow */
-        }
-
-        .expertise-button {
-             animation: pulseGlow 2s infinite;
-             box-shadow: 0 0 10px rgba(0, 191, 255, 0.6); /* Blue pulse */
-        }
-
-        .expertise-button:hover {
-            animation: none;
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="pt-20">
+<body class="antialiased selection:bg-brand-blue selection:text-black">
+
+    <!-- INTERACTIVE BACKGROUND CANVAS -->
+    <canvas id="bgCanvas"></canvas>
 
     <!-- NAVIGATION BAR -->
-    <nav class="fixed top-0 left-0 w-full flex justify-center z-50 bg-gray-900/80 backdrop-blur-sm p-3 border-b border-gray-800">
-        <div class="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl space-y-2 md:space-y-0">
-            
-            <!-- Nav Links (Rounded Capsule) -->
-            <div class="flex items-center space-x-2 p-1 bg-gray-900 border border-gray-700 rounded-full shadow-2xl shadow-black">
-                <a href="#home" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Home</a>
-                <a href="#about" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">About</a>
-                <a href="#projects" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Projects</a>
-                <a href="#skills" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Skills</a>
-                <a href="#contact" class="nav-link-item px-4 py-2 text-sm font-medium rounded-full transition duration-300 text-gray-300">Contact</a>
+    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 p-4" id="navbar">
+        <div class="max-w-5xl mx-auto backdrop-blur-md bg-black/40 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/50">
+            <!-- Logo/Name -->
+            <a href="#" class="font-bold text-lg md:text-xl tracking-tighter hover:text-brand-blue transition">
+                DERTS<span class="text-brand-blue">.VERCEL.APP</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="#home" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Home</a>
+                <a href="#about" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">About</a>
+                <a href="#projects" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Projects</a>
+                <a href="#contact" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Contact</a>
             </div>
 
-            <!-- Social Icons (Updated Links) -->
-            <div class="flex space-x-4">
-                <a href="https://discord.com/users/817078537366143026" target="_blank" class="text-gray-400 hover:text-primary-blue transition duration-300 p-2 rounded-full hover:shadow-lg hover:shadow-primary-blue/50">
+            <!-- Socials -->
+            <div class="flex space-x-3">
+                <a href="https://discord.com/users/817078537366143026" target="_blank" class="text-gray-400 hover:text-brand-blue transition transform hover:scale-110">
                     <i class="fab fa-discord text-xl"></i>
                 </a>
-                <a href="https://github.com/dertme314" target="_blank" class="text-gray-400 hover:text-white transition duration-300 p-2 rounded-full hover:shadow-lg hover:shadow-white/50">
+                <a href="https://github.com/dertme314" target="_blank" class="text-gray-400 hover:text-white transition transform hover:scale-110">
                     <i class="fab fa-github text-xl"></i>
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="container mx-auto px-4 py-16">
+    <main class="container mx-auto px-4 pt-32 pb-16">
 
-        <!-- HERO SECTION (High-impact neon title - Text Updated) -->
-        <section id="home" class="text-center mb-32">
-            <h1 class="text-6xl sm:text-8xl font-black tracking-tighter mb-4 neon-text">
-                DERT.VERCEL.APP
+        <!-- HERO SECTION -->
+        <section id="home" class="min-h-[80vh] flex flex-col justify-center items-center text-center relative mb-20">
+            <!-- Decorative blur behind text -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full z-[-1]"></div>
+
+            <div class="reveal animate-float">
+                <span class="px-3 py-1 text-xs font-semibold tracking-widest text-brand-blue uppercase bg-brand-blue/10 rounded-full border border-brand-blue/20 mb-4 inline-block">
+                    Full Stack Developer
+                </span>
+            </div>
+            
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 reveal delay-100">
+                <span class="text-white">IMAGINE.</span><br>
+                <span class="text-gradient neon-text-pulse">CREATE.</span>
             </h1>
-            <p class="text-xl sm:text-3xl text-gray-400 font-light italic mb-12">
-                - Where Imagination and Creation come together -
+
+            <p class="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mb-10 reveal delay-200">
+                Where imagination and creation come together. Welcome to my sandbox.
             </p>
 
-            <!-- CTA Buttons (Links & Logic Updated) -->
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8">
-                <a href="#skills" class="expertise-button bg-primary-blue/20 border border-primary-blue text-white font-bold py-3 px-8 rounded-xl transition duration-300 text-lg hover:bg-primary-blue/40 hover:scale-[1.03]">
-                    Explore Expertise 🔥
+            <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
+                <a href="#projects" class="group relative px-8 py-3 bg-brand-blue text-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(0,191,255,0.5)]">
+                    <span class="relative z-10">View Projects <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></span>
                 </a>
-                <a href="https://guns.lol/dertme314" target="_blank" class="bg-transparent border border-gray-600 text-white font-semibold py-3 px-8 rounded-xl transition duration-300 hover:border-white hover:bg-white/10 hover:shadow-md hover:shadow-gray-500/30">
+                <a href="https://guns.lol/dertme314" target="_blank" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all hover:border-brand-blue/50">
                     My Bio Link
                 </a>
             </div>
         </section>
 
-        <!-- ABOUT / BIO SECTION (Framed with the split-color glow) -->
-        <section id="about" class="flex justify-center mb-24">
-            <div class="w-full max-w-5xl p-1 lg:p-10">
-                <div class="flex flex-col lg:flex-row items-center p-8 glow-box-border rounded-xl">
+        <!-- ABOUT SECTION -->
+        <section id="about" class="mb-32 max-w-5xl mx-auto">
+            <div class="glass-card rounded-2xl p-8 md:p-12 reveal">
+                <div class="flex flex-col md:flex-row items-center gap-10">
+                    <div class="relative shrink-0 group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=D" alt="Avatar" class="relative w-40 h-40 object-cover rounded-full border-2 border-white/10 shadow-2xl">
+                    </div>
                     
-                    <!-- Avatar & Intro (Updated Color) -->
-                    <div class="flex-shrink-0 mb-6 lg:mb-0 lg:mr-10 text-center">
-                        <!-- Placeholder Avatar with strong blue shadow -->
-                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=AVATAR" alt="Profile Avatar" class="w-36 h-36 object-cover rounded-full border-4 border-primary-blue mx-auto shadow-2xl shadow-primary-blue/70 transition duration-500 hover:scale-105">
-                        <h2 class="text-3xl font-bold mt-4 text-white tracking-wider">The Creator</h2>
-                    </div>
-
-                    <!-- Bio Text (Updated to sound more human and relate to fun projects) -->
-                    <div class="text-lg text-left">
-                        <p class="mb-4 text-gray-300">
-                            Hey there! I'm Dert, and honestly, I just love messing around with code and building cool stuff for fun. If I can think it up, I try to make it work.
+                    <div class="text-center md:text-left">
+                        <h2 class="text-3xl font-bold mb-4 text-white">The Creator</h2>
+                        <p class="text-gray-300 leading-relaxed text-lg mb-4">
+                            Hey there! I'm <span class="text-brand-blue font-semibold">Dert</span>, and honestly, I just love messing around with code and building cool stuff for fun. If I can think it up, I try to make it work.
                         </p>
-                        <p class="text-gray-300">
-                            My focus is on turning random ideas into working projects- whether that's transforming video into ASCII art, building small desktop apps with Electron, or just keeping my personal websites running smoothly. This whole site is basically a sandbox for my hobbies. Let's see what breaks next!
+                        <p class="text-gray-400">
+                            My focus is on turning random ideas into actual working projects, whether that's transforming video into ASCII art, building small desktop apps with Electron, or just keeping my personal websites running smoothly. This whole site is basically a sandbox for my hobbies. Let's see what breaks next!
                         </p>
                     </div>
                 </div>
             </div>
         </section>
-        
-        <!-- PROJECTS SECTION (New Projects and Descriptions) -->
-        <section id="projects" class="mt-24 text-center">
-            <h2 class="text-5xl font-bold text-gray-100 mb-16 relative">
-                <span class="border-b-4 border-primary-blue pb-1">PROJECTS</span>
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
-                
-                <!-- Project Card 1: dert-ascii -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">dert-ascii</h3>
-                        <p class="text-gray-400 text-sm mb-3">Converts MP4 video files into ASCII art representations.</p>
-                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, JavaScript (Public)</span>
-                    </div>
-                    <a href="https://github.com/dertme314/dert-ascii" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
-                        View Code <i class="fab fa-github ml-1 text-xl"></i>
-                    </a>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="mb-32">
+            <div class="flex items-end justify-between mb-12 px-4 reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-white">Featured Projects</h2>
+                    <div class="h-1 w-20 bg-brand-blue mt-2 rounded-full"></div>
                 </div>
-                
-                <!-- Project Card 2: Dertme314.github.io -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">Dertme314.github.io</h3>
-                        <p class="text-gray-400 text-sm mb-3">The personal portfolio and web presence site.</p>
-                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, CSS, JavaScript (Public)</span>
+                <p class="text-gray-500 hidden md:block">Explore my latest builds</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Project 1 -->
+                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-100 group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-brand-blue/10 rounded-lg text-brand-blue">
+                            <i class="fas fa-video text-xl"></i>
+                        </div>
+                        <a href="https://github.com/dertme314/dert-ascii" target="_blank" class="text-gray-500 hover:text-brand-blue transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
                     </div>
-                    <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
-                        View Code <i class="fab fa-github ml-1 text-xl"></i>
-                    </a>
-                </div>
-                
-                <!-- Project Card 3: xeno-fixes -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">xeno-fixes</h3>
-                        <p class="text-gray-400 text-sm mb-3">A collection of fixes for the Xeno project.</p>
-                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, CSS, JavaScript (Public)</span>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-brand-blue transition-colors">dert-ascii</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A unique tool that converts MP4 video files into real-time ASCII art representations within the browser.</p>
+                    <div class="flex gap-2 text-xs font-mono text-gray-500">
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">HTML</span>
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">JS</span>
                     </div>
-                    <a href="https://github.com/dertme314/xeno-fixes" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
-                        View Code <i class="fab fa-github ml-1 text-xl"></i>
-                    </a>
                 </div>
 
-                <!-- Project Card 4: Xylo.Download -->
-                <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">Xylo.Download</h3>
-                        <p class="text-gray-400 text-sm mb-3">A dedicated website for installing the Xylo application.</p>
-                        <span class="text-xs text-gray-500 block">Tech Stack: HTML, Web Design (Public)</span>
+                <!-- Project 2 -->
+                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-200 group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-purple-500/10 rounded-lg text-purple-400">
+                            <i class="fas fa-globe text-xl"></i>
+                        </div>
+                        <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" class="text-gray-500 hover:text-white transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
                     </div>
-                    <a href="https://github.com/dertme314/Xylo.Download" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
-                        View Code <i class="fab fa-github ml-1 text-xl"></i>
-                    </a>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Executor Hub</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">The central hub. Built with performance and aesthetics in mind to showcase executors.</p>
+                    <div class="flex gap-2 text-xs font-mono text-gray-500">
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Web Design</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-300 group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-green-500/10 rounded-lg text-green-400">
+                            <i class="fas fa-wrench text-xl"></i>
+                        </div>
+                        <a href="https://github.com/dertme314/xeno-fixes" target="_blank" class="text-gray-500 hover:text-white transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">xeno-fixes</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A comprehensive collection of patches and fixes for Xeno.</p>
+                    <div class="flex gap-2 text-xs font-mono text-gray-500">
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Patching</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-100 group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-pink-500/10 rounded-lg text-pink-400">
+                            <i class="fas fa-download text-xl"></i>
+                        </div>
+                        <a href="https://github.com/dertme314/Xylo.Download" target="_blank" class="text-gray-500 hover:text-white transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Xylo.Download</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">Dedicated installation portal for the Xylo Executor.</p>
+                    <div class="flex gap-2 text-xs font-mono text-gray-500">
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Web</span>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-200 group">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-yellow-500/10 rounded-lg text-yellow-400">
+                            <i class="fas fa-bolt text-xl"></i>
+                        </div>
+                        <a href="https://github.com/dertme314/ZaplyAPI" target="_blank" class="text-gray-500 hover:text-white transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">ZaplyAPI</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">Robust backend API development for Zaply services.</p>
+                    <div class="flex gap-2 text-xs font-mono text-gray-500">
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">API</span>
+                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Node</span>
+                    </div>
                 </div>
             </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills" class="mb-32 text-center">
+            <h2 class="text-4xl font-bold text-white mb-12 reveal">Technical Arsenal</h2>
             
-            <!-- Project Card 5: ZaplyAPI (Added as a separate row due to space) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 mt-8">
-                 <div class="bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-primary-blue transition duration-300 shadow-lg hover:shadow-primary-blue/30 hover:scale-[1.02] flex flex-col justify-between md:col-span-1 lg:col-span-1">
-                    <div>
-                        <h3 class="text-xl font-semibold mb-2 text-primary-blue">ZaplyAPI</h3>
-                        <p class="text-gray-400 text-sm mb-3">An application programming interface for Zaply.</p>
-                        <span class="text-xs text-gray-500 block">Tech Stack: API Development (Public)</span>
-                    </div>
-                    <a href="https://github.com/dertme314/ZaplyAPI" target="_blank" class="mt-4 pt-3 border-t border-gray-800 text-right text-primary-blue hover:text-white transition duration-300 font-semibold">
-                        View Code <i class="fab fa-github ml-1 text-xl"></i>
-                    </a>
+            <div class="flex flex-wrap justify-center gap-4 reveal">
+                <!-- Skill Item Template -->
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fab fa-html5 text-orange-500 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">HTML5</span>
+                </div>
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fab fa-css3-alt text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">Tailwind</span>
+                </div>
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fab fa-js text-yellow-400 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">JavaScript</span>
+                </div>
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fab fa-react text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">React</span>
+                </div>
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fab fa-node text-green-500 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">Node.js</span>
+                </div>
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fas fa-server text-purple-500 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">API Dev</span>
+                </div>
+                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                    <i class="fas fa-desktop text-gray-400 text-xl group-hover:scale-110 transition-transform"></i>
+                    <span class="text-gray-300 font-medium group-hover:text-white">Electron</span>
                 </div>
             </div>
         </section>
 
-        <!-- SKILLS SECTION (Updated skills and Blue/White theme) -->
-        <section id="skills" class="mt-32 text-center">
-            <h2 class="text-5xl font-bold text-gray-100 mb-16 relative">
-                <span class="border-b-4 border-primary-blue pb-1">SKILLS STACK</span>
-            </h2>
-            <div class="flex flex-wrap justify-center gap-6 px-4">
-                <!-- New Skills / Blue Primary -->
-                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
-                    <i class="fab fa-html5 mr-2"></i> HTML5
-                </span>
-                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
-                    <i class="fab fa-css3-alt mr-2"></i> CSS3 / Tailwind
-                </span>
-                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
-                    <i class="fab fa-react mr-2"></i> React / Next.js
-                </span>
-                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
-                    <i class="fab fa-node-js mr-2"></i> Node / Express
-                </span>
-                <!-- Electron (Neutral/White Accent) -->
-                <span class="skill-tag px-6 py-3 rounded-xl bg-gray-700/50 border border-white/50 text-white font-medium shadow-lg shadow-white/30">
-                    <i class="fas fa-desktop mr-2"></i> Electron
-                </span>
-                <!-- Blue Primary -->
-                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
-                    <i class="fas fa-database mr-2"></i> MongoDB / Firebase
-                </span>
-                <span class="skill-tag px-6 py-3 rounded-xl bg-primary-blue/10 border border-primary-blue text-primary-blue font-medium shadow-lg shadow-primary-blue/40">
-                    <i class="fas fa-code mr-2"></i> TypeScript / Python
-                </span>
-                <!-- White Accent -->
-                <span class="skill-tag px-6 py-3 rounded-xl bg-gray-700/50 border border-white/50 text-gray-300 font-medium shadow-lg shadow-gray-700/40">
-                    <i class="fas fa-puzzle-piece mr-2"></i> UI/UX Design
-                </span>
+        <!-- CTA / CONTACT -->
+        <section id="contact" class="max-w-4xl mx-auto text-center reveal">
+            <div class="relative rounded-3xl p-1 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-blue via-purple-500 to-brand-blue opacity-30 animate-pulse"></div>
+                <div class="relative bg-black rounded-[20px] p-12 border border-white/10">
+                    <h2 class="text-4xl font-bold text-white mb-6">Let's Build Something Crazy</h2>
+                    <p class="text-gray-400 mb-8 text-lg">
+                        Got an idea? Need a developer? Or just want to chat about tech?
+                    </p>
+                    <a href="https://discord.com/users/817078537366143026" target="_blank" class="inline-flex items-center bg-brand-blue text-black font-bold py-4 px-10 rounded-full transition-all hover:bg-white hover:scale-105 shadow-[0_0_20px_rgba(0,191,255,0.4)]">
+                        <i class="fab fa-discord mr-3 text-xl"></i> Chat on Discord
+                    </a>
+                </div>
             </div>
-        </section>
-        
-        <!-- CONTACT SECTION (Updated Link & Color) -->
-        <section id="contact" class="mt-32 text-center p-16 bg-gray-900 rounded-3xl border border-gray-800 shadow-2xl shadow-black/70">
-            <h2 class="text-5xl font-bold text-white mb-4 tracking-tight">
-                LET'S CONNECT
-            </h2>
-            <p class="text-xl text-gray-400 mb-10">
-                Have a project idea? Need a collaborator? I'm always open to new connections.
-            </p>
-            <a href="https://discord.com/users/817078537366143026" target="_blank" class="inline-block bg-primary-blue text-white font-bold py-4 px-12 rounded-full text-xl transition duration-300 hover:bg-blue-600 shadow-2xl shadow-primary-blue/70 hover:scale-105">
-                <i class="fab fa-discord mr-3"></i> Direct Message (Discord)
-            </a>
         </section>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="text-center py-8 border-t border-gray-800 mt-20 bg-gray-900/50">
-        <p class="text-gray-600 text-sm tracking-wider">&copy; 2025 DERT.VERCEL.APP - Code is Poetry</p>
+    <footer class="border-t border-white/5 bg-black py-8 text-center mt-20">
+        <p class="text-gray-600 text-sm">© 2025 DERTS.VERCEL.APP • Code is Poetry</p>
     </footer>
 
+    <!-- INTERACTIVE SCRIPTS -->
+    <script>
+        // --- 1. Interactive Starfield Canvas ---
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+
+        // Configuration
+        const particleCount = 60; // Number of stars
+        const connectionDistance = 150; // Distance to connect stars
+        const mouseDistance = 200; // Distance to connect to mouse
+
+        // Mouse tracking
+        const mouse = { x: null, y: null };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        // Resize handling
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Velocity X
+                this.vy = (Math.random() - 0.5) * 0.5; // Velocity Y
+                this.size = Math.random() * 2;
+                this.color = `rgba(0, 191, 255, ${Math.random() * 0.5 + 0.2})`; // Blue tint
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw connections first (behind stars)
+            for (let i = 0; i < particles.length; i++) {
+                let p1 = particles[i];
+                p1.update();
+                p1.draw();
+
+                // Connect to mouse
+                if (mouse.x != null) {
+                    let dx = mouse.x - p1.x;
+                    let dy = mouse.y - p1.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    if (distance < mouseDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 191, 255, ${1 - distance/mouseDistance})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                    }
+                }
+
+                // Connect to other particles
+                for (let j = i; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dx = p1.x - p2.x;
+                    let dy = p1.y - p2.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance/connectionDistance)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        initParticles();
+        animate();
+
+        // --- 2. Scroll Reveal Animation ---
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+    </script>
 </body>
 </html>
