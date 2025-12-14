@@ -4,13 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developer Portfolio - Dert</title>
-    <!-- Load Tailwind CSS -->
+    <meta name="description" content="Portfolio of Dert - Full Stack Developer specializing in HTML, JS, Node.js and Electron apps.">
+    
+    <meta property="og:title" content="Dert - Developer Portfolio">
+    <meta property="og:description" content="Where imagination and creation come together. Welcome to my sandbox.">
+    <meta property="og:image" content="https://placehold.co/1200x630/00bfff/ffffff?text=Dert+Portfolio">
+    <meta property="og:url" content="https://derts.vercel.app">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Inter Font -->
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <!-- Load Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <script>
+      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -19,7 +29,6 @@
                         brand: {
                             blue: '#00bfff',
                             dark: '#050505',
-                            card: 'rgba(20, 20, 20, 0.6)'
                         }
                     },
                     animation: {
@@ -58,20 +67,11 @@
             z-index: -1;
         }
 
-        /* --- Scrollbar Customization --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-blue);
-        }
+        /* --- Scrollbar --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary-blue); }
 
         /* --- Text Gradients --- */
         .text-gradient {
@@ -80,22 +80,49 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- Glass Cards --- */
+        /* --- Liquid Glass Effect --- */
         .glass-card {
+            position: relative;
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); /* Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            overflow: hidden; /* Contains the shine */
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* The "Liquid" Shine Animation */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: 0.5s;
+            pointer-events: none;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+            transition: 0.7s;
         }
 
         .glass-card:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: var(--primary-blue);
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 10px 30px -10px rgba(0, 191, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(0, 191, 255, 0.5); /* Brand blue border on hover */
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 40px -10px rgba(0, 191, 255, 0.25);
         }
 
-        /* --- Neon Glow Animation --- */
+        /* --- Neon Glow --- */
         .neon-text-pulse {
             text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
             animation: pulseGlow 3s infinite alternate;
@@ -106,7 +133,7 @@
             100% { text-shadow: 0 0 25px rgba(0, 191, 255, 0.9), 0 0 50px rgba(0, 191, 255, 0.4); }
         }
 
-        /* --- Scroll Reveal Classes --- */
+        /* --- Scroll Reveal --- */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -120,18 +147,14 @@
 </head>
 <body class="antialiased selection:bg-brand-blue selection:text-black">
 
-    <!-- INTERACTIVE BACKGROUND CANVAS -->
     <canvas id="bgCanvas"></canvas>
 
-    <!-- NAVIGATION BAR -->
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 p-4" id="navbar">
         <div class="max-w-5xl mx-auto backdrop-blur-md bg-black/40 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/50">
-            <!-- Logo/Name -->
             <a href="#" class="font-bold text-lg md:text-xl tracking-tighter hover:text-brand-blue transition">
                 DERTS<span class="text-brand-blue">.VERCEL.APP</span>
             </a>
 
-            <!-- Desktop Links -->
             <div class="hidden md:flex items-center space-x-1">
                 <a href="#home" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Home</a>
                 <a href="#about" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">About</a>
@@ -139,12 +162,11 @@
                 <a href="#contact" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Contact</a>
             </div>
 
-            <!-- Socials -->
             <div class="flex space-x-3">
-                <a href="https://discord.com/users/817078537366143026" target="_blank" class="text-gray-400 hover:text-brand-blue transition transform hover:scale-110">
+                <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="text-gray-400 hover:text-brand-blue transition transform hover:scale-110">
                     <i class="fab fa-discord text-xl"></i>
                 </a>
-                <a href="https://github.com/dertme314" target="_blank" class="text-gray-400 hover:text-white transition transform hover:scale-110">
+                <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-gray-400 hover:text-white transition transform hover:scale-110">
                     <i class="fab fa-github text-xl"></i>
                 </a>
             </div>
@@ -153,9 +175,7 @@
 
     <main class="container mx-auto px-4 pt-32 pb-16">
 
-        <!-- HERO SECTION -->
         <section id="home" class="min-h-[80vh] flex flex-col justify-center items-center text-center relative mb-20">
-            <!-- Decorative blur behind text -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full z-[-1]"></div>
 
             <div class="reveal animate-float">
@@ -177,19 +197,18 @@
                 <a href="#projects" class="group relative px-8 py-3 bg-brand-blue text-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(0,191,255,0.5)]">
                     <span class="relative z-10">View Projects <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></span>
                 </a>
-                <a href="https://guns.lol/dertme314" target="_blank" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all hover:border-brand-blue/50">
+                <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all hover:border-brand-blue/50">
                     My Bio Link
                 </a>
             </div>
         </section>
 
-        <!-- ABOUT SECTION -->
         <section id="about" class="mb-32 max-w-5xl mx-auto">
             <div class="glass-card rounded-2xl p-8 md:p-12 reveal">
                 <div class="flex flex-col md:flex-row items-center gap-10">
                     <div class="relative shrink-0 group">
                         <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=D" alt="Avatar" class="relative w-40 h-40 object-cover rounded-full border-2 border-white/10 shadow-2xl">
+                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=D" alt="Dert Avatar" class="relative w-40 h-40 object-cover rounded-full border-2 border-white/10 shadow-2xl">
                     </div>
                     
                     <div class="text-center md:text-left">
@@ -205,7 +224,6 @@
             </div>
         </section>
 
-        <!-- PROJECTS SECTION -->
         <section id="projects" class="mb-32">
             <div class="flex items-end justify-between mb-12 px-4 reveal">
                 <div>
@@ -216,13 +234,12 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Project 1 -->
                 <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-100 group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="p-3 bg-brand-blue/10 rounded-lg text-brand-blue">
                             <i class="fas fa-video text-xl"></i>
                         </div>
-                        <a href="https://github.com/dertme314/dert-ascii" target="_blank" class="text-gray-500 hover:text-brand-blue transition">
+                        <a href="https://github.com/dertme314/dert-ascii" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-brand-blue transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -234,13 +251,12 @@
                     </div>
                 </div>
 
-                <!-- Project 2 -->
                 <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-200 group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="p-3 bg-purple-500/10 rounded-lg text-purple-400">
                             <i class="fas fa-globe text-xl"></i>
                         </div>
-                        <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -251,13 +267,12 @@
                     </div>
                 </div>
 
-                <!-- Project 3 -->
                 <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-300 group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="p-3 bg-green-500/10 rounded-lg text-green-400">
                             <i class="fas fa-wrench text-xl"></i>
                         </div>
-                        <a href="https://github.com/dertme314/xeno-fixes" target="_blank" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/xeno-fixes" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -268,13 +283,12 @@
                     </div>
                 </div>
 
-                <!-- Project 4 -->
                 <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-100 group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="p-3 bg-pink-500/10 rounded-lg text-pink-400">
                             <i class="fas fa-download text-xl"></i>
                         </div>
-                        <a href="https://github.com/dertme314/Xylo.Download" target="_blank" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/Xylo.Download" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -285,13 +299,12 @@
                     </div>
                 </div>
 
-                <!-- Project 5 -->
                 <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-200 group">
                     <div class="flex justify-between items-start mb-4">
                         <div class="p-3 bg-yellow-500/10 rounded-lg text-yellow-400">
                             <i class="fas fa-bolt text-xl"></i>
                         </div>
-                        <a href="https://github.com/dertme314/ZaplyAPI" target="_blank" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/ZaplyAPI" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
@@ -305,12 +318,10 @@
             </div>
         </section>
 
-        <!-- SKILLS SECTION -->
         <section id="skills" class="mb-32 text-center">
             <h2 class="text-4xl font-bold text-white mb-12 reveal">Technical Arsenal</h2>
             
             <div class="flex flex-wrap justify-center gap-4 reveal">
-                <!-- Skill Item Template -->
                 <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
                     <i class="fab fa-html5 text-orange-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">HTML5</span>
@@ -342,7 +353,6 @@
             </div>
         </section>
 
-        <!-- CTA / CONTACT -->
         <section id="contact" class="max-w-4xl mx-auto text-center reveal">
             <div class="relative rounded-3xl p-1 overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-r from-brand-blue via-purple-500 to-brand-blue opacity-30 animate-pulse"></div>
@@ -351,7 +361,7 @@
                     <p class="text-gray-400 mb-8 text-lg">
                         Got an idea? Need a developer? Or just want to chat about tech?
                     </p>
-                    <a href="https://discord.com/users/817078537366143026" target="_blank" class="inline-flex items-center bg-brand-blue text-black font-bold py-4 px-10 rounded-full transition-all hover:bg-white hover:scale-105 shadow-[0_0_20px_rgba(0,191,255,0.4)]">
+                    <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer" class="inline-flex items-center bg-brand-blue text-black font-bold py-4 px-10 rounded-full transition-all hover:bg-white hover:scale-105 shadow-[0_0_20px_rgba(0,191,255,0.4)]">
                         <i class="fab fa-discord mr-3 text-xl"></i> Chat on Discord
                     </a>
                 </div>
@@ -364,7 +374,6 @@
         <p class="text-gray-600 text-sm">© 2025 DERTS.VERCEL.APP • Code is Poetry</p>
     </footer>
 
-    <!-- INTERACTIVE SCRIPTS -->
     <script>
         // --- 1. Interactive Starfield Canvas ---
         const canvas = document.getElementById('bgCanvas');
@@ -372,12 +381,9 @@
         let width, height;
         let particles = [];
 
-        // Configuration
-        const particleCount = 60; // Number of stars
-        const connectionDistance = 150; // Distance to connect stars
-        const mouseDistance = 200; // Distance to connect to mouse
+        const connectionDistance = 150; 
+        const mouseDistance = 200; 
 
-        // Mouse tracking
         const mouse = { x: null, y: null };
 
         window.addEventListener('mousemove', (e) => {
@@ -385,29 +391,27 @@
             mouse.y = e.y;
         });
 
-        // Resize handling
         function resize() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            initParticles(); // Re-initialize to prevent stretching or gaps
         }
         window.addEventListener('resize', resize);
-        resize();
-
+        
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Velocity X
-                this.vy = (Math.random() - 0.5) * 0.5; // Velocity Y
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
                 this.size = Math.random() * 2;
-                this.color = `rgba(0, 191, 255, ${Math.random() * 0.5 + 0.2})`; // Blue tint
+                this.color = `rgba(0, 191, 255, ${Math.random() * 0.5 + 0.2})`;
             }
 
             update() {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Bounce off edges
                 if (this.x < 0 || this.x > width) this.vx *= -1;
                 if (this.y < 0 || this.y > height) this.vy *= -1;
             }
@@ -422,6 +426,8 @@
 
         function initParticles() {
             particles = [];
+            // Reduce particle count on small screens for performance
+            const particleCount = window.innerWidth < 768 ? 30 : 60;
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
@@ -430,13 +436,12 @@
         function animate() {
             ctx.clearRect(0, 0, width, height);
             
-            // Draw connections first (behind stars)
             for (let i = 0; i < particles.length; i++) {
                 let p1 = particles[i];
                 p1.update();
                 p1.draw();
 
-                // Connect to mouse
+                // Mouse connections
                 if (mouse.x != null) {
                     let dx = mouse.x - p1.x;
                     let dy = mouse.y - p1.y;
@@ -451,7 +456,7 @@
                     }
                 }
 
-                // Connect to other particles
+                // Star connections
                 for (let j = i; j < particles.length; j++) {
                     let p2 = particles[j];
                     let dx = p1.x - p2.x;
@@ -471,18 +476,19 @@
             requestAnimationFrame(animate);
         }
 
-        initParticles();
+        resize(); // Call once on load
         animate();
 
-        // --- 2. Scroll Reveal Animation ---
+        // --- 2. Scroll Reveal Animation (Performance Optimized) ---
         const observerOptions = {
             threshold: 0.1
         };
 
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop watching once revealed
                 }
             });
         }, observerOptions);
