@@ -27,8 +27,9 @@
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#00bfff',
-                            dark: '#050505',
+                            blue: '#4ba3ff',
+                            purple: '#a56eff',
+                            dark: '#131314',
                         }
                     },
                     animation: {
@@ -47,24 +48,15 @@
 
     <style>
         :root {
-            --primary-blue: #00bfff;
+            --primary-blue: #4ba3ff;
+            --primary-purple: #a56eff;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #050505;
-            color: #e0e0e0;
+            background-color: #131314;
+            color: #e3e3e3;
             overflow-x: hidden;
-        }
-
-        /* --- Canvas Background --- */
-        #bgCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
         }
 
         /* --- Scrollbar --- */
@@ -80,46 +72,23 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- Liquid Glass Effect --- */
+        /* --- Glass Card --- */
         .glass-card {
             position: relative;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px); /* Safari support */
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            overflow: hidden; /* Contains the shine */
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* The "Liquid" Shine Animation */
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.05),
-                transparent
-            );
-            transition: 0.5s;
-            pointer-events: none;
-        }
-
-        .glass-card:hover::before {
-            left: 100%;
-            transition: 0.7s;
+            background: rgba(30, 31, 32, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .glass-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(0, 191, 255, 0.5); /* Brand blue border on hover */
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 15px 40px -10px rgba(0, 191, 255, 0.25);
+            background: rgba(45, 46, 48, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         /* --- Neon Glow --- */
@@ -147,10 +116,10 @@
 </head>
 <body class="antialiased selection:bg-brand-blue selection:text-black">
 
-    <canvas id="bgCanvas"></canvas>
+    <div class="fixed top-0 left-0 w-full h-full z-[-1] bg-gradient-to-tr from-brand-blue/5 via-transparent to-brand-purple/5 pointer-events-none"></div>
 
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 p-4" id="navbar">
-        <div class="max-w-5xl mx-auto backdrop-blur-md bg-black/40 border border-white/10 rounded-full px-6 py-3 flex justify-between items-center shadow-2xl shadow-black/50">
+        <div class="max-w-5xl mx-auto backdrop-blur-md bg-[#1e1f20]/80 border border-white/5 rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="#" class="font-bold text-lg md:text-xl tracking-tighter hover:text-brand-blue transition">
                 DERTS<span class="text-brand-blue">.VERCEL.APP</span>
             </a>
@@ -179,32 +148,32 @@
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full z-[-1]"></div>
 
             <div class="reveal animate-float">
-                <span class="px-3 py-1 text-xs font-semibold tracking-widest text-brand-blue uppercase bg-brand-blue/10 rounded-full border border-brand-blue/20 mb-4 inline-block">
-                    Full Stack Developer😁
+                <span class="px-4 py-1.5 text-sm font-medium tracking-wide text-brand-blue bg-brand-blue/10 rounded-full border border-brand-blue/20 mb-6 inline-block">
+                    Full Stack Developer
                 </span>
             </div>
             
-            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 reveal delay-100">
-                <span class="text-white">Imagine.</span><br>
-                <span class="text-gradient neon-text-pulse">Create.</span>
+            <h1 class="text-6xl md:text-7xl font-semibold tracking-tight mb-8 reveal delay-100 leading-tight">
+                <span class="text-white">Imagine.</span>
+                <span class="bg-gradient-to-r from-brand-blue to-brand-purple bg-clip-text text-transparent">Create.</span>
             </h1>
 
-            <p class="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mb-10 reveal delay-200">
-                Where imagination and creation come together. Welcome to my website!.
+            <p class="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mb-12 reveal delay-200 leading-relaxed">
+                Where imagination and creation come together. Welcome to my website!
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
-                <a href="#projects" class="group relative px-8 py-3 bg-brand-blue text-black font-bold rounded-lg overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(0,191,255,0.5)]">
+                <a href="#projects" class="group relative px-8 py-4 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-semibold rounded-full overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(75,163,255,0.3)] hover:scale-[1.02]">
                     <span class="relative z-10">View Projects <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></span>
                 </a>
-                <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer" class="px-8 py-3 bg-white/5 border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all hover:border-brand-blue/50">
+                <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-all hover:border-white/20">
                     My Bio Link
                 </a>
             </div>
         </section>
 
         <section id="about" class="mb-32 max-w-5xl mx-auto">
-            <div class="glass-card rounded-2xl p-8 md:p-12 reveal">
+            <div class="glass-card rounded-[2rem] p-8 md:p-12 reveal">
                 <div class="flex flex-col md:flex-row items-center gap-10">
                     <div class="relative shrink-0 group">
                         <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
@@ -234,10 +203,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-100 group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-brand-blue/10 rounded-lg text-brand-blue">
-                            <i class="fas fa-video text-xl"></i>
+                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-100 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-full text-brand-blue">
+                            <i class="fas fa-video text-lg"></i>
                         </div>
                         <a href="https://github.com/dertme314/dert-ascii" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-brand-blue transition">
                             <i class="fas fa-external-link-alt"></i>
@@ -251,10 +220,10 @@
                     </div>
                 </div>
 
-                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-200 group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-purple-500/10 rounded-lg text-purple-400">
-                            <i class="fas fa-globe text-xl"></i>
+                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-200 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 flex items-center justify-center bg-purple-500/10 rounded-full text-purple-400">
+                            <i class="fas fa-globe text-lg"></i>
                         </div>
                         <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
@@ -267,10 +236,10 @@
                     </div>
                 </div>
 
-                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-300 group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-green-500/10 rounded-lg text-green-400">
-                            <i class="fas fa-wrench text-xl"></i>
+                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-300 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 flex items-center justify-center bg-green-500/10 rounded-full text-green-400">
+                            <i class="fas fa-wrench text-lg"></i>
                         </div>
                         <a href="https://github.com/dertme314/xeno-fixes" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
@@ -283,10 +252,10 @@
                     </div>
                 </div>
 
-                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-100 group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-pink-500/10 rounded-lg text-pink-400">
-                            <i class="fas fa-download text-xl"></i>
+                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-100 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 flex items-center justify-center bg-pink-500/10 rounded-full text-pink-400">
+                            <i class="fas fa-download text-lg"></i>
                         </div>
                         <a href="https://github.com/Dertme314/RDD-Dert" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
@@ -299,10 +268,10 @@
                     </div>
                 </div>
 
-                <div class="glass-card rounded-xl p-6 flex flex-col h-full reveal delay-200 group">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 bg-yellow-500/10 rounded-lg text-yellow-400">
-                            <i class="fas fa-bolt text-xl"></i>
+                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-200 group">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="w-12 h-12 flex items-center justify-center bg-yellow-500/10 rounded-full text-yellow-400">
+                            <i class="fas fa-bolt text-lg"></i>
                         </div>
                         <a href="https://github.com/Dertme314/ZaplyAPI-website" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
@@ -322,31 +291,31 @@
             <h2 class="text-4xl font-bold text-white mb-12 reveal">Technical Arsenal</h2>
             
             <div class="flex flex-wrap justify-center gap-4 reveal">
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-html5 text-orange-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">HTML5</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-css3-alt text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Tailwind</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-js text-yellow-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">JavaScript</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-react text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">React</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-node text-green-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Node.js</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-server text-purple-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">API Dev</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:border-brand-blue hover:bg-brand-blue/10 transition-all cursor-default flex items-center gap-3 group">
+                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-desktop text-gray-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Electron</span>
                 </div>
@@ -354,14 +323,14 @@
         </section>
 
         <section id="contact" class="max-w-4xl mx-auto text-center reveal">
-            <div class="relative rounded-3xl p-1 overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-r from-brand-blue via-purple-500 to-brand-blue opacity-30 animate-pulse"></div>
-                <div class="relative bg-black rounded-[20px] p-12 border border-white/10">
+            <div class="relative glass-card rounded-[2.5rem] p-12 overflow-hidden border border-white/5">
+                <div class="absolute inset-0 bg-gradient-to-tr from-brand-blue/10 via-transparent to-purple-500/10 opacity-50"></div>
+                <div class="relative z-10">
                     <h2 class="text-4xl font-bold text-white mb-6">Let's Build Something Crazy</h2>
-                    <p class="text-gray-400 mb-8 text-lg">
-                        Got an idea? Need a developer? Or just want to chat about tech?
+                    <p class="text-gray-400 mb-10 text-lg max-w-2xl mx-auto">
+                        Got an idea? Need a developer? Or just want to chat about tech? I'm always open to discussing new projects and creative ideas.
                     </p>
-                    <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer" class="inline-flex items-center bg-brand-blue text-black font-bold py-4 px-10 rounded-full transition-all hover:bg-white hover:scale-105 shadow-[0_0_20px_rgba(0,191,255,0.4)]">
+                    <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer" class="inline-flex items-center bg-white text-black font-semibold py-4 px-10 rounded-full transition-all hover:bg-gray-200 hover:scale-[1.02] shadow-lg">
                         <i class="fab fa-discord mr-3 text-xl"></i> Chat on Discord
                     </a>
                 </div>
@@ -375,111 +344,7 @@
     </footer>
 
     <script>
-        // --- 1. Interactive Starfield Canvas ---
-        const canvas = document.getElementById('bgCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-
-        const connectionDistance = 150; 
-        const mouseDistance = 200; 
-
-        const mouse = { x: null, y: null };
-
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            initParticles(); // Re-initialize to prevent stretching or gaps
-        }
-        window.addEventListener('resize', resize);
-        
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2;
-                this.color = `rgba(0, 191, 255, ${Math.random() * 0.5 + 0.2})`;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            // Reduce particle count on small screens for performance
-            const particleCount = window.innerWidth < 768 ? 30 : 60;
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            
-            for (let i = 0; i < particles.length; i++) {
-                let p1 = particles[i];
-                p1.update();
-                p1.draw();
-
-                // Mouse connections
-                if (mouse.x != null) {
-                    let dx = mouse.x - p1.x;
-                    let dy = mouse.y - p1.y;
-                    let distance = Math.sqrt(dx*dx + dy*dy);
-                    if (distance < mouseDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 191, 255, ${1 - distance/mouseDistance})`;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(mouse.x, mouse.y);
-                        ctx.stroke();
-                    }
-                }
-
-                // Star connections
-                for (let j = i; j < particles.length; j++) {
-                    let p2 = particles[j];
-                    let dx = p1.x - p2.x;
-                    let dy = p1.y - p2.y;
-                    let distance = Math.sqrt(dx*dx + dy*dy);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (1 - distance/connectionDistance)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animate);
-        }
-
-        resize(); // Call once on load
-        animate();
-
-        // --- 2. Scroll Reveal Animation (Performance Optimized) ---
+        // --- Scroll Reveal Animation ---
         const observerOptions = {
             threshold: 0.1
         };
