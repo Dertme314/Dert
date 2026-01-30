@@ -388,7 +388,6 @@
                 update() {
                     this.x += this.vx;
                     this.y += this.vy;
-                    // Wrap around edges for smoother scrolling interaction
                     if (this.x < 0) this.x = width;
                     if (this.x > width) this.x = 0;
                     if (this.y < 0) this.y = height;
