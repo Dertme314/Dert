@@ -116,7 +116,8 @@
 </head>
 <body class="antialiased selection:bg-brand-blue selection:text-black">
 
-    <div class="fixed top-0 left-0 w-full h-full z-[-1] bg-gradient-to-tr from-brand-blue/5 via-transparent to-brand-purple/5 pointer-events-none"></div>
+    <!-- Reactive Canvas Background -->
+    <canvas id="bg-canvas" class="fixed inset-0 z-[-1] pointer-events-none opacity-40"></canvas>
 
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 p-4" id="navbar">
         <div class="max-w-5xl mx-auto backdrop-blur-md bg-[#1e1f20]/80 border border-white/5 rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
@@ -362,6 +363,96 @@
             observer.observe(el);
         });
 
+        // --- Reactive Canvas Background ---
+        const canvas = document.getElementById('bg-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let width, height;
+
+            const resize = () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                initParticles();
+            };
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 1;
+                    this.color = Math.random() > 0.5 ? '#4ba3ff' : '#a56eff'; // Brand colors
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    // Wrap around edges for smoother scrolling interaction
+                    if (this.x < 0) this.x = width;
+                    if (this.x > width) this.x = 0;
+                    if (this.y < 0) this.y = height;
+                    if (this.y > height) this.y = 0;
+                }
+                draw() {
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = 0.5;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            const initParticles = () => {
+                particles = [];
+                const count = Math.min(Math.floor(window.innerWidth / 15), 60); // Responsive count
+                for (let i = 0; i < count; i++) particles.push(new Particle());
+            };
+
+            const mouse = { x: null, y: null };
+            window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+            window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+            // --- Scroll Reaction ---
+            let lastScrollY = window.scrollY;
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                const delta = currentScrollY - lastScrollY;
+                lastScrollY = currentScrollY;
+                
+                particles.forEach(p => {
+                    // Parallax effect: move particles based on scroll speed and size
+                    p.y -= delta * (p.size * 0.2);
+                });
+            });
+
+            const animate = () => {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                    if (mouse.x != null) {
+                        const dx = p.x - mouse.x;
+                        const dy = p.y - mouse.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 150) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = p.color;
+                            ctx.globalAlpha = 1 - (dist/150);
+                            ctx.lineWidth = 1;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(mouse.x, mouse.y);
+                            ctx.stroke();
+                        }
+                    }
+                });
+                requestAnimationFrame(animate);
+            };
+
+            window.addEventListener('resize', resize);
+            resize();
+            animate();
+        }
     </script>
 </body>
 </html>
