@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Developer Portfolio - Dert</title>
-    <meta name="description" content="Portfolio of Dert - Full Stack Developer specializing in HTML, JS, Node.js and Electron apps.">
-    
+    <meta name="description"
+        content="Portfolio of Dert - Full Stack Developer specializing in HTML, JS, Node.js and Electron apps.">
+
     <meta property="og:title" content="Dert - Developer Portfolio">
     <meta property="og:description" content="Where imagination and creation come together. Welcome to my sandbox.">
     <meta property="og:image" content="https://placehold.co/1200x630/00bfff/ffffff?text=Dert+Portfolio">
     <meta property="og:url" content="https://derts.vercel.app">
 
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
 
@@ -60,10 +62,22 @@
         }
 
         /* --- Scrollbar --- */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--primary-blue); }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue);
+        }
 
         /* --- Text Gradients --- */
         .text-gradient {
@@ -98,8 +112,13 @@
         }
 
         @keyframes pulseGlow {
-            0% { text-shadow: 0 0 10px rgba(0, 191, 255, 0.5); }
-            100% { text-shadow: 0 0 25px rgba(0, 191, 255, 0.9), 0 0 50px rgba(0, 191, 255, 0.4); }
+            0% {
+                text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+            }
+
+            100% {
+                text-shadow: 0 0 25px rgba(0, 191, 255, 0.9), 0 0 50px rgba(0, 191, 255, 0.4);
+            }
         }
 
         /* --- Scroll Reveal --- */
@@ -108,35 +127,45 @@
             transform: translateY(30px);
             transition: all 0.8s ease-out;
         }
+
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
     </style>
 </head>
+
 <body class="antialiased selection:bg-brand-blue selection:text-black">
 
     <!-- Reactive Canvas Background -->
     <canvas id="bg-canvas" class="fixed inset-0 z-[-1] pointer-events-none opacity-40"></canvas>
 
     <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 p-4" id="navbar">
-        <div class="max-w-5xl mx-auto backdrop-blur-md bg-[#1e1f20]/80 border border-white/5 rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
+        <div
+            class="max-w-5xl mx-auto backdrop-blur-md bg-[#1e1f20]/80 border border-white/5 rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
             <a href="#" class="font-bold text-lg md:text-xl tracking-tighter hover:text-brand-blue transition">
                 DERTS<span class="text-brand-blue">.VERCEL.APP</span>
             </a>
 
             <div class="hidden md:flex items-center space-x-1">
-                <a href="#home" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Home</a>
-                <a href="#about" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">About</a>
-                <a href="#projects" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Projects</a>
-                <a href="#contact" class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Contact</a>
+                <a href="#home"
+                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Home</a>
+                <a href="#about"
+                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">About</a>
+                <a href="#projects"
+                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Projects</a>
+                <a href="#contact"
+                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Contact</a>
             </div>
 
             <div class="flex space-x-3">
-                <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer" aria-label="Discord" class="text-gray-400 hover:text-brand-blue transition transform hover:scale-110">
+                <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
+                    aria-label="Discord"
+                    class="text-gray-400 hover:text-brand-blue transition transform hover:scale-110">
                     <i class="fab fa-discord text-xl"></i>
                 </a>
-                <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-gray-400 hover:text-white transition transform hover:scale-110">
+                <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+                    class="text-gray-400 hover:text-white transition transform hover:scale-110">
                     <i class="fab fa-github text-xl"></i>
                 </a>
             </div>
@@ -146,17 +175,21 @@
     <main class="container mx-auto px-4 pt-32 pb-16">
 
         <section id="home" class="min-h-[80vh] flex flex-col justify-center items-center text-center relative mb-20">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full z-[-1]"></div>
+            <div
+                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full z-[-1]">
+            </div>
 
             <div class="reveal animate-float">
-                <span class="px-4 py-1.5 text-sm font-medium tracking-wide text-brand-blue bg-brand-blue/10 rounded-full border border-brand-blue/20 mb-6 inline-block">
+                <span
+                    class="px-4 py-1.5 text-sm font-medium tracking-wide text-brand-blue bg-brand-blue/10 rounded-full border border-brand-blue/20 mb-6 inline-block">
                     Full Stack Developer
                 </span>
             </div>
-            
+
             <h1 class="text-6xl md:text-7xl font-semibold tracking-tight mb-8 reveal delay-100 leading-tight">
                 <span class="text-white">Imagine.</span>
-                <span class="bg-gradient-to-r from-brand-blue to-brand-purple bg-clip-text text-transparent">Create.</span>
+                <span
+                    class="bg-gradient-to-r from-brand-blue to-brand-purple bg-clip-text text-transparent">Create.</span>
             </h1>
 
             <p class="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mb-12 reveal delay-200 leading-relaxed">
@@ -164,10 +197,13 @@
             </p>
 
             <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
-                <a href="#projects" class="group relative px-8 py-4 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-semibold rounded-full overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(75,163,255,0.3)] hover:scale-[1.02]">
-                    <span class="relative z-10">View Projects <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></span>
+                <a href="#projects"
+                    class="group relative px-8 py-4 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-semibold rounded-full overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(75,163,255,0.3)] hover:scale-[1.02]">
+                    <span class="relative z-10">View Projects <i
+                            class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></span>
                 </a>
-                <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer" class="px-8 py-4 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-all hover:border-white/20">
+                <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer"
+                    class="px-8 py-4 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-all hover:border-white/20">
                     My Bio Link
                 </a>
             </div>
@@ -177,17 +213,25 @@
             <div class="glass-card rounded-[2rem] p-8 md:p-12 reveal">
                 <div class="flex flex-col md:flex-row items-center gap-10">
                     <div class="relative shrink-0 group">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-brand-blue to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
-                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=D" alt="Dert Avatar" class="relative w-40 h-40 object-cover rounded-full border-2 border-white/10 shadow-2xl">
+                        <div
+                            class="absolute -inset-1 bg-gradient-to-r from-brand-blue to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200">
+                        </div>
+                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=D" alt="Dert Avatar"
+                            class="relative w-40 h-40 object-cover rounded-full border-2 border-white/10 shadow-2xl">
                     </div>
-                    
+
                     <div class="text-center md:text-left">
                         <h2 class="text-3xl font-bold mb-4 text-white">The Creator</h2>
                         <p class="text-gray-300 leading-relaxed text-lg mb-4">
-                            Hey there! I'm <span class="text-brand-blue font-semibold">Dert</span>, and honestly, I love messing around with code and building cool stuff for fun. If I can think it up, I try to make it work.
+                            Hey there! I'm <span class="text-brand-blue font-semibold">Dert</span>, and honestly, I love
+                            messing around with code and building cool stuff for fun. If I can think it up, I try to
+                            make it work.
                         </p>
                         <p class="text-gray-400">
-                            I like turning random ideas into actual working projects, if that's transforming video into ASCII art, building small desktop apps with Electron, or just keeping my personal websites running smoothly. This whole site is basically a sandbox for my hobbies. Let's see what happens next!
+                            I like turning random ideas into actual working projects, if that's transforming video into
+                            ASCII art, building small desktop apps with Electron, or just keeping my personal websites
+                            running smoothly. This whole site is basically a sandbox for my hobbies. Let's see what
+                            happens next!
                         </p>
                     </div>
                 </div>
@@ -206,15 +250,20 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-100 group">
                     <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-full text-brand-blue">
+                        <div
+                            class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-full text-brand-blue">
                             <i class="fas fa-cogs text-lg"></i>
                         </div>
-                        <a href="https://github.com/dertme314/Encoder.exe" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-brand-blue transition">
+                        <a href="https://github.com/dertme314/Encoder.exe" target="_blank" rel="noopener noreferrer"
+                            aria-label="View Source" class="text-gray-500 hover:text-brand-blue transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-brand-blue transition-colors">Encoder.exe</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">A tool packed with various encoders and decoders, featuring a multi-chain layer system for complex tasks. It includes full API documentation, making it easy for other devs to integrate these functions into their own projects.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-brand-blue transition-colors">
+                        Encoder.exe</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A tool packed with various encoders and decoders,
+                        featuring a multi-chain layer system for complex tasks. It includes full API documentation,
+                        making it easy for other devs to integrate these functions into their own projects.</p>
                     <div class="flex gap-2 text-xs font-mono text-gray-500">
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Tools</span>
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">API</span>
@@ -223,15 +272,19 @@
 
                 <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-200 group">
                     <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 flex items-center justify-center bg-purple-500/10 rounded-full text-purple-400">
+                        <div
+                            class="w-12 h-12 flex items-center justify-center bg-purple-500/10 rounded-full text-purple-400">
                             <i class="fas fa-globe text-lg"></i>
                         </div>
-                        <a href="https://github.com/dertme314/Derty-website" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/Derty-website" target="_blank" rel="noopener noreferrer"
+                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">Derty-website</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">The official download page for the Derty executor. This is where you go to get the latest version and get set up.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">
+                        Derty-website</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">The official download page for the Derty executor.
+                        This is where you go to get the latest version and get set up.</p>
                     <div class="flex gap-2 text-xs font-mono text-gray-500">
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Web</span>
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Executor</span>
@@ -240,15 +293,19 @@
 
                 <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-300 group">
                     <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 flex items-center justify-center bg-green-500/10 rounded-full text-green-400">
+                        <div
+                            class="w-12 h-12 flex items-center justify-center bg-green-500/10 rounded-full text-green-400">
                             <i class="fas fa-wrench text-lg"></i>
                         </div>
-                        <a href="https://github.com/dertme314/xeno-fixes" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/xeno-fixes" target="_blank" rel="noopener noreferrer"
+                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">xeno-fixes</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">A collection of patches and fixes for Xeno. If something isn't working right or keeps crashing, this repo has the files to patch it up.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
+                        xeno-fixes</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A collection of patches and fixes for Xeno. If
+                        something isn't working right or keeps crashing, this repo has the files to patch it up.</p>
                     <div class="flex gap-2 text-xs font-mono text-gray-500">
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Patching</span>
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Fixes</span>
@@ -260,12 +317,15 @@
                         <div class="w-12 h-12 flex items-center justify-center bg-red-500/10 rounded-full text-red-400">
                             <i class="fas fa-arrow-up text-lg"></i>
                         </div>
-                        <a href="https://github.com/dertme314/Unc-for-xeno" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/Unc-for-xeno" target="_blank" rel="noopener noreferrer"
+                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">Unc-for-xeno</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">Scripts that upgrade Xeno’s current functions. It takes the stock features and improves them so they run better and do more.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
+                        Unc-for-xeno</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">Scripts that upgrade Xeno’s current functions. It
+                        takes the stock features and improves them so they run better and do more.</p>
                     <div class="flex gap-2 text-xs font-mono text-gray-500">
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Scripts</span>
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Upgrade</span>
@@ -274,15 +334,20 @@
 
                 <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-200 group">
                     <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 flex items-center justify-center bg-pink-500/10 rounded-full text-pink-400">
+                        <div
+                            class="w-12 h-12 flex items-center justify-center bg-pink-500/10 rounded-full text-pink-400">
                             <i class="fas fa-layer-group text-lg"></i>
                         </div>
-                        <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/Dertme314.github.io" target="_blank"
+                            rel="noopener noreferrer" aria-label="View Source"
+                            class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">Executor Hub</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">An executor hub where you can browse and find different executors to use. It’s a directory for finding the right tool for the job.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">FreeDert
+                    </h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">Your Ultimate Resource Hub for Privacy, Freedom, and
+                        Tools.</p>
                     <div class="flex gap-2 text-xs font-mono text-gray-500">
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Hub</span>
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Directory</span>
@@ -291,15 +356,19 @@
 
                 <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-300 group">
                     <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 flex items-center justify-center bg-yellow-500/10 rounded-full text-yellow-400">
+                        <div
+                            class="w-12 h-12 flex items-center justify-center bg-yellow-500/10 rounded-full text-yellow-400">
                             <i class="fas fa-download text-lg"></i>
                         </div>
-                        <a href="https://github.com/dertme314/RDD-Dert" target="_blank" rel="noopener noreferrer" aria-label="View Source" class="text-gray-500 hover:text-white transition">
+                        <a href="https://github.com/dertme314/RDD-Dert" target="_blank" rel="noopener noreferrer"
+                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">RDD-Dert</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">A quick downloader for Roblox assets. It’s just a simple tool to help you grab the files you need without a headache.</p>
+                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
+                        RDD-Dert</h3>
+                    <p class="text-gray-400 text-sm mb-6 flex-grow">A quick downloader for Roblox assets. It’s just a
+                        simple tool to help you grab the files you need without a headache.</p>
                     <div class="flex gap-2 text-xs font-mono text-gray-500">
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Downloader</span>
                         <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Tools</span>
@@ -310,45 +379,55 @@
 
         <section id="skills" class="mb-32 text-center">
             <h2 class="text-4xl font-bold text-white mb-12 reveal">Featured Knowledge</h2>
-            
+
             <div class="flex flex-wrap justify-center gap-4 reveal">
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-html5 text-orange-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">HTML5</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-css3-alt text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Tailwind</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-js text-yellow-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">JavaScript</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-react text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">React</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fab fa-node text-green-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Node.js</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-server text-purple-500 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">API Dev</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-desktop text-gray-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Electron</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-microchip text-blue-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">C++ (Learning)</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-hashtag text-indigo-400 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">C# (Learning)</span>
                 </div>
-                <div class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
+                <div
+                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
                     <i class="fas fa-moon text-yellow-200 text-xl group-hover:scale-110 transition-transform"></i>
                     <span class="text-gray-300 font-medium group-hover:text-white">Lua (Learning)</span>
                 </div>
@@ -357,13 +436,17 @@
 
         <section id="contact" class="max-w-4xl mx-auto text-center reveal">
             <div class="relative glass-card rounded-[2.5rem] p-12 overflow-hidden border border-white/5">
-                <div class="absolute inset-0 bg-gradient-to-tr from-brand-blue/10 via-transparent to-purple-500/10 opacity-50"></div>
+                <div
+                    class="absolute inset-0 bg-gradient-to-tr from-brand-blue/10 via-transparent to-purple-500/10 opacity-50">
+                </div>
                 <div class="relative z-10">
                     <h2 class="text-4xl font-bold text-white mb-6">Let's Build Something Crazy</h2>
                     <p class="text-gray-400 mb-10 text-lg max-w-2xl mx-auto">
-                        Got an idea? Need a developer? Or just want to chat about tech? I'm always open to discussing new projects and creative ideas.
+                        Got an idea? Need a developer? Or just want to chat about tech? I'm always open to discussing
+                        new projects and creative ideas.
                     </p>
-                    <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer" class="inline-flex items-center bg-white text-black font-semibold py-4 px-10 rounded-full transition-all hover:bg-gray-200 hover:scale-[1.02] shadow-lg">
+                    <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
+                        class="inline-flex items-center bg-white text-black font-semibold py-4 px-10 rounded-full transition-all hover:bg-gray-200 hover:scale-[1.02] shadow-lg">
                         <i class="fab fa-discord mr-3 text-xl"></i> Chat on Discord
                     </a>
                 </div>
@@ -450,7 +533,7 @@
                 const currentScrollY = window.scrollY;
                 const delta = currentScrollY - lastScrollY;
                 lastScrollY = currentScrollY;
-                
+
                 particles.forEach(p => {
                     // Parallax effect: move particles based on scroll speed and size
                     p.y -= delta * (p.size * 0.2);
@@ -465,11 +548,11 @@
                     if (mouse.x != null) {
                         const dx = p.x - mouse.x;
                         const dy = p.y - mouse.y;
-                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        const dist = Math.sqrt(dx * dx + dy * dy);
                         if (dist < 150) {
                             ctx.beginPath();
                             ctx.strokeStyle = p.color;
-                            ctx.globalAlpha = 1 - (dist/150);
+                            ctx.globalAlpha = 1 - (dist / 150);
                             ctx.lineWidth = 1;
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(mouse.x, mouse.y);
@@ -486,4 +569,5 @@
         }
     </script>
 </body>
+
 </html>
