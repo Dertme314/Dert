@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Developer Portfolio - Dert</title>
-    <meta name="description"
-        content="Portfolio of Dert - Full Stack Developer specializing in HTML, JS, Node.js and Electron apps.">
-
-    <meta property="og:title" content="Dert - Developer Portfolio">
-    <meta property="og:description" content="Where imagination and creation come together. Welcome to my sandbox.">
-    <meta property="og:image" content="https://placehold.co/1200x630/00bfff/ffffff?text=Dert+Portfolio">
+    <title>Dert</title>
+    <meta name="description" content="Developer portfolio of Dert. Building tools, sites, and scripts.">
+    <meta property="og:title" content="Dert">
+    <meta property="og:description" content="Where Imagination and Creation come together.">
+    <meta property="og:image" content="https://avatars.githubusercontent.com/u/203884500?v=4">
     <meta property="og:url" content="https://derts.vercel.app">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <script>
@@ -23,549 +19,1111 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            blue: '#4ba3ff',
-                            purple: '#a56eff',
-                            dark: '#131314',
-                        }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
-            --primary-blue: #4ba3ff;
-            --primary-purple: #a56eff;
+            --bg: #050510;
+            --surface: rgba(12, 14, 30, 0.7);
+            --surface-hover: rgba(20, 24, 50, 0.8);
+            --border: rgba(59, 139, 255, 0.12);
+            --border-hover: rgba(59, 139, 255, 0.3);
+            --accent: #3b8bff;
+            --accent-2: #6c5ce7;
+            --accent-soft: rgba(59, 139, 255, 0.1);
+            --accent-glow: rgba(59, 139, 255, 0.5);
+            --text: #e4e4f0;
+            --text-muted: #6e6e8a;
+            --text-dim: #44445a;
+            --font: 'Outfit', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #131314;
-            color: #e3e3e3;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
             overflow-x: hidden;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- Scrollbar --- */
+        ::selection {
+            background: var(--accent);
+            color: #000;
+        }
+
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 5px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
+            background: rgba(59, 139, 255, 0.3);
+            border-radius: 10px;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-blue);
+        a {
+            color: inherit;
+            text-decoration: none;
         }
 
-        /* --- Text Gradients --- */
-        .text-gradient {
-            background: linear-gradient(to right, #ffffff, var(--primary-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        canvas#particles {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
         }
 
-        /* --- Glass Card --- */
-        .glass-card {
+        .layout {
             position: relative;
-            background: rgba(30, 31, 32, 0.6);
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 8px;
+            background: rgba(8, 10, 24, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-tab {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            background: none;
+            font-family: var(--font);
+            white-space: nowrap;
+            user-select: none;
         }
 
-        .glass-card:hover {
-            background: rgba(45, 46, 48, 0.8);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.1);
+        .nav-tab:hover {
+            color: var(--text);
+            background: rgba(59, 139, 255, 0.06);
         }
 
-        /* --- Neon Glow --- */
-        .neon-text-pulse {
-            text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
-            animation: pulseGlow 3s infinite alternate;
+        .nav-tab.active {
+            color: #fff;
+            background: var(--accent);
+            box-shadow: 0 0 20px rgba(59, 139, 255, 0.3);
         }
 
-        @keyframes pulseGlow {
-            0% {
-                text-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
-            }
-
-            100% {
-                text-shadow: 0 0 25px rgba(0, 191, 255, 0.9), 0 0 50px rgba(0, 191, 255, 0.4);
-            }
+        .nav-sep {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 0 6px;
         }
 
-        /* --- Scroll Reveal --- */
-        .reveal {
+        .nav-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            color: var(--text-muted);
+            font-size: 16px;
+            transition: all 0.25s;
+        }
+
+        .nav-icon:hover {
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .tab-page {
+            display: none;
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            flex: 1;
         }
 
-        .reveal.active {
+        .tab-page.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tab-page.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .page-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 100px 24px 60px;
+            width: 100%;
+            flex: 1;
+        }
+
+        .hero-page {
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .hero-page .page-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 0;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            background: var(--accent-soft);
+            border: 1px solid rgba(59, 139, 255, 0.15);
+            padding: 8px 20px;
+            border-radius: 100px;
+            margin-bottom: 40px;
+        }
+
+        .hero-tag .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.2;
+            }
+        }
+
+        .hero-name {
+            font-size: clamp(64px, 12vw, 120px);
+            font-weight: 900;
+            letter-spacing: -4px;
+            line-height: 1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent-2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 40px rgba(59, 139, 255, 0.25));
+        }
+
+        .hero-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 300;
+            max-width: 420px;
+            line-height: 1.7;
+            margin-bottom: 44px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: var(--font);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            border-color: var(--border-hover);
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            border: none;
+            color: #fff;
+        }
+
+        .btn-accent:hover {
+            box-shadow: 0 6px 30px var(--accent-glow);
+        }
+
+        .page-title {
+            font-size: clamp(36px, 5vw, 52px);
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 48px;
+        }
+
+        .about-layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 48px;
+            align-items: start;
+        }
+
+        .about-avatar-wrap {
+            position: relative;
+        }
+
+        .about-avatar-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            opacity: 0.4;
+            filter: blur(12px);
+            z-index: -1;
+        }
+
+        .about-avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            display: block;
+        }
+
+        .about-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .about-content p {
+            font-size: 15px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            flex: 1;
+            min-width: 120px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 18px 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-2px);
+        }
+
+        .stat-box .num {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--accent);
+            display: block;
+        }
+
+        .stat-box .label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .skills-section {
+            margin-top: 48px;
+        }
+
+        .skills-section h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .skill-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .skill-chip:hover {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(59, 139, 255, 0.1);
+        }
+
+        .skill-chip i {
+            font-size: 16px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(59, 139, 255, 0.08);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card-body {
+            padding: 24px;
+        }
+
+        .project-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .project-card-top .folder {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .project-card-top a {
+            color: var(--text-dim);
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .project-card-top a:hover {
+            color: var(--accent);
+        }
+
+        .project-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .project-card .desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .project-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .project-lang {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .lang-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .lang-dot.html {
+            background: #e34c26;
+        }
+
+        .lang-dot.javascript {
+            background: #f1e05a;
+        }
+
+        .lang-dot.css {
+            background: #563d7c;
+        }
+
+        .lang-dot.lua {
+            background: #000080;
+        }
+
+        .lang-dot.default {
+            background: #555;
+        }
+
+        .project-topics {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .topic {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .projects-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 0;
+            color: var(--text-dim);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .tracker-frame {
+            width: 100%;
+            height: calc(100vh - 80px);
+            border: none;
+            border-radius: 12px;
+            background: #050508;
+        }
+
+        .tracker-page .page-inner {
+            max-width: 100%;
+            padding-top: 80px;
+            padding-bottom: 0;
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .contact-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.2s;
+        }
+
+        .contact-link:last-child {
+            border-bottom: none;
+        }
+
+        .contact-link:hover {
+            padding-left: 8px;
+        }
+
+        .contact-link:hover .cl-icon {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            border-color: transparent;
+        }
+
+        .cl-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--accent-soft);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: var(--accent);
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .contact-link:hover .cl-icon {
+            color: #fff;
+        }
+
+        .cl-text strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .cl-text span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        footer {
+            text-align: center;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer p {
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                left: 12px;
+                right: 12px;
+                transform: none;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 2px;
+                padding: 6px;
+                border-radius: 14px;
+            }
+
+            .nav-tab {
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+
+            .about-layout {
+                grid-template-columns: 1fr;
+                gap: 24px;
+                justify-items: center;
+                text-align: center;
+            }
+
+            .about-avatar {
+                width: 140px;
+                height: 140px;
+            }
+
+            .projects-grid,
+            .contact-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-row {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-name {
+                font-size: 56px;
+                letter-spacing: -2px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 260px;
+                justify-content: center;
+            }
+
+            .nav-sep,
+            .nav-icon {
+                display: none;
+            }
         }
     </style>
 </head>
 
-<body class="antialiased selection:bg-brand-blue selection:text-black">
+<body>
+    <canvas id="particles"></canvas>
 
-    <!-- Reactive Canvas Background -->
-    <canvas id="bg-canvas" class="fixed inset-0 z-[-1] pointer-events-none opacity-40"></canvas>
-
-    <nav class="fixed top-0 left-0 w-full z-50 transition-all duration-300 p-4" id="navbar">
-        <div
-            class="max-w-5xl mx-auto backdrop-blur-md bg-[#1e1f20]/80 border border-white/5 rounded-full px-6 py-3 flex justify-between items-center shadow-lg shadow-black/20">
-            <a href="#" class="font-bold text-lg md:text-xl tracking-tighter hover:text-brand-blue transition">
-                DERTS<span class="text-brand-blue">.VERCEL.APP</span>
-            </a>
-
-            <div class="hidden md:flex items-center space-x-1">
-                <a href="#home"
-                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Home</a>
-                <a href="#about"
-                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">About</a>
-                <a href="#projects"
-                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Projects</a>
-                <a href="#contact"
-                    class="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition">Contact</a>
-            </div>
-
-            <div class="flex space-x-3">
-                <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
-                    aria-label="Discord"
-                    class="text-gray-400 hover:text-brand-blue transition transform hover:scale-110">
-                    <i class="fab fa-discord text-xl"></i>
-                </a>
-                <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
-                    class="text-gray-400 hover:text-white transition transform hover:scale-110">
-                    <i class="fab fa-github text-xl"></i>
-                </a>
-            </div>
-        </div>
+    <nav>
+        <button class="nav-tab active" data-tab="home">Home</button>
+        <button class="nav-tab" data-tab="about">About</button>
+        <button class="nav-tab" data-tab="projects">Projects</button>
+        <button class="nav-tab" data-tab="contact">Contact</button>
+        <button class="nav-tab" data-tab="tracker">Exploits</button>
+        <div class="nav-sep"></div>
+        <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
+            class="nav-icon" aria-label="Discord">
+            <i class="fab fa-discord"></i>
+        </a>
+        <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer" class="nav-icon"
+            aria-label="GitHub">
+            <i class="fab fa-github"></i>
+        </a>
     </nav>
 
-    <main class="container mx-auto px-4 pt-32 pb-16">
+    <div class="layout">
 
-        <section id="home" class="min-h-[80vh] flex flex-col justify-center items-center text-center relative mb-20">
-            <div
-                class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-brand-blue/20 blur-[100px] rounded-full z-[-1]">
-            </div>
-
-            <div class="reveal animate-float">
-                <span
-                    class="px-4 py-1.5 text-sm font-medium tracking-wide text-brand-blue bg-brand-blue/10 rounded-full border border-brand-blue/20 mb-6 inline-block">
-                    Full Stack Developer
-                </span>
-            </div>
-
-            <h1 class="text-6xl md:text-7xl font-semibold tracking-tight mb-8 reveal delay-100 leading-tight">
-                <span class="text-white">Imagine.</span>
-                <span
-                    class="bg-gradient-to-r from-brand-blue to-brand-purple bg-clip-text text-transparent">Create.</span>
-            </h1>
-
-            <p class="text-xl md:text-2xl text-gray-400 font-light max-w-2xl mb-12 reveal delay-200 leading-relaxed">
-                Where imagination and creation come together. Welcome to my website!
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 reveal delay-300">
-                <a href="#projects"
-                    class="group relative px-8 py-4 bg-gradient-to-r from-brand-blue to-brand-purple text-white font-semibold rounded-full overflow-hidden transition-all hover:shadow-[0_0_30px_rgba(75,163,255,0.3)] hover:scale-[1.02]">
-                    <span class="relative z-10">View Projects <i
-                            class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i></span>
-                </a>
-                <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer"
-                    class="px-8 py-4 bg-white/5 border border-white/10 text-white font-medium rounded-full hover:bg-white/10 transition-all hover:border-white/20">
-                    My Bio Link
-                </a>
-            </div>
-        </section>
-
-        <section id="about" class="mb-32 max-w-5xl mx-auto">
-            <div class="glass-card rounded-[2rem] p-8 md:p-12 reveal">
-                <div class="flex flex-col md:flex-row items-center gap-10">
-                    <div class="relative shrink-0 group">
-                        <div
-                            class="absolute -inset-1 bg-gradient-to-r from-brand-blue to-purple-600 rounded-full blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200">
-                        </div>
-                        <img src="https://placehold.co/150x150/00bfff/ffffff?text=D" alt="Dert Avatar"
-                            class="relative w-40 h-40 object-cover rounded-full border-2 border-white/10 shadow-2xl">
-                    </div>
-
-                    <div class="text-center md:text-left">
-                        <h2 class="text-3xl font-bold mb-4 text-white">The Creator</h2>
-                        <p class="text-gray-300 leading-relaxed text-lg mb-4">
-                            Hey there! I'm <span class="text-brand-blue font-semibold">Dert</span>, and honestly, I love
-                            messing around with code and building cool stuff for fun. If I can think it up, I try to
-                            make it work.
-                        </p>
-                        <p class="text-gray-400">
-                            I like turning random ideas into actual working projects, if that's transforming video into
-                            ASCII art, building small desktop apps with Electron, or just keeping my personal websites
-                            running smoothly. This whole site is basically a sandbox for my hobbies. Let's see what
-                            happens next!
-                        </p>
-                    </div>
+        <div class="tab-page active visible hero-page" id="page-home">
+            <div class="page-inner">
+                <div class="hero-tag">
+                    <span class="pulse-dot"></span>
+                    Available for projects
                 </div>
-            </div>
-        </section>
-
-        <section id="projects" class="mb-32">
-            <div class="flex items-end justify-between mb-12 px-4 reveal">
-                <div>
-                    <h2 class="text-4xl md:text-5xl font-bold text-white">Featured Projects</h2>
-                    <div class="h-1 w-20 bg-brand-blue mt-2 rounded-full"></div>
-                </div>
-                <p class="text-gray-500 hidden md:block">Explore my latest builds</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-100 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div
-                            class="w-12 h-12 flex items-center justify-center bg-brand-blue/10 rounded-full text-brand-blue">
-                            <i class="fas fa-cogs text-lg"></i>
-                        </div>
-                        <a href="https://github.com/dertme314/Encoder.exe" target="_blank" rel="noopener noreferrer"
-                            aria-label="View Source" class="text-gray-500 hover:text-brand-blue transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-brand-blue transition-colors">
-                        Encoder.exe</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">A tool packed with various encoders and decoders,
-                        featuring a multi-chain layer system for complex tasks. It includes full API documentation,
-                        making it easy for other devs to integrate these functions into their own projects.</p>
-                    <div class="flex gap-2 text-xs font-mono text-gray-500">
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Tools</span>
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">API</span>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-200 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div
-                            class="w-12 h-12 flex items-center justify-center bg-purple-500/10 rounded-full text-purple-400">
-                            <i class="fas fa-globe text-lg"></i>
-                        </div>
-                        <a href="https://github.com/dertme314/Derty-website" target="_blank" rel="noopener noreferrer"
-                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-purple-400 transition-colors">
-                        Derty-website</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">The official download page for the Derty executor.
-                        This is where you go to get the latest version and get set up.</p>
-                    <div class="flex gap-2 text-xs font-mono text-gray-500">
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Web</span>
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Executor</span>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-300 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div
-                            class="w-12 h-12 flex items-center justify-center bg-green-500/10 rounded-full text-green-400">
-                            <i class="fas fa-wrench text-lg"></i>
-                        </div>
-                        <a href="https://github.com/dertme314/xeno-fixes" target="_blank" rel="noopener noreferrer"
-                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-green-400 transition-colors">
-                        xeno-fixes</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">A collection of patches and fixes for Xeno. If
-                        something isn't working right or keeps crashing, this repo has the files to patch it up.</p>
-                    <div class="flex gap-2 text-xs font-mono text-gray-500">
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Patching</span>
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Fixes</span>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-100 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="w-12 h-12 flex items-center justify-center bg-red-500/10 rounded-full text-red-400">
-                            <i class="fas fa-arrow-up text-lg"></i>
-                        </div>
-                        <a href="https://github.com/dertme314/Unc-for-xeno" target="_blank" rel="noopener noreferrer"
-                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-red-400 transition-colors">
-                        Unc-for-xeno</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">Scripts that upgrade Xeno’s current functions. It
-                        takes the stock features and improves them so they run better and do more.</p>
-                    <div class="flex gap-2 text-xs font-mono text-gray-500">
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Scripts</span>
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Upgrade</span>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-200 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div
-                            class="w-12 h-12 flex items-center justify-center bg-pink-500/10 rounded-full text-pink-400">
-                            <i class="fas fa-layer-group text-lg"></i>
-                        </div>
-                        <a href="https://github.com/dertme314/FreeDert" target="_blank" rel="noopener noreferrer"
-                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-pink-400 transition-colors">FreeDert
-                    </h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">Your Ultimate Resource Hub for Privacy, Freedom, and
-                        Tools.</p>
-                    <div class="flex gap-2 text-xs font-mono text-gray-500">
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Hub</span>
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Directory</span>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-[1.5rem] p-8 flex flex-col h-full reveal delay-300 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div
-                            class="w-12 h-12 flex items-center justify-center bg-yellow-500/10 rounded-full text-yellow-400">
-                            <i class="fas fa-download text-lg"></i>
-                        </div>
-                        <a href="https://github.com/dertme314/RDD-Dert" target="_blank" rel="noopener noreferrer"
-                            aria-label="View Source" class="text-gray-500 hover:text-white transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </a>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-yellow-400 transition-colors">
-                        RDD-Dert</h3>
-                    <p class="text-gray-400 text-sm mb-6 flex-grow">A quick downloader for Roblox assets. It’s just a
-                        simple tool to help you grab the files you need without a headache.</p>
-                    <div class="flex gap-2 text-xs font-mono text-gray-500">
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Downloader</span>
-                        <span class="px-2 py-1 bg-white/5 rounded border border-white/5">Tools</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills" class="mb-32 text-center">
-            <h2 class="text-4xl font-bold text-white mb-12 reveal">Featured Knowledge</h2>
-
-            <div class="flex flex-wrap justify-center gap-4 reveal">
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fab fa-html5 text-orange-500 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">HTML5</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fab fa-css3-alt text-blue-500 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">Tailwind</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fab fa-js text-yellow-400 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">JavaScript</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fab fa-react text-cyan-400 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">React</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fab fa-node text-green-500 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">Node.js</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fas fa-server text-purple-500 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">API Dev</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fas fa-desktop text-gray-400 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">Electron</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fas fa-microchip text-blue-400 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">C++ (Learning)</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fas fa-hashtag text-indigo-400 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">C# (Learning)</span>
-                </div>
-                <div
-                    class="px-6 py-3 rounded-full bg-[#1e1f20] border border-white/5 hover:border-brand-blue/50 hover:bg-[#2a2b2d] transition-all cursor-default flex items-center gap-3 group shadow-lg">
-                    <i class="fas fa-moon text-yellow-200 text-xl group-hover:scale-110 transition-transform"></i>
-                    <span class="text-gray-300 font-medium group-hover:text-white">Lua (Learning)</span>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="max-w-4xl mx-auto text-center reveal">
-            <div class="relative glass-card rounded-[2.5rem] p-12 overflow-hidden border border-white/5">
-                <div
-                    class="absolute inset-0 bg-gradient-to-tr from-brand-blue/10 via-transparent to-purple-500/10 opacity-50">
-                </div>
-                <div class="relative z-10">
-                    <h2 class="text-4xl font-bold text-white mb-6">Let's Build Something Crazy</h2>
-                    <p class="text-gray-400 mb-10 text-lg max-w-2xl mx-auto">
-                        Got an idea? Need a developer? Or just want to chat about tech? I'm always open to discussing
-                        new projects and creative ideas.
-                    </p>
-                    <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
-                        class="inline-flex items-center bg-white text-black font-semibold py-4 px-10 rounded-full transition-all hover:bg-gray-200 hover:scale-[1.02] shadow-lg">
-                        <i class="fab fa-discord mr-3 text-xl"></i> Chat on Discord
+                <h1 class="hero-name">Dert</h1>
+                <p class="hero-desc">
+                    Developer and builder. Turning random ideas into working projects, one at a time.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-accent" data-tab="projects">
+                        <i class="fas fa-rocket"></i> View Projects
+                    </button>
+                    <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer" class="btn">
+                        <i class="fas fa-link"></i> Bio Link
                     </a>
                 </div>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <div class="tab-page" id="page-about">
+            <div class="page-inner">
+                <h2 class="page-title">About Me</h2>
+                <p class="page-subtitle">The person behind the code</p>
 
-    <footer class="border-t border-white/5 bg-black py-8 text-center mt-20">
-        <p class="text-gray-600 text-sm">© 2025 DERTS.VERCEL.APP • Code is Poetry</p>
-    </footer>
+                <div class="about-layout">
+                    <div class="about-avatar-wrap">
+                        <img src="https://avatars.githubusercontent.com/u/203884500?v=4" alt="Dert"
+                            class="about-avatar">
+                    </div>
+                    <div class="about-content">
+                        <h3>Hey, I'm Dert</h3>
+                        <p>
+                            I got into coding because I was curious. I wanted to know how websites actually
+                            worked and how tools could make things easier. That curiosity quickly became a
+                            full-on obsession with building things people actually want to use.
+                        </p>
+                        <p>
+                            These days, I'm all about creating stuff that's fun and useful. From transforming
+                            video into ASCII art, building desktop apps with Electron, or keeping sites running.
+                            This whole portfolio is basically a sandbox for my hobbies.
+                        </p>
+
+                        <div class="stat-row" id="stats-row">
+                            <div class="stat-box">
+                                <span class="num" id="stat-repos">18</span>
+                                <span class="label">Repos</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="num">6</span>
+                                <span class="label">Pinned</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="num">2025</span>
+                                <span class="label">Started</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-section">
+                    <h4>Tech Stack</h4>
+                    <div class="skills-grid">
+                        <div class="skill-chip"><i class="fab fa-html5" style="color: #e34c26;"></i> HTML</div>
+                        <div class="skill-chip"><i class="fab fa-css3-alt" style="color: #2965f1;"></i> CSS</div>
+                        <div class="skill-chip"><i class="fab fa-js" style="color: #f0db4f;"></i> JavaScript</div>
+                        <div class="skill-chip"><i class="fab fa-react" style="color: #61dafb;"></i> React</div>
+                        <div class="skill-chip"><i class="fab fa-node" style="color: #68a063;"></i> Node.js</div>
+                        <div class="skill-chip"><i class="fas fa-desktop" style="color: #9feaf9;"></i> Electron</div>
+                        <div class="skill-chip"><i class="fas fa-server" style="color: #a56eff;"></i> API Dev</div>
+                        <div class="skill-chip"><i class="fas fa-microchip" style="color: #659ad2;"></i> C++</div>
+                        <div class="skill-chip"><i class="fas fa-hashtag" style="color: #9b4dca;"></i> C#</div>
+                        <div class="skill-chip"><i class="fas fa-moon" style="color: #5555aa;"></i> Lua</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-page" id="page-projects">
+            <div class="page-inner">
+                <h2 class="page-title">Projects</h2>
+                <p class="page-subtitle">Pinned repositories from GitHub</p>
+
+                <div class="projects-grid" id="projects-grid">
+                    <div class="projects-loading">
+                        <div class="spinner"></div>
+                        Loading from GitHub...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-page" id="page-contact">
+            <div class="page-inner">
+                <h2 class="page-title">Contact</h2>
+                <p class="page-subtitle">Want to work together or just chat? Reach out</p>
+
+                <div class="contact-layout">
+                    <div class="contact-card">
+                        <h3>Socials</h3>
+
+                        <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
+                            class="contact-link">
+                            <div class="cl-icon"><i class="fab fa-discord"></i></div>
+                            <div class="cl-text">
+                                <strong>Discord</strong>
+                                <span>dertme314</span>
+                            </div>
+                        </a>
+
+                        <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer"
+                            class="contact-link">
+                            <div class="cl-icon"><i class="fab fa-github"></i></div>
+                            <div class="cl-text">
+                                <strong>GitHub</strong>
+                                <span>Dertme314</span>
+                            </div>
+                        </a>
+
+                        <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer"
+                            class="contact-link">
+                            <div class="cl-icon"><i class="fas fa-link"></i></div>
+                            <div class="cl-text">
+                                <strong>Bio Link</strong>
+                                <span>guns.lol/dertme314</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="contact-card">
+                        <h3>Quick Nav</h3>
+
+                        <a href="javascript:void(0)" class="contact-link" data-tab="home">
+                            <div class="cl-icon"><i class="fas fa-home"></i></div>
+                            <div class="cl-text">
+                                <strong>Home</strong>
+                                <span>Back to landing</span>
+                            </div>
+                        </a>
+
+                        <a href="javascript:void(0)" class="contact-link" data-tab="about">
+                            <div class="cl-icon"><i class="fas fa-user"></i></div>
+                            <div class="cl-text">
+                                <strong>About</strong>
+                                <span>Learn more about me</span>
+                            </div>
+                        </a>
+
+                        <a href="javascript:void(0)" class="contact-link" data-tab="projects">
+                            <div class="cl-icon"><i class="fas fa-code"></i></div>
+                            <div class="cl-text">
+                                <strong>Projects</strong>
+                                <span>See what I've built</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-page tracker-page" id="page-tracker">
+            <div class="page-inner">
+                <iframe id="tracker-iframe" class="tracker-frame" loading="lazy"></iframe>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 derts.vercel.app</p>
+        </footer>
+    </div>
 
     <script>
-        // --- Scroll Reveal Animation ---
-        const observerOptions = {
-            threshold: 0.1
-        };
+        var FALLBACK_REPOS = [
+            { name: "FreeDert", description: "Your Ultimate Resource Hub for Privacy, Freedom, and Tools.", url: "https://github.com/Dertme314/FreeDert", language: "HTML", stars: 0, topics: ["hub", "privacy"] },
+            { name: "dert-ascii", description: "mp4 to ascii", url: "https://github.com/Dertme314/dert-ascii", language: "HTML", stars: 0, topics: ["ascii", "video"] },
+            { name: "xeno-fixes", description: "xeno fixes!", url: "https://github.com/Dertme314/xeno-fixes", language: "HTML", stars: 0, topics: ["patching"] },
+            { name: "Dert", description: "My bio", url: "https://github.com/Dertme314/Dert", language: "HTML", stars: 0, topics: ["portfolio"] },
+            { name: "RDD-Dert", description: "roblox downloader", url: "https://github.com/Dertme314/RDD-Dert", language: "JavaScript", stars: 0, topics: ["downloader"] },
+            { name: "Encoder.exe", description: "A tool packed with various encoders and decoders with a multi-chain layer system.", url: "https://github.com/Dertme314/Encoder.exe", language: "JavaScript", stars: 0, topics: ["tools", "api"] }
+        ];
 
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                    observer.unobserve(entry.target); // Stop watching once revealed
+        var trackerLoaded = false;
+
+        function switchTab(tabId) {
+            document.querySelectorAll(".nav-tab").forEach(function (t) {
+                t.classList.toggle("active", t.getAttribute("data-tab") === tabId);
+            });
+
+            document.querySelectorAll(".tab-page").forEach(function (p) {
+                var isTarget = p.id === "page-" + tabId;
+                if (isTarget) {
+                    p.classList.add("active");
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            p.classList.add("visible");
+                        });
+                    });
+                } else {
+                    p.classList.remove("visible");
+                    setTimeout(function () {
+                        if (!p.classList.contains("visible")) {
+                            p.classList.remove("active");
+                        }
+                    }, 400);
                 }
             });
-        }, observerOptions);
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
+            if (tabId === "tracker" && !trackerLoaded) {
+                document.getElementById("tracker-iframe").src = "/tracker.html";
+                trackerLoaded = true;
+            }
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        document.querySelectorAll("[data-tab]").forEach(function (el) {
+            el.addEventListener("click", function (e) {
+                if (el.tagName === "A" && el.getAttribute("href") && el.getAttribute("href").indexOf("http") === 0) return;
+                e.preventDefault();
+                switchTab(el.getAttribute("data-tab"));
+            });
         });
 
-        // --- Reactive Canvas Background ---
-        const canvas = document.getElementById('bg-canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let particles = [];
-            let width, height;
+        function getDotClass(lang) {
+            if (!lang) return "default";
+            var l = lang.toLowerCase();
+            if (l === "html") return "html";
+            if (l === "javascript") return "javascript";
+            if (l === "css") return "css";
+            if (l === "lua") return "lua";
+            return "default";
+        }
 
-            const resize = () => {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-                initParticles();
-            };
+        function renderProjects(repos) {
+            var grid = document.getElementById("projects-grid");
+            grid.innerHTML = "";
 
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * width;
-                    this.y = Math.random() * height;
-                    this.vx = (Math.random() - 0.5) * 0.5;
-                    this.vy = (Math.random() - 0.5) * 0.5;
-                    this.size = Math.random() * 2 + 1;
-                    this.color = Math.random() > 0.5 ? '#4ba3ff' : '#a56eff'; // Brand colors
+            repos.forEach(function (repo) {
+                var card = document.createElement("div");
+                card.className = "project-card";
+
+                var desc = repo.description || "No description";
+                var lang = repo.language || "";
+                var dc = getDotClass(lang);
+                var topics = repo.topics || [];
+
+                var topicsHTML = "";
+                topics.forEach(function (t) {
+                    topicsHTML += '<span class="topic">' + t + '</span>';
+                });
+
+                card.innerHTML =
+                    '<div class="project-card-body">' +
+                    '<div class="project-card-top">' +
+                    '<i class="fas fa-folder folder"></i>' +
+                    '<a href="' + repo.url + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i></a>' +
+                    '</div>' +
+                    '<h3>' + repo.name + '</h3>' +
+                    '<p class="desc">' + desc + '</p>' +
+                    '<div class="project-card-footer">' +
+                    (lang ? '<span class="project-lang"><span class="lang-dot ' + dc + '"></span>' + lang + '</span>' : '') +
+                    (topicsHTML ? '<div class="project-topics">' + topicsHTML + '</div>' : '') +
+                    '</div>' +
+                    '</div>';
+
+                grid.appendChild(card);
+            });
+        }
+
+        fetch("/api/pinned")
+            .then(function (res) {
+                if (!res.ok) throw new Error("fail");
+                return res.json();
+            })
+            .then(function (data) {
+                if (data && data.length > 0) {
+                    renderProjects(data);
+                } else {
+                    renderProjects(FALLBACK_REPOS);
                 }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    if (this.x < 0) this.x = width;
-                    if (this.x > width) this.x = 0;
-                    if (this.y < 0) this.y = height;
-                    if (this.y > height) this.y = 0;
-                }
-                draw() {
-                    ctx.fillStyle = this.color;
-                    ctx.globalAlpha = 0.5;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
+            })
+            .catch(function () {
+                renderProjects(FALLBACK_REPOS);
+            });
+
+        (function () {
+            var canvas = document.getElementById("particles");
+            if (!canvas) return;
+            var ctx = canvas.getContext("2d");
+            var dots = [];
+            var w, h;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+                init();
+            }
+
+            function init() {
+                dots = [];
+                var count = Math.min(Math.floor(w / 20), 55);
+                for (var i = 0; i < count; i++) {
+                    dots.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        vx: (Math.random() - 0.5) * 0.3,
+                        vy: (Math.random() - 0.5) * 0.3,
+                        r: Math.random() * 2 + 0.5,
+                        o: Math.random() * 0.5 + 0.2
+                    });
                 }
             }
 
-            const initParticles = () => {
-                particles = [];
-                const count = Math.min(Math.floor(window.innerWidth / 15), 60); // Responsive count
-                for (let i = 0; i < count; i++) particles.push(new Particle());
-            };
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                for (var i = 0; i < dots.length; i++) {
+                    var d = dots[i];
+                    d.x += d.vx;
+                    d.y += d.vy;
+                    if (d.x < 0) d.x = w;
+                    if (d.x > w) d.x = 0;
+                    if (d.y < 0) d.y = h;
+                    if (d.y > h) d.y = 0;
 
-            const mouse = { x: null, y: null };
-            window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-            window.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+                    ctx.beginPath();
+                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                    ctx.fillStyle = "rgba(59, 139, 255, " + d.o + ")";
+                    ctx.fill();
+                }
+                requestAnimationFrame(draw);
+            }
 
-            // --- Scroll Reaction ---
-            let lastScrollY = window.scrollY;
-            window.addEventListener('scroll', () => {
-                const currentScrollY = window.scrollY;
-                const delta = currentScrollY - lastScrollY;
-                lastScrollY = currentScrollY;
-
-                particles.forEach(p => {
-                    // Parallax effect: move particles based on scroll speed and size
-                    p.y -= delta * (p.size * 0.2);
-                });
-            });
-
-            const animate = () => {
-                ctx.clearRect(0, 0, width, height);
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                    if (mouse.x != null) {
-                        const dx = p.x - mouse.x;
-                        const dy = p.y - mouse.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 150) {
-                            ctx.beginPath();
-                            ctx.strokeStyle = p.color;
-                            ctx.globalAlpha = 1 - (dist / 150);
-                            ctx.lineWidth = 1;
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(mouse.x, mouse.y);
-                            ctx.stroke();
-                        }
-                    }
-                });
-                requestAnimationFrame(animate);
-            };
-
-            window.addEventListener('resize', resize);
+            window.addEventListener("resize", resize);
             resize();
-            animate();
-        }
+            draw();
+        })();
     </script>
 </body>
 
