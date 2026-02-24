@@ -261,11 +261,27 @@
             position: relative;
         }
 
-        .hero-name .accent {
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        .hero-name span {
+            background: linear-gradient(270deg, #4ba3ff, #001f54, #1e88e5, #4ba3ff);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: moveGradient 6s ease infinite;
+        }
+
+        @keyframes moveGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .hero-desc {
@@ -853,7 +869,7 @@
                         <span class="status-dot"></span>
                         doing stuff...
                     </div>
-                    <h1 class="hero-name"><span class="accent">Dert</span></h1>
+                    <h1 class="hero-name"><span>Dert</span></h1>
                     <p class="hero-desc">
                         Developer and builder. I turn random ideas into working projects, break things on accident, and
                         sometimes fix them.
