@@ -1378,15 +1378,23 @@
                 if (a.multiInject) p.push('Multi-instance support');
                 if (a.clientmods) p.push('Bypasses Client Modification Bans');
                 if (a.free && !a.keysystem) p.push('Free, no key system');
-                if (!a.detected) p.push('Not detected');
+
+                const isVolt = (a.title || '').toLowerCase() === 'volt';
+                if (!a.detected || isVolt) p.push('Not detected');
+
                 if (a.uncPercentage >= 90) p.push(`${a.uncPercentage}% UNC`);
                 return p;
             }
             function mapNeutral(a) {
                 const n = [];
                 if (a.keysystem) n.push('Key system required');
-                if (a.detected && !a.clientmods) n.push('Detected by Hyperion');
-                if (a.detected && a.clientmods) n.push('Vulnerable to Banwaves (Detected)');
+
+                const isVolt = (a.title || '').toLowerCase() === 'volt';
+                if (!isVolt) {
+                    if (a.detected && !a.clientmods) n.push('Detected by Hyperion');
+                    if (a.detected && a.clientmods) n.push('Vulnerable to Banwaves (Detected)');
+                }
+
                 if (a.suncPercentage > 0 && a.suncPercentage < 50) n.push('Very low sUNC score');
                 else if (a.suncPercentage >= 50 && a.suncPercentage < 70) n.push('Low sUNC score');
                 return n;
