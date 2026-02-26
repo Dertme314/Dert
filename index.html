@@ -23,7 +23,7 @@
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
 
-    <!-- Google tag (gtag.js) -->
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNN14674PD"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -926,7 +926,7 @@
         <div class="tab-page" id="page-about">
             <div class="page-inner">
                 <h2 class="page-title">About Me</h2>
-                <p class="page-subtitle">// the person behind the code</p>
+                <p class="page-subtitle">the person behind the code</p>
 
                 <div class="about-layout">
                     <img src="https://avatars.githubusercontent.com/u/203884500?v=4" alt="Dert" class="about-avatar">
@@ -983,7 +983,7 @@
         <div class="tab-page" id="page-projects">
             <div class="page-inner">
                 <h2 class="page-title">Projects</h2>
-                <p class="page-subtitle">// pinned repos from github</p>
+                <p class="page-subtitle">pinned repos from github</p>
 
                 <div class="projects-grid" id="projects-grid">
                     <div class="projects-loading">
@@ -997,7 +997,7 @@
         <div class="tab-page" id="page-contact">
             <div class="page-inner">
                 <h2 class="page-title">Contact</h2>
-                <p class="page-subtitle">// reach out</p>
+                <p class="page-subtitle">reach out</p>
 
                 <div class="contact-layout">
                     <div class="contact-card">
@@ -1244,8 +1244,8 @@
             draw();
         })();
 
-        // Fetch visitor count
-        fetch("https://api.counterapi.dev/v1/derts.vercel.app/visits/up")
+
+        fetch("/api/visits")
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 var countEl = document.getElementById("visit-count");
@@ -1257,7 +1257,6 @@
                 var countEl = document.getElementById("visit-count");
                 if (countEl) countEl.textContent = "err";
             });
-        // --- Outer Wilds Inspired Planet ---
         (function initPlanet() {
             var canvas = document.getElementById('planet-canvas');
             if (!canvas || typeof THREE === 'undefined') return;
@@ -1273,7 +1272,6 @@
             });
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-            // Controls
             var controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
@@ -1295,7 +1293,6 @@
             var planetGroup = new THREE.Group();
             scene.add(planetGroup);
 
-            // ============ PLANET CORE ============
             var planetRadius = 1.8;
             var geometry = new THREE.IcosahedronGeometry(planetRadius, 4);
             var pos = geometry.attributes.position;
@@ -1320,7 +1317,7 @@
 
                 var color = new THREE.Color();
                 if (height < 0.02) {
-                    height = 0; // flatten water
+                    height = 0;
                     color.copy(waterColor);
                 } else if (height < 0.12) {
                     color.copy(grassColor);
@@ -1344,7 +1341,6 @@
             var planet = new THREE.Mesh(geometry, planetMaterial);
             planetGroup.add(planet);
 
-            // ============ TREES ============
             var treeMaterial = new THREE.MeshStandardMaterial({ color: 0x1e5128, flatShading: true });
             var trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x5c4033, flatShading: true });
 
@@ -1377,7 +1373,6 @@
                 }
             }
 
-            // ============ CAMPFIRE ============
             var campGroup = new THREE.Group();
 
             var wood = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.12, 5), trunkMaterial);
@@ -1408,7 +1403,6 @@
             campGroup.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), vec3);
             planetGroup.add(campGroup);
 
-            // ============ ORBITING MOON ============
             var moonGroup = new THREE.Group();
             var moonMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 1.0, flatShading: true });
             var moon = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 2), moonMaterial);
@@ -1435,7 +1429,7 @@
 
             scene.add(moonGroup);
 
-            // ============ LIGHTING ============
+
             var ambientLight = new THREE.AmbientLight(0x222233, 1.2);
             scene.add(ambientLight);
 
