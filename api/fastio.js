@@ -1,13 +1,20 @@
-import { Redis } from "@upstash/redis";
+import IORedis from "ioredis";
+
+// Create a cached connection
+let redis;
+function getRedis() {
+    if (!redis) {
+        redis = new IORedis(process.env.KV_REST_API_URL, {
+            tls: { rejectUnauthorized: false },
+            maxRetriesPerRequest: 3,
+        });
+    }
+    return redis;
+}
 
 export default async function handler(req, res) {
-    let kv;
-    try {
-        kv = Redis.fromEnv();
-    } catch (err) {
-        console.error("Redis init failed:", err.message);
-        // It will fail later if KV is used, but won't crash the auth/list endpoints
-    }
+    const kv = getRedis();
+
     const workspaceId = (process.env.FAST_IO_WORKSPACE_ID || '').trim();
     const apiKey = (process.env.FAST_IO_API_KEY || '').trim();
 
@@ -110,12 +117,12 @@ export default async function handler(req, res) {
                 const completeData = await resp.json();
 
                 const fileId = completeData.id || Math.random().toString(36).substring(2, 10);
-                await kv.set(`file:${fileId}`, {
+                await kv.set(`file:${fileId}`, JSON.stringify({
                     filename,
                     description,
                     size,
                     fastio_url: `https://dert.fast.io/${encodeURIComponent(filename)}`
-                });
+                }));
 
                 return res.status(200).json({ success: true, fileId, url: `/download.html?id=${fileId}` });
             }
