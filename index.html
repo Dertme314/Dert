@@ -56,9 +56,7 @@
     </script>
 
     <style>
-        *,
-        *::before,
-        *::after {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -66,7 +64,130 @@
 
         :root {
             --bg: #0a0a0c;
-            --surface: rgba(14, 14, 18, 0.85);
+            --surface: #121216;
+            --surface-hover: #1a1a20;
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --danger: #ef4444;
+            --success: #22c55e;
+            --sans: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
+
+        /* ------------------ ADMIN PANEL STYLES -------------- */
+        .sup-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .sup-form-group label {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .sup-input,
+        .sup-file {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 12px 14px;
+            border-radius: 8px;
+            outline: none;
+            font-family: var(--sans);
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        .sup-input:focus {
+            border-color: var(--primary);
+        }
+
+        .sup-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .sup-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .sup-btn:disabled {
+            background: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .sup-list-container {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .sup-list-title {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        #sec-file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .sup-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .sup-list-item:hover {
+            border-color: var(--border);
+        }
+
+        .sup-del-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .sup-del-btn:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        /* ---------------------------------------------------- */
+        :root {
             --surface-hover: rgba(22, 22, 30, 0.9);
             --border: rgba(255, 255, 255, 0.06);
             --border-hover: rgba(255, 255, 255, 0.12);
@@ -905,6 +1026,7 @@
         <button class="nav-tab" data-tab="projects">Projects</button>
         <button class="nav-tab" data-tab="contact">Contact</button>
         <button class="nav-tab" data-tab="tracker">Roblox</button>
+        <button class="nav-tab" data-tab="admin" style="display: none;">Admin</button>
         <div class="nav-sep"></div>
         <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
             class="nav-icon" aria-label="Discord">
@@ -1025,64 +1147,144 @@
                 <div class="contact-layout">
                     <div class="contact-card">
                         <h3>Socials</h3>
-
-                        <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
-                            class="contact-link">
+                        <a href="https://discord.com/users/817078537366143026" target="_blank" class="contact-link">
                             <div class="cl-icon"><i class="fab fa-discord"></i></div>
                             <div class="cl-text">
                                 <strong>Discord</strong>
-                                <span>dertme314</span>
+                                <span>dertjustwhy</span>
                             </div>
                         </a>
-
-                        <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer"
-                            class="contact-link">
+                        <a href="https://github.com/dertme314" target="_blank" class="contact-link">
                             <div class="cl-icon"><i class="fab fa-github"></i></div>
                             <div class="cl-text">
                                 <strong>GitHub</strong>
-                                <span>Dertme314</span>
-                            </div>
-                        </a>
-
-                        <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer"
-                            class="contact-link">
-                            <div class="cl-icon"><i class="fas fa-link"></i></div>
-                            <div class="cl-text">
-                                <strong>Bio Link</strong>
-                                <span>guns.lol/dertme314</span>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="contact-card">
-                        <h3>Quick Nav</h3>
-
-                        <a href="javascript:void(0)" class="contact-link" data-tab="home">
-                            <div class="cl-icon"><i class="fas fa-home"></i></div>
-                            <div class="cl-text">
-                                <strong>Home</strong>
-                                <span>back to landing</span>
-                            </div>
-                        </a>
-
-                        <a href="javascript:void(0)" class="contact-link" data-tab="about">
-                            <div class="cl-icon"><i class="fas fa-user"></i></div>
-                            <div class="cl-text">
-                                <strong>About</strong>
-                                <span>learn more</span>
-                            </div>
-                        </a>
-
-                        <a href="javascript:void(0)" class="contact-link" data-tab="projects">
-                            <div class="cl-icon"><i class="fas fa-code"></i></div>
-                            <div class="cl-text">
-                                <strong>Projects</strong>
-                                <span>see what I've built</span>
+                                <span>@dertme314</span>
                             </div>
                         </a>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="tab-page tracker-page" id="page-tracker">
+            <div class="page-inner">
+                <iframe src="tracker.html" class="tracker-frame" title="Roblox Tracker"></iframe>
+            </div>
+        </div>
+
+        <!-- NEW ADMIN PANEL HIDDEN TAB -->
+        <div class="tab-page" id="page-admin">
+            <div class="page-inner">
+                <h2 class="page-title">Admin Dashboard</h2>
+                <p class="page-subtitle">File Management Server: Fast.io</p>
+                <br>
+
+                <div id="secret-upload-panel"
+                    style="background: rgba(14, 14, 18, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);">
+                    <div id="sup-auth-view">
+                        <div class="sup-form-group">
+                            <label>Admin Password</label>
+                            <input type="password" id="sec-pwd-login" class="sup-input" placeholder="••••••••"
+                                onkeydown="if(event.key==='Enter') verifyAdmin()">
+                        </div>
+                        <button class="sup-btn" id="btn-login" onclick="verifyAdmin()">Login</button>
+                        <div id="login-err"
+                            style="color:var(--danger); font-size:14px; margin-top:10px; display:none; text-align:center;">
+                        </div>
+                    </div>
+
+                    <div id="sup-dash-view" style="display: none;">
+                        <div class="sup-form-group">
+                            <label>Select File (Any Size)</label>
+                            <input type="file" id="sec-file" class="sup-file">
+                        </div>
+                        <div class="sup-form-group">
+                            <label>Description (Optional)</label>
+                            <input type="text" id="sec-desc" class="sup-input"
+                                placeholder="e.g. My private project zip">
+                        </div>
+                        <button class="sup-btn" id="btn-upload" onclick="uploadSecretFile()">Upload to Fast.io</button>
+
+                        <div id="sup-progress-container" style="display: none; margin-top: 15px;">
+                            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 6px;"
+                                id="sup-progress-text">Uploading: 0%</div>
+                            <div
+                                style="width: 100%; background: rgba(0,0,0,0.5); border-radius: 6px; border: 1px solid var(--border); padding: 2px;">
+                                <div id="sup-progress-bar"
+                                    style="width: 0%; height: 8px; background: var(--success); border-radius: 4px; transition: width 0.2s;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sup-list-container">
+                            <div class="sup-list-title">My Files</div>
+                            <div id="sec-file-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END ADMIN PANEL HIDDEN TAB -->
+
+    </div>
+
+    <footer>
+
+        <a href="https://discord.com/users/817078537366143026" target="_blank" rel="noopener noreferrer"
+            class="contact-link">
+            <div class="cl-icon"><i class="fab fa-discord"></i></div>
+            <div class="cl-text">
+                <strong>Discord</strong>
+                <span>dertme314</span>
+            </div>
+        </a>
+
+        <a href="https://github.com/dertme314" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <div class="cl-icon"><i class="fab fa-github"></i></div>
+            <div class="cl-text">
+                <strong>GitHub</strong>
+                <span>Dertme314</span>
+            </div>
+        </a>
+
+        <a href="https://guns.lol/dertme314" target="_blank" rel="noopener noreferrer" class="contact-link">
+            <div class="cl-icon"><i class="fas fa-link"></i></div>
+            <div class="cl-text">
+                <strong>Bio Link</strong>
+                <span>guns.lol/dertme314</span>
+            </div>
+        </a>
+        </div>
+
+        <div class="contact-card">
+            <h3>Quick Nav</h3>
+
+            <a href="javascript:void(0)" class="contact-link" data-tab="home">
+                <div class="cl-icon"><i class="fas fa-home"></i></div>
+                <div class="cl-text">
+                    <strong>Home</strong>
+                    <span>back to landing</span>
+                </div>
+            </a>
+
+            <a href="javascript:void(0)" class="contact-link" data-tab="about">
+                <div class="cl-icon"><i class="fas fa-user"></i></div>
+                <div class="cl-text">
+                    <strong>About</strong>
+                    <span>learn more</span>
+                </div>
+            </a>
+
+            <a href="javascript:void(0)" class="contact-link" data-tab="projects">
+                <div class="cl-icon"><i class="fas fa-code"></i></div>
+                <div class="cl-text">
+                    <strong>Projects</strong>
+                    <span>see what I've built</span>
+                </div>
+            </a>
+        </div>
+        </div>
+        </div>
         </div>
 
         <div class="tab-page tracker-page" id="page-tracker">
@@ -1094,964 +1296,798 @@
         <footer>
             <p>&copy; 2025 derts.vercel.app</p>
         </footer>
-    </div>
-
-    <div class="visitor-counter" title="total visitors since february 26 2026">
-        <i class="fas fa-eye"></i>
-        <span id="visit-count">...</span>
-    </div>
-
-    <script>
-        var FALLBACK_REPOS = [
-            { name: "FreeDert", description: "Your Ultimate Resource Hub for Privacy, Freedom, and Tools.", url: "https://github.com/Dertme314/FreeDert", language: "HTML", stars: 0, topics: ["hub", "privacy"] },
-            { name: "dert-ascii", description: "mp4 to ascii", url: "https://github.com/Dertme314/dert-ascii", language: "HTML", stars: 0, topics: ["ascii", "video"] },
-            { name: "xeno-fixes", description: "xeno fixes!", url: "https://github.com/Dertme314/xeno-fixes", language: "HTML", stars: 0, topics: ["patching"] },
-            { name: "Dert", description: "My bio", url: "https://github.com/Dertme314/Dert", language: "HTML", stars: 0, topics: ["portfolio"] },
-            { name: "RDD-Dert", description: "roblox downloader", url: "https://github.com/Dertme314/RDD-Dert", language: "JavaScript", stars: 0, topics: ["downloader"] },
-            { name: "Encoder.exe", description: "A tool packed with various encoders and decoders with a multi-chain layer system.", url: "https://github.com/Dertme314/Encoder.exe", language: "JavaScript", stars: 0, topics: ["tools", "api"] }
-        ];
-
-        var trackerLoaded = false;
-
-        function switchTab(tabId) {
-            document.querySelectorAll(".nav-tab").forEach(function (t) {
-                t.classList.toggle("active", t.getAttribute("data-tab") === tabId);
-            });
-
-            document.querySelectorAll(".tab-page").forEach(function (p) {
-                var isTarget = p.id === "page-" + tabId;
-                if (isTarget) {
-                    p.classList.add("active");
-                    requestAnimationFrame(function () {
-                        requestAnimationFrame(function () {
-                            p.classList.add("visible");
-                        });
-                    });
-                } else {
-                    p.classList.remove("visible");
-                    setTimeout(function () {
-                        if (!p.classList.contains("visible")) {
-                            p.classList.remove("active");
-                        }
-                    }, 400);
-                }
-            });
-
-            if (tabId === "tracker" && !trackerLoaded) {
-                document.getElementById("tracker-iframe").src = "/tracker.html";
-                trackerLoaded = true;
-            }
-
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-
-        document.querySelectorAll("[data-tab]").forEach(function (el) {
-            el.addEventListener("click", function (e) {
-                if (el.tagName === "A" && el.getAttribute("href") && el.getAttribute("href").indexOf("http") === 0) return;
-                e.preventDefault();
-                switchTab(el.getAttribute("data-tab"));
-            });
-        });
-
-        function getDotClass(lang) {
-            if (!lang) return "default";
-            var l = lang.toLowerCase();
-            if (l === "html") return "html";
-            if (l === "javascript") return "javascript";
-            if (l === "css") return "css";
-            if (l === "lua") return "lua";
-            return "default";
-        }
-
-        function renderProjects(repos) {
-            var grid = document.getElementById("projects-grid");
-            grid.innerHTML = "";
-
-            repos.forEach(function (repo) {
-                var card = document.createElement("div");
-                card.className = "project-card";
-
-                var desc = repo.description || "No description";
-                var lang = repo.language || "";
-                var dc = getDotClass(lang);
-                var topics = repo.topics || [];
-
-                var topicsHTML = "";
-                topics.forEach(function (t) {
-                    topicsHTML += '<span class="topic">' + t + '</span>';
-                });
-
-                card.innerHTML =
-                    '<div class="project-card-body">' +
-                    '<div class="project-card-top">' +
-                    '<i class="fas fa-folder folder"></i>' +
-                    '<a href="' + repo.url + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i></a>' +
-                    '</div>' +
-                    '<h3>' + repo.name + '</h3>' +
-                    '<p class="desc">' + desc + '</p>' +
-                    '<div class="project-card-footer">' +
-                    (lang ? '<span class="project-lang"><span class="lang-dot ' + dc + '"></span>' + lang + '</span>' : '') +
-                    (topicsHTML ? '<div class="project-topics">' + topicsHTML + '</div>' : '') +
-                    '</div>' +
-                    '</div>';
-
-                grid.appendChild(card);
-            });
-        }
-
-        fetch("/api/pinned")
-            .then(function (res) {
-                if (!res.ok) throw new Error("fail");
-                return res.json();
-            })
-            .then(function (data) {
-                if (data && data.length > 0) {
-                    renderProjects(data);
-                } else {
-                    renderProjects(FALLBACK_REPOS);
-                }
-            })
-            .catch(function () {
-                renderProjects(FALLBACK_REPOS);
-            });
-
-        (function () {
-            var canvas = document.getElementById("particles");
-            if (!canvas) return;
-            var ctx = canvas.getContext("2d");
-            var dots = [];
-            var w, h;
-
-            function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-                init();
-            }
-
-            function init() {
-                dots = [];
-                var count = Math.min(Math.floor(w / 25), 45);
-                for (var i = 0; i < count; i++) {
-                    dots.push({
-                        x: Math.random() * w,
-                        y: Math.random() * h,
-                        vx: (Math.random() - 0.5) * 0.2,
-                        vy: (Math.random() - 0.5) * 0.2,
-                        r: Math.random() * 1.5 + 0.3,
-                        o: Math.random() * 0.35 + 0.1
-                    });
-                }
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, w, h);
-                for (var i = 0; i < dots.length; i++) {
-                    var d = dots[i];
-                    d.x += d.vx;
-                    d.y += d.vy;
-                    if (d.x < 0) d.x = w;
-                    if (d.x > w) d.x = 0;
-                    if (d.y < 0) d.y = h;
-                    if (d.y > h) d.y = 0;
-
-                    ctx.beginPath();
-                    ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-                    ctx.fillStyle = "rgba(75, 163, 255, " + d.o + ")";
-                    ctx.fill();
-                }
-                requestAnimationFrame(draw);
-            }
-
-            window.addEventListener("resize", resize);
-            resize();
-            draw();
-        })();
-
-
-        fetch("/api/visits")
-            .then(function (res) { return res.json(); })
-            .then(function (data) {
-                var countEl = document.getElementById("visit-count");
-                if (countEl && data.count) {
-                    countEl.textContent = data.count;
-                }
-            })
-            .catch(function () {
-                var countEl = document.getElementById("visit-count");
-                if (countEl) countEl.textContent = "err";
-            });
-        (function initPlanet() {
-            var canvas = document.getElementById('planet-canvas');
-            if (!canvas || typeof THREE === 'undefined') return;
-
-            var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
-            camera.position.z = 10;
-
-            var renderer = new THREE.WebGLRenderer({
-                canvas: canvas,
-                alpha: true,
-                antialias: true
-            });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            var controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.enableZoom = true;
-            controls.minDistance = 3.5;
-            controls.maxDistance = 14;
-            controls.enablePan = false;
-
-            function resizePlanet() {
-                var w = canvas.clientWidth || 420;
-                var h = canvas.clientHeight || 420;
-                renderer.setSize(w, h, false);
-                camera.aspect = w / h;
-                camera.updateProjectionMatrix();
-            }
-            window.addEventListener('resize', resizePlanet);
-            setTimeout(resizePlanet, 100);
-
-            var planetGroup = new THREE.Group();
-            scene.add(planetGroup);
-
-            var planetRadius = 1.8;
-            var geometry = new THREE.IcosahedronGeometry(planetRadius, 4);
-            var pos = geometry.attributes.position;
-            var colors = [];
-            var vec3 = new THREE.Vector3();
-
-            var waterColor = new THREE.Color(0x1e88e5);
-            var grassColor = new THREE.Color(0x3a7d44);
-            var rockColor = new THREE.Color(0x6b705c);
-
-            function noise(x, y, z) {
-                var s = x * 12.3 + y * 45.6 + z * 78.9;
-                return Math.sin(s) * Math.cos(s * 0.5);
-            }
-
-            for (var i = 0; i < pos.count; i++) {
-                vec3.fromBufferAttribute(pos, i);
-                vec3.normalize();
-
-                var n = noise(vec3.x * 2, vec3.y * 2, vec3.z * 2) + noise(vec3.x * 4, vec3.y * 4, vec3.z * 4) * 0.5;
-                var height = n * 0.15;
-
-                var color = new THREE.Color();
-                if (height < 0.02) {
-                    height = 0;
-                    color.copy(waterColor);
-                } else if (height < 0.12) {
-                    color.copy(grassColor);
-                } else {
-                    color.copy(rockColor);
-                }
-
-                colors.push(color.r, color.g, color.b);
-                vec3.multiplyScalar(planetRadius + height);
-                pos.setXYZ(i, vec3.x, vec3.y, vec3.z);
-            }
-            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-            geometry.computeVertexNormals();
-
-            var planetMaterial = new THREE.MeshStandardMaterial({
-                vertexColors: true,
-                roughness: 0.9,
-                metalness: 0.0,
-                flatShading: true
-            });
-            var planet = new THREE.Mesh(geometry, planetMaterial);
-            planetGroup.add(planet);
-
-            var treeMaterial = new THREE.MeshStandardMaterial({ color: 0x1e5128, flatShading: true });
-            var trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x5c4033, flatShading: true });
-
-            for (var i = 0; i < pos.count; i += 15) {
-                vec3.fromBufferAttribute(pos, i);
-                var mag = vec3.length();
-                if (mag > planetRadius + 0.05 && Math.random() > 0.4) {
-                    var treeGroup = new THREE.Group();
-
-                    var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.02, 0.1, 5), trunkMaterial);
-                    trunk.position.y = 0.05;
-                    treeGroup.add(trunk);
-
-                    var leaves = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.25, 5), treeMaterial);
-                    leaves.position.y = 0.2;
-                    treeGroup.add(leaves);
-
-                    var leaves2 = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.2, 5), treeMaterial);
-                    leaves2.position.y = 0.3;
-                    treeGroup.add(leaves2);
-
-                    vec3.normalize();
-                    treeGroup.position.copy(vec3).multiplyScalar(mag - 0.02);
-
-                    var axis = new THREE.Vector3(0, 1, 0);
-                    treeGroup.quaternion.setFromUnitVectors(axis, vec3);
-                    treeGroup.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.random() * Math.PI * 2);
-
-                    planetGroup.add(treeGroup);
-                }
-            }
-
-            var campGroup = new THREE.Group();
-
-            var wood = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.12, 5), trunkMaterial);
-            wood.rotation.x = Math.PI / 2;
-            wood.rotation.z = Math.PI / 4;
-            wood.position.y = 0.015;
-            campGroup.add(wood);
-
-            var wood2 = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.12, 5), trunkMaterial);
-            wood2.rotation.x = Math.PI / 2;
-            wood2.rotation.z = -Math.PI / 4;
-            wood2.position.y = 0.015;
-            campGroup.add(wood2);
-
-            var fireLight = new THREE.PointLight(0xff5500, 2.5, 3);
-            fireLight.position.y = 0.1;
-            campGroup.add(fireLight);
-
-            var fireMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.9 });
-            var fire = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.1, 4), fireMat);
-            fire.position.y = 0.06;
-            campGroup.add(fire);
-
-            vec3.fromBufferAttribute(pos, 200);
-            var campMag = vec3.length();
-            vec3.normalize();
-            campGroup.position.copy(vec3).multiplyScalar(campMag);
-            campGroup.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), vec3);
-            planetGroup.add(campGroup);
-
-            var moonGroup = new THREE.Group();
-            var moonMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 1.0, flatShading: true });
-            var moon = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 2), moonMaterial);
-
-            var mPos = moon.geometry.attributes.position;
-            var mv = new THREE.Vector3();
-            for (var i = 0; i < mPos.count; i++) {
-                mv.fromBufferAttribute(mPos, i);
-                mv.normalize();
-                var mn = noise(mv.x * 3, mv.y * 3, mv.z * 3);
-                mv.multiplyScalar(0.3 + mn * 0.02);
-                mPos.setXYZ(i, mv.x, mv.y, mv.z);
-            }
-            moon.geometry.computeVertexNormals();
-
-            moon.position.set(3.2, 0.8, 0);
-            moonGroup.add(moon);
-
-            var pathGeo = new THREE.TorusGeometry(3.3, 0.005, 3, 64);
-            var pathMat = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, opacity: 0.15 });
-            var path = new THREE.Mesh(pathGeo, pathMat);
-            path.rotation.x = Math.PI / 2 - 0.2;
-            moonGroup.add(path);
-
-            scene.add(moonGroup);
-
-
-            var ambientLight = new THREE.AmbientLight(0x222233, 1.2);
-            scene.add(ambientLight);
-
-            var sunLight = new THREE.DirectionalLight(0xfff5e6, 1.5);
-            sunLight.position.set(-8, 4, 5);
-            scene.add(sunLight);
-
-            var fillLight = new THREE.DirectionalLight(0x4fc3f7, 0.7);
-            fillLight.position.set(5, -3, -5);
-            scene.add(fillLight);
-
-            var clock = new THREE.Clock();
-            var time = 0;
-            var autoRotate = true;
-
-            controls.addEventListener('start', function () { autoRotate = false; });
-
-            function animate() {
-                requestAnimationFrame(animate);
-                controls.update();
-
-                var homePage = document.getElementById('page-home');
-                if (homePage && homePage.classList.contains('active')) {
-                    var delta = clock.getDelta();
-                    time += delta;
-
-                    if (autoRotate) {
-                        planetGroup.rotation.y += 0.06 * delta;
-                    }
-
-                    moonGroup.rotation.y -= 0.15 * delta;
-                    moon.rotation.y += 0.4 * delta;
-
-                    fireLight.intensity = 2 + Math.random() * 0.8;
-                    fire.scale.set(1 + Math.random() * 0.2, 1 + Math.random() * 0.3, 1 + Math.random() * 0.2);
-
-                    renderer.render(scene, camera);
-                }
-            }
-            animate();
-        })();
-    </script>
-    <audio id="bg-audio" loop>
-        <source src="Song.mp3" type="audio/mpeg">
-    </audio>
-    <div id="audio-widget">
-        <button id="mute-btn" title="Toggle background music">
-            <i class="fas fa-volume-up"></i>
-        </button>
-        <div class="volume-slider-container">
-            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.4">
         </div>
-    </div>
-    <style>
-        #audio-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            background: rgba(10, 10, 14, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 22px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-            width: 44px;
-            height: 44px;
-        }
 
-        #audio-widget:hover {
-            width: 140px;
-            border-color: var(--border-hover);
-            transform: translateY(-2px);
-        }
+        <div class="visitor-counter" title="total visitors since february 26 2026">
+            <i class="fas fa-eye"></i>
+            <span id="visit-count">...</span>
+        </div>
 
-        #mute-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            min-width: 44px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
+        <script>
+            var FALLBACK_REPOS = [
+                { name: "FreeDert", description: "Your Ultimate Resource Hub for Privacy, Freedom, and Tools.", url: "https://github.com/Dertme314/FreeDert", language: "HTML", stars: 0, topics: ["hub", "privacy"] },
+                { name: "dert-ascii", description: "mp4 to ascii", url: "https://github.com/Dertme314/dert-ascii", language: "HTML", stars: 0, topics: ["ascii", "video"] },
+                { name: "xeno-fixes", description: "xeno fixes!", url: "https://github.com/Dertme314/xeno-fixes", language: "HTML", stars: 0, topics: ["patching"] },
+                { name: "Dert", description: "My bio", url: "https://github.com/Dertme314/Dert", language: "HTML", stars: 0, topics: ["portfolio"] },
+                { name: "RDD-Dert", description: "roblox downloader", url: "https://github.com/Dertme314/RDD-Dert", language: "JavaScript", stars: 0, topics: ["downloader"] },
+                { name: "Encoder.exe", description: "A tool packed with various encoders and decoders with a multi-chain layer system.", url: "https://github.com/Dertme314/Encoder.exe", language: "JavaScript", stars: 0, topics: ["tools", "api"] }
+            ];
 
-        #mute-btn:hover {
-            color: var(--text);
-        }
+            var trackerLoaded = false;
 
-        #mute-btn i {
-            font-size: 16px;
-        }
+            function switchTab(tabId) {
+                document.querySelectorAll(".nav-tab").forEach(function (t) {
+                    t.classList.toggle("active", t.getAttribute("data-tab") === tabId);
+                });
 
-        .volume-slider-container {
-            width: 80px;
-            opacity: 0;
-            padding-right: 14px;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
+                document.querySelectorAll(".tab-page").forEach(function (p) {
+                    var isTarget = p.id === "page-" + tabId;
+                    if (isTarget) {
+                        p.classList.add("active");
+                        requestAnimationFrame(function () {
+                            requestAnimationFrame(function () {
+                                p.classList.add("visible");
+                            });
+                        });
+                    } else {
+                        p.classList.remove("visible");
+                        setTimeout(function () {
+                            if (!p.classList.contains("visible")) {
+                                p.classList.remove("active");
+                            }
+                        }, 400);
+                    }
+                });
 
-        #audio-widget:hover .volume-slider-container {
-            opacity: 1;
-            pointer-events: auto;
-            transition-delay: 0.1s;
-        }
-
-        #volume-slider {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 4px;
-            border-radius: 2px;
-            background: rgba(255, 255, 255, 0.1);
-            outline: none;
-            cursor: pointer;
-        }
-
-        #volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--text);
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
-        #volume-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var bgAudio = document.getElementById("bg-audio");
-            var muteBtn = document.getElementById("mute-btn");
-            var volumeSlider = document.getElementById("volume-slider");
-            var icon = muteBtn.querySelector("i");
-            var isPlaying = false;
-            var userInteracted = false;
-            var previousVolume = 0.4;
-            bgAudio.volume = 0.4;
-            function updateIcon() {
-                if (bgAudio.muted || bgAudio.volume === 0 || !isPlaying) {
-                    icon.className = "fas fa-volume-xmark";
-                } else if (bgAudio.volume < 0.5) {
-                    icon.className = "fas fa-volume-down";
-                } else {
-                    icon.className = "fas fa-volume-up";
+                if (tabId === "tracker" && !trackerLoaded) {
+                    document.getElementById("tracker-iframe").src = "/tracker.html";
+                    trackerLoaded = true;
                 }
+
+                window.scrollTo({ top: 0, behavior: "smooth" });
             }
-            var playPromise = bgAudio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(function () {
-                    isPlaying = true;
-                    updateIcon();
-                }).catch(function () {
-                    isPlaying = false;
-                    updateIcon();
+
+            document.querySelectorAll("[data-tab]").forEach(function (el) {
+                el.addEventListener("click", function (e) {
+                    if (el.tagName === "A" && el.getAttribute("href") && el.getAttribute("href").indexOf("http") === 0) return;
+                    e.preventDefault();
+                    switchTab(el.getAttribute("data-tab"));
+                });
+            });
+
+            function getDotClass(lang) {
+                if (!lang) return "default";
+                var l = lang.toLowerCase();
+                if (l === "html") return "html";
+                if (l === "javascript") return "javascript";
+                if (l === "css") return "css";
+                if (l === "lua") return "lua";
+                return "default";
+            }
+
+            function renderProjects(repos) {
+                var grid = document.getElementById("projects-grid");
+                grid.innerHTML = "";
+
+                repos.forEach(function (repo) {
+                    var card = document.createElement("div");
+                    card.className = "project-card";
+
+                    var desc = repo.description || "No description";
+                    var lang = repo.language || "";
+                    var dc = getDotClass(lang);
+                    var topics = repo.topics || [];
+
+                    var topicsHTML = "";
+                    topics.forEach(function (t) {
+                        topicsHTML += '<span class="topic">' + t + '</span>';
+                    });
+
+                    card.innerHTML =
+                        '<div class="project-card-body">' +
+                        '<div class="project-card-top">' +
+                        '<i class="fas fa-folder folder"></i>' +
+                        '<a href="' + repo.url + '" target="_blank" rel="noopener noreferrer"><i class="fas fa-arrow-up-right-from-square"></i></a>' +
+                        '</div>' +
+                        '<h3>' + repo.name + '</h3>' +
+                        '<p class="desc">' + desc + '</p>' +
+                        '<div class="project-card-footer">' +
+                        (lang ? '<span class="project-lang"><span class="lang-dot ' + dc + '"></span>' + lang + '</span>' : '') +
+                        (topicsHTML ? '<div class="project-topics">' + topicsHTML + '</div>' : '') +
+                        '</div>' +
+                        '</div>';
+
+                    grid.appendChild(card);
                 });
             }
-            muteBtn.addEventListener("click", function (e) {
-                e.stopPropagation();
-                userInteracted = true;
-                if (bgAudio.muted || bgAudio.volume === 0 || !isPlaying) {
-                    bgAudio.muted = false;
-                    if (bgAudio.volume === 0) {
-                        bgAudio.volume = previousVolume > 0 ? previousVolume : 0.4;
-                        volumeSlider.value = bgAudio.volume;
+
+            fetch("/api/pinned")
+                .then(function (res) {
+                    if (!res.ok) throw new Error("fail");
+                    return res.json();
+                })
+                .then(function (data) {
+                    if (data && data.length > 0) {
+                        renderProjects(data);
+                    } else {
+                        renderProjects(FALLBACK_REPOS);
                     }
-                    bgAudio.play().then(function () {
+                })
+                .catch(function () {
+                    renderProjects(FALLBACK_REPOS);
+                });
+
+            (function () {
+                var canvas = document.getElementById("particles");
+                if (!canvas) return;
+                var ctx = canvas.getContext("2d");
+                var dots = [];
+                var w, h;
+
+                function resize() {
+                    w = canvas.width = window.innerWidth;
+                    h = canvas.height = window.innerHeight;
+                    init();
+                }
+
+                function init() {
+                    dots = [];
+                    var count = Math.min(Math.floor(w / 25), 45);
+                    for (var i = 0; i < count; i++) {
+                        dots.push({
+                            x: Math.random() * w,
+                            y: Math.random() * h,
+                            vx: (Math.random() - 0.5) * 0.2,
+                            vy: (Math.random() - 0.5) * 0.2,
+                            r: Math.random() * 1.5 + 0.3,
+                            o: Math.random() * 0.35 + 0.1
+                        });
+                    }
+                }
+
+                function draw() {
+                    ctx.clearRect(0, 0, w, h);
+                    for (var i = 0; i < dots.length; i++) {
+                        var d = dots[i];
+                        d.x += d.vx;
+                        d.y += d.vy;
+                        if (d.x < 0) d.x = w;
+                        if (d.x > w) d.x = 0;
+                        if (d.y < 0) d.y = h;
+                        if (d.y > h) d.y = 0;
+
+                        ctx.beginPath();
+                        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                        ctx.fillStyle = "rgba(75, 163, 255, " + d.o + ")";
+                        ctx.fill();
+                    }
+                    requestAnimationFrame(draw);
+                }
+
+                window.addEventListener("resize", resize);
+                resize();
+                draw();
+            })();
+
+
+            fetch("/api/visits")
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    var countEl = document.getElementById("visit-count");
+                    if (countEl && data.count) {
+                        countEl.textContent = data.count;
+                    }
+                })
+                .catch(function () {
+                    var countEl = document.getElementById("visit-count");
+                    if (countEl) countEl.textContent = "err";
+                });
+            (function initPlanet() {
+                var canvas = document.getElementById('planet-canvas');
+                if (!canvas || typeof THREE === 'undefined') return;
+
+                var scene = new THREE.Scene();
+                var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
+                camera.position.z = 10;
+
+                var renderer = new THREE.WebGLRenderer({
+                    canvas: canvas,
+                    alpha: true,
+                    antialias: true
+                });
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+                var controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.enableZoom = true;
+                controls.minDistance = 3.5;
+                controls.maxDistance = 14;
+                controls.enablePan = false;
+
+                function resizePlanet() {
+                    var w = canvas.clientWidth || 420;
+                    var h = canvas.clientHeight || 420;
+                    renderer.setSize(w, h, false);
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                }
+                window.addEventListener('resize', resizePlanet);
+                setTimeout(resizePlanet, 100);
+
+                var planetGroup = new THREE.Group();
+                scene.add(planetGroup);
+
+                var planetRadius = 1.8;
+                var geometry = new THREE.IcosahedronGeometry(planetRadius, 4);
+                var pos = geometry.attributes.position;
+                var colors = [];
+                var vec3 = new THREE.Vector3();
+
+                var waterColor = new THREE.Color(0x1e88e5);
+                var grassColor = new THREE.Color(0x3a7d44);
+                var rockColor = new THREE.Color(0x6b705c);
+
+                function noise(x, y, z) {
+                    var s = x * 12.3 + y * 45.6 + z * 78.9;
+                    return Math.sin(s) * Math.cos(s * 0.5);
+                }
+
+                for (var i = 0; i < pos.count; i++) {
+                    vec3.fromBufferAttribute(pos, i);
+                    vec3.normalize();
+
+                    var n = noise(vec3.x * 2, vec3.y * 2, vec3.z * 2) + noise(vec3.x * 4, vec3.y * 4, vec3.z * 4) * 0.5;
+                    var height = n * 0.15;
+
+                    var color = new THREE.Color();
+                    if (height < 0.02) {
+                        height = 0;
+                        color.copy(waterColor);
+                    } else if (height < 0.12) {
+                        color.copy(grassColor);
+                    } else {
+                        color.copy(rockColor);
+                    }
+
+                    colors.push(color.r, color.g, color.b);
+                    vec3.multiplyScalar(planetRadius + height);
+                    pos.setXYZ(i, vec3.x, vec3.y, vec3.z);
+                }
+                geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+                geometry.computeVertexNormals();
+
+                var planetMaterial = new THREE.MeshStandardMaterial({
+                    vertexColors: true,
+                    roughness: 0.9,
+                    metalness: 0.0,
+                    flatShading: true
+                });
+                var planet = new THREE.Mesh(geometry, planetMaterial);
+                planetGroup.add(planet);
+
+                var treeMaterial = new THREE.MeshStandardMaterial({ color: 0x1e5128, flatShading: true });
+                var trunkMaterial = new THREE.MeshStandardMaterial({ color: 0x5c4033, flatShading: true });
+
+                for (var i = 0; i < pos.count; i += 15) {
+                    vec3.fromBufferAttribute(pos, i);
+                    var mag = vec3.length();
+                    if (mag > planetRadius + 0.05 && Math.random() > 0.4) {
+                        var treeGroup = new THREE.Group();
+
+                        var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.02, 0.1, 5), trunkMaterial);
+                        trunk.position.y = 0.05;
+                        treeGroup.add(trunk);
+
+                        var leaves = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.25, 5), treeMaterial);
+                        leaves.position.y = 0.2;
+                        treeGroup.add(leaves);
+
+                        var leaves2 = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.2, 5), treeMaterial);
+                        leaves2.position.y = 0.3;
+                        treeGroup.add(leaves2);
+
+                        vec3.normalize();
+                        treeGroup.position.copy(vec3).multiplyScalar(mag - 0.02);
+
+                        var axis = new THREE.Vector3(0, 1, 0);
+                        treeGroup.quaternion.setFromUnitVectors(axis, vec3);
+                        treeGroup.rotateOnAxis(new THREE.Vector3(0, 1, 0), Math.random() * Math.PI * 2);
+
+                        planetGroup.add(treeGroup);
+                    }
+                }
+
+                var campGroup = new THREE.Group();
+
+                var wood = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.12, 5), trunkMaterial);
+                wood.rotation.x = Math.PI / 2;
+                wood.rotation.z = Math.PI / 4;
+                wood.position.y = 0.015;
+                campGroup.add(wood);
+
+                var wood2 = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.12, 5), trunkMaterial);
+                wood2.rotation.x = Math.PI / 2;
+                wood2.rotation.z = -Math.PI / 4;
+                wood2.position.y = 0.015;
+                campGroup.add(wood2);
+
+                var fireLight = new THREE.PointLight(0xff5500, 2.5, 3);
+                fireLight.position.y = 0.1;
+                campGroup.add(fireLight);
+
+                var fireMat = new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0.9 });
+                var fire = new THREE.Mesh(new THREE.ConeGeometry(0.03, 0.1, 4), fireMat);
+                fire.position.y = 0.06;
+                campGroup.add(fire);
+
+                vec3.fromBufferAttribute(pos, 200);
+                var campMag = vec3.length();
+                vec3.normalize();
+                campGroup.position.copy(vec3).multiplyScalar(campMag);
+                campGroup.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), vec3);
+                planetGroup.add(campGroup);
+
+                var moonGroup = new THREE.Group();
+                var moonMaterial = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, roughness: 1.0, flatShading: true });
+                var moon = new THREE.Mesh(new THREE.IcosahedronGeometry(0.3, 2), moonMaterial);
+
+                var mPos = moon.geometry.attributes.position;
+                var mv = new THREE.Vector3();
+                for (var i = 0; i < mPos.count; i++) {
+                    mv.fromBufferAttribute(mPos, i);
+                    mv.normalize();
+                    var mn = noise(mv.x * 3, mv.y * 3, mv.z * 3);
+                    mv.multiplyScalar(0.3 + mn * 0.02);
+                    mPos.setXYZ(i, mv.x, mv.y, mv.z);
+                }
+                moon.geometry.computeVertexNormals();
+
+                moon.position.set(3.2, 0.8, 0);
+                moonGroup.add(moon);
+
+                var pathGeo = new THREE.TorusGeometry(3.3, 0.005, 3, 64);
+                var pathMat = new THREE.MeshBasicMaterial({ color: 0x888888, transparent: true, opacity: 0.15 });
+                var path = new THREE.Mesh(pathGeo, pathMat);
+                path.rotation.x = Math.PI / 2 - 0.2;
+                moonGroup.add(path);
+
+                scene.add(moonGroup);
+
+
+                var ambientLight = new THREE.AmbientLight(0x222233, 1.2);
+                scene.add(ambientLight);
+
+                var sunLight = new THREE.DirectionalLight(0xfff5e6, 1.5);
+                sunLight.position.set(-8, 4, 5);
+                scene.add(sunLight);
+
+                var fillLight = new THREE.DirectionalLight(0x4fc3f7, 0.7);
+                fillLight.position.set(5, -3, -5);
+                scene.add(fillLight);
+
+                var clock = new THREE.Clock();
+                var time = 0;
+                var autoRotate = true;
+
+                controls.addEventListener('start', function () { autoRotate = false; });
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    controls.update();
+
+                    var homePage = document.getElementById('page-home');
+                    if (homePage && homePage.classList.contains('active')) {
+                        var delta = clock.getDelta();
+                        time += delta;
+
+                        if (autoRotate) {
+                            planetGroup.rotation.y += 0.06 * delta;
+                        }
+
+                        moonGroup.rotation.y -= 0.15 * delta;
+                        moon.rotation.y += 0.4 * delta;
+
+                        fireLight.intensity = 2 + Math.random() * 0.8;
+                        fire.scale.set(1 + Math.random() * 0.2, 1 + Math.random() * 0.3, 1 + Math.random() * 0.2);
+
+                        renderer.render(scene, camera);
+                    }
+                }
+                animate();
+            })();
+        </script>
+        <audio id="bg-audio" loop>
+            <source src="Song.mp3" type="audio/mpeg">
+        </audio>
+        <div id="audio-widget">
+            <button id="mute-btn" title="Toggle background music">
+                <i class="fas fa-volume-up"></i>
+            </button>
+            <div class="volume-slider-container">
+                <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.4">
+            </div>
+        </div>
+        <style>
+            #audio-widget {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 100;
+                display: flex;
+                align-items: center;
+                background: rgba(10, 10, 14, 0.9);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid var(--border);
+                border-radius: 22px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                overflow: hidden;
+                width: 44px;
+                height: 44px;
+            }
+
+            #audio-widget:hover {
+                width: 140px;
+                border-color: var(--border-hover);
+                transform: translateY(-2px);
+            }
+
+            #mute-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px;
+                height: 44px;
+                min-width: 44px;
+                background: transparent;
+                border: none;
+                color: var(--text-muted);
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            #mute-btn:hover {
+                color: var(--text);
+            }
+
+            #mute-btn i {
+                font-size: 16px;
+            }
+
+            .volume-slider-container {
+                width: 80px;
+                opacity: 0;
+                padding-right: 14px;
+                transition: opacity 0.3s;
+                pointer-events: none;
+            }
+
+            #audio-widget:hover .volume-slider-container {
+                opacity: 1;
+                pointer-events: auto;
+                transition-delay: 0.1s;
+            }
+
+            #volume-slider {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 100%;
+                height: 4px;
+                border-radius: 2px;
+                background: rgba(255, 255, 255, 0.1);
+                outline: none;
+                cursor: pointer;
+            }
+
+            #volume-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background: var(--text);
+                cursor: pointer;
+                transition: transform 0.1s;
+            }
+
+            #volume-slider::-webkit-slider-thumb:hover {
+                transform: scale(1.2);
+            }
+        </style>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var bgAudio = document.getElementById("bg-audio");
+                var muteBtn = document.getElementById("mute-btn");
+                var volumeSlider = document.getElementById("volume-slider");
+                var icon = muteBtn.querySelector("i");
+                var isPlaying = false;
+                var userInteracted = false;
+                var previousVolume = 0.4;
+                bgAudio.volume = 0.4;
+                function updateIcon() {
+                    if (bgAudio.muted || bgAudio.volume === 0 || !isPlaying) {
+                        icon.className = "fas fa-volume-xmark";
+                    } else if (bgAudio.volume < 0.5) {
+                        icon.className = "fas fa-volume-down";
+                    } else {
+                        icon.className = "fas fa-volume-up";
+                    }
+                }
+                var playPromise = bgAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(function () {
                         isPlaying = true;
                         updateIcon();
-                    }).catch(function () { });
-                } else {
-                    bgAudio.muted = true;
-                    updateIcon();
+                    }).catch(function () {
+                        isPlaying = false;
+                        updateIcon();
+                    });
                 }
-            });
-            volumeSlider.addEventListener("input", function (e) {
-                var vol = parseFloat(e.target.value);
-                bgAudio.volume = vol;
-                if (vol > 0) {
-                    bgAudio.muted = false;
-                    previousVolume = vol;
-                    if (!isPlaying && userInteracted) {
+                muteBtn.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    userInteracted = true;
+                    if (bgAudio.muted || bgAudio.volume === 0 || !isPlaying) {
+                        bgAudio.muted = false;
+                        if (bgAudio.volume === 0) {
+                            bgAudio.volume = previousVolume > 0 ? previousVolume : 0.4;
+                            volumeSlider.value = bgAudio.volume;
+                        }
                         bgAudio.play().then(function () {
                             isPlaying = true;
+                            updateIcon();
+                        }).catch(function () { });
+                    } else {
+                        bgAudio.muted = true;
+                        updateIcon();
+                    }
+                });
+                volumeSlider.addEventListener("input", function (e) {
+                    var vol = parseFloat(e.target.value);
+                    bgAudio.volume = vol;
+                    if (vol > 0) {
+                        bgAudio.muted = false;
+                        previousVolume = vol;
+                        if (!isPlaying && userInteracted) {
+                            bgAudio.play().then(function () {
+                                isPlaying = true;
+                            }).catch(function () { });
+                        }
+                    }
+                    updateIcon();
+                });
+                document.body.addEventListener("click", function () {
+                    if (!userInteracted && !isPlaying) {
+                        userInteracted = true;
+                        bgAudio.muted = false;
+                        bgAudio.play().then(function () {
+                            isPlaying = true;
+                            updateIcon();
                         }).catch(function () { });
                     }
-                }
-                updateIcon();
+                }, { once: true });
             });
-            document.body.addEventListener("click", function () {
-                if (!userInteracted && !isPlaying) {
-                    userInteracted = true;
-                    bgAudio.muted = false;
-                    bgAudio.play().then(function () {
-                        isPlaying = true;
-                        updateIcon();
-                    }).catch(function () { });
+        </script>
+
+        <script>
+            let secretBuffer = "";
+            const secretWord = "upload";
+            let sessionPassword = "";
+
+            document.addEventListener("keydown", (e) => {
+                if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+                secretBuffer += e.key.toLowerCase();
+                if (secretBuffer.length > secretWord.length) secretBuffer = secretBuffer.slice(-secretWord.length);
+                if (secretBuffer === secretWord) {
+                    secretBuffer = "";
+                    const adminTabBtn = document.querySelector('.nav-tab[data-tab="admin"]');
+                    if (adminTabBtn) adminTabBtn.click();
+
+                    setTimeout(() => {
+                        const pwdInput = document.getElementById("sec-pwd-login");
+                        if (pwdInput) pwdInput.focus();
+                    }, 100);
                 }
-            }, { once: true });
-        });
-    </script>
+            });
 
-    <style>
-        #secret-upload-panel {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-            background: rgba(14, 14, 18, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-            color: #fff;
-            flex-direction: column;
-            gap: 20px;
-            font-family: var(--sans);
-        }
+            async function verifyAdmin() {
+                const pwd = document.getElementById("sec-pwd-login").value;
+                const errEl = document.getElementById("login-err");
+                const btn = document.getElementById("btn-login");
 
-        #secret-upload-panel h2 {
-            margin: 0;
-            font-size: 20px;
-            text-align: center;
-        }
+                if (!pwd) return;
+                btn.textContent = "Verifying...";
+                btn.disabled = true;
 
-        .sup-form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .sup-form-group label {
-            font-size: 13px;
-            color: #aaa;
-        }
-
-        .sup-input,
-        .sup-file {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 10px 14px;
-            border-radius: 8px;
-            outline: none;
-            font-family: var(--sans);
-        }
-
-        .sup-btn {
-            background: #22c55e;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .sup-btn:hover {
-            background: #16a34a;
-        }
-
-        .sup-list-container {
-            margin-top: 10px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
-        }
-
-        .sup-list-title {
-            font-size: 14px;
-            color: #ccc;
-            margin-bottom: 10px;
-        }
-
-        #sec-file-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .sup-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-        }
-
-        .sup-del-btn {
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .sup-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 20px;
-            color: #888;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            transition: 0.2s;
-        }
-
-        .sup-close:hover {
-            color: #fff;
-        }
-    </style>
-
-    <div id="secret-upload-panel">
-        <button class="sup-close" onclick="closeSecretPanel()">&times;</button>
-        <h2>File Manager</h2>
-
-
-        <div id="sup-auth-view">
-            <div class="sup-form-group">
-                <label>Admin Password</label>
-                <input type="password" id="sec-pwd-login" class="sup-input" placeholder="••••••••"
-                    onkeydown="if(event.key==='Enter') verifyAdmin()">
-            </div>
-            <button class="sup-btn" id="btn-login" onclick="verifyAdmin()">Login</button>
-            <div id="login-err" style="color:#ef4444; font-size:13px; margin-top:5px; display:none;"></div>
-        </div>
-
-
-        <div id="sup-dash-view" style="display: none;">
-            <div class="sup-form-group">
-                <label>Select File (Any Size)</label>
-                <input type="file" id="sec-file" class="sup-file">
-            </div>
-            <div class="sup-form-group">
-                <label>Description (Optional)</label>
-                <input type="text" id="sec-desc" class="sup-input" placeholder="e.g. My private project zip">
-            </div>
-            <button class="sup-btn" id="btn-upload" onclick="uploadSecretFile()">Upload to Fast.io</button>
-
-
-            <div id="sup-progress-container" style="display: none; margin-top: 10px;">
-                <div style="font-size: 13px; color: #aaa; margin-bottom: 4px;" id="sup-progress-text">Uploading: 0%
-                </div>
-                <div
-                    style="width: 100%; background: rgba(0,0,0,0.5); border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">
-                    <div id="sup-progress-bar"
-                        style="width: 0%; height: 8px; background: #22c55e; border-radius: 4px; transition: width 0.2s;">
-                    </div>
-                </div>
-            </div>
-
-            <div class="sup-list-container">
-                <div class="sup-list-title">My Files</div>
-                <div id="sec-file-list"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        let secretBuffer = "";
-        const secretWord = "upload";
-        let sessionPassword = "";
-
-        document.addEventListener("keydown", (e) => {
-            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
-            secretBuffer += e.key.toLowerCase();
-            if (secretBuffer.length > secretWord.length) secretBuffer = secretBuffer.slice(-secretWord.length);
-            if (secretBuffer === secretWord) {
-                secretBuffer = "";
-                const panel = document.getElementById("secret-upload-panel");
-                panel.style.display = panel.style.display === "none" ? "flex" : "none";
-                if (panel.style.display === "flex") {
-                    document.getElementById("sec-pwd-login").focus();
-                }
-            }
-        });
-
-        function closeSecretPanel() {
-            document.getElementById('secret-upload-panel').style.display = 'none';
-        }
-
-        async function verifyAdmin() {
-            const pwd = document.getElementById("sec-pwd-login").value;
-            const errEl = document.getElementById("login-err");
-            const btn = document.getElementById("btn-login");
-
-            if (!pwd) return;
-            btn.textContent = "Verifying...";
-            btn.disabled = true;
-
-            try {
-                const res = await fetch("/api/fastio", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "auth", password: pwd })
-                });
-
-                if (res.ok) {
-                    sessionPassword = pwd;
-                    document.getElementById("sup-auth-view").style.display = "none";
-                    document.getElementById("sup-dash-view").style.display = "block";
-                    loadFiles();
-                } else {
-                    errEl.textContent = "Incorrect password";
-                    errEl.style.display = "block";
-                }
-            } catch (e) {
-                errEl.textContent = "Error communicating with server.";
-                errEl.style.display = "block";
-            }
-            btn.textContent = "Login";
-            btn.disabled = false;
-        }
-
-        async function uploadSecretFile() {
-            const fileInput = document.getElementById("sec-file");
-            const file = fileInput.files[0];
-            const desc = document.getElementById("sec-desc").value;
-            if (!file) return alert("Please select a file.");
-
-            const btn = document.getElementById('btn-upload');
-            const progCon = document.getElementById('sup-progress-container');
-            const progBar = document.getElementById('sup-progress-bar');
-            const progTxt = document.getElementById('sup-progress-text');
-
-            btn.disabled = true;
-            progCon.style.display = "block";
-            progBar.style.width = "0%";
-
-            try {
-
-                progTxt.textContent = "Initializing Fast.io upload session...";
-                const initRes = await fetch("/api/fastio", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "init", filename: file.name, size: file.size, password: sessionPassword })
-                });
-
-                const initData = await initRes.json();
-                if (!initRes.ok) throw new Error(initData.error || "Failed to init session");
-                const uploadId = initData.upload_id;
-
-
-                const chunkSize = 3 * 1024 * 1024;
-                const totalChunks = Math.ceil(file.size / chunkSize);
-
-                for (let i = 0; i < totalChunks; i++) {
-                    const pct = Math.round((i / totalChunks) * 100);
-                    progTxt.textContent = `Uploading chunk ${i + 1}/${totalChunks} (${pct}%)`;
-                    progBar.style.width = pct + "%";
-
-                    const start = i * chunkSize;
-                    const end = Math.min(start + chunkSize, file.size);
-                    const chunkBlob = file.slice(start, end);
-
-
-                    const base64Chunk = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(chunkBlob);
-                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                try {
+                    const res = await fetch("/api/fastio", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ action: "auth", password: pwd })
                     });
 
-                    const chunkRes = await fetch("/api/fastio", {
+                    if (res.ok) {
+                        sessionPassword = pwd;
+                        document.getElementById("sup-auth-view").style.display = "none";
+                        document.getElementById("sup-dash-view").style.display = "block";
+                        loadFiles();
+                    } else {
+                        errEl.textContent = "Incorrect password";
+                        errEl.style.display = "block";
+                    }
+                } catch (e) {
+                    errEl.textContent = "Error communicating with server.";
+                    errEl.style.display = "block";
+                }
+                btn.textContent = "Login";
+                btn.disabled = false;
+            }
+
+            async function uploadSecretFile() {
+                const fileInput = document.getElementById("sec-file");
+                const file = fileInput.files[0];
+                const desc = document.getElementById("sec-desc").value;
+                if (!file) return alert("Please select a file.");
+
+                const btn = document.getElementById('btn-upload');
+                const progCon = document.getElementById('sup-progress-container');
+                const progBar = document.getElementById('sup-progress-bar');
+                const progTxt = document.getElementById('sup-progress-text');
+
+                btn.disabled = true;
+                progCon.style.display = "block";
+                progBar.style.width = "0%";
+
+                try {
+                    progTxt.textContent = "Initializing session...";
+                    const initRes = await fetch("/api/fastio", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ action: "init", filename: file.name, size: file.size, password: sessionPassword })
+                    });
+
+                    const initData = await initRes.json();
+                    if (!initRes.ok) throw new Error(initData.error || "Failed to init session");
+                    const uploadId = initData.upload_id;
+
+                    const chunkSize = 3 * 1024 * 1024;
+                    const totalChunks = Math.ceil(file.size / chunkSize);
+
+                    for (let i = 0; i < totalChunks; i++) {
+                        const pct = Math.round((i / totalChunks) * 100);
+                        progTxt.textContent = `Uploading chunk ${i + 1}/${totalChunks} (${pct}%)`;
+                        progBar.style.width = pct + "%";
+
+                        const start = i * chunkSize;
+                        const end = Math.min(start + chunkSize, file.size);
+                        const chunkBlob = file.slice(start, end);
+
+                        const base64Chunk = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.readAsDataURL(chunkBlob);
+                            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                        });
+
+                        const chunkRes = await fetch("/api/fastio", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                action: "chunk",
+                                upload_id: uploadId,
+                                part_number: i + 1,
+                                password: sessionPassword,
+                                fileData: base64Chunk,
+                                startByte: start,
+                                endByte: end - 1,
+                                totalSize: file.size
+                            })
+                        });
+
+                        if (!chunkRes.ok) {
+                            const errData = await chunkRes.json();
+                            throw new Error(`Chunk ${i + 1} failed: ${errData.error}`);
+                        }
+                    }
+
+                    progTxt.textContent = "Assembling on remote server...";
+                    progBar.style.width = "99%";
+
+                    const completeRes = await fetch("/api/fastio", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
-                            action: "chunk",
+                            action: "complete",
                             upload_id: uploadId,
-                            part_number: i + 1,
-                            password: sessionPassword,
-                            fileData: base64Chunk
+                            filename: file.name,
+                            size: file.size,
+                            description: desc,
+                            password: sessionPassword
                         })
                     });
 
-                    if (!chunkRes.ok) {
-                        const errData = await chunkRes.json();
-                        throw new Error(`Chunk ${i + 1} failed: ${errData.error}`);
+                    const completeData = await completeRes.json();
+                    if (!completeRes.ok) throw new Error(completeData.error || "Failed finalization");
+
+                    progBar.style.width = "100%";
+                    progTxt.textContent = "Upload Complete!";
+                    setTimeout(() => { progCon.style.display = "none"; }, 2000);
+
+                    fileInput.value = "";
+                    document.getElementById("sec-desc").value = "";
+
+                    prompt("Successfully Uploaded! Share this link:", window.location.origin + completeData.url);
+                    loadFiles();
+
+                } catch (e) {
+                    alert("Upload Failure: " + e.message);
+                    progCon.style.display = "none";
+                }
+
+                btn.textContent = "Upload to Fast.io";
+                btn.disabled = false;
+            }
+
+            async function loadFiles() {
+                const list = document.getElementById("sec-file-list");
+                list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>Fetching...</div>";
+                try {
+                    const res = await fetch("/api/fastio", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ action: "list", password: sessionPassword })
+                    });
+                    const data = await res.json();
+                    list.innerHTML = "";
+                    if (data && Array.isArray(data)) {
+                        const arr = data.items || data;
+                        if (arr.length === 0) list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files found.</div>";
+
+                        arr.forEach(f => {
+                            const div = document.createElement("div");
+                            div.className = "sup-list-item";
+                            div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')"><i class="fas fa-trash"></i></button>`;
+                            list.appendChild(div);
+                        });
+                    } else if (data.items && Array.isArray(data.items)) {
+                        if (data.items.length === 0) list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files found.</div>";
+                        data.items.forEach(f => {
+                            const div = document.createElement("div");
+                            div.className = "sup-list-item";
+                            div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')"><i class="fas fa-trash"></i></button>`;
+                            list.appendChild(div);
+                        });
+                    } else {
+                        list.innerHTML = "<div style='color:var(--danger); padding: 10px 0;'>Bad data returned.</div>";
                     }
+                } catch (e) {
+                    list.innerHTML = "<div style='color:var(--danger); padding: 10px 0;'>Failed load.</div>";
                 }
-
-                progTxt.textContent = "Assembling file on Fast.io servers...";
-                progBar.style.width = "99%";
-
-
-                const completeRes = await fetch("/api/fastio", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        action: "complete",
-                        upload_id: uploadId,
-                        filename: file.name,
-                        size: file.size,
-                        description: desc,
-                        password: sessionPassword
-                    })
-                });
-
-                const completeData = await completeRes.json();
-                if (!completeRes.ok) throw new Error(completeData.error || "Failed to finalize upload");
-
-
-                progBar.style.width = "100%";
-                progTxt.textContent = "Upload Complete!";
-                setTimeout(() => { progCon.style.display = "none"; }, 2000);
-
-
-                fileInput.value = "";
-                document.getElementById("sec-desc").value = "";
-
-                prompt("Successfully Uploaded! Share this link:", window.location.origin + completeData.url);
-                loadFiles();
-
-            } catch (e) {
-                alert("Upload Failure: " + e.message);
-                progCon.style.display = "none";
             }
 
-            btn.textContent = "Upload to Fast.io";
-            btn.disabled = false;
-        }
+            async function deleteFile(id) {
+                if (!confirm("Permanently delete this file?")) return;
 
-        async function loadFiles() {
-            const list = document.getElementById("sec-file-list");
-            list.innerHTML = "Fetching from Fast.io...";
-            try {
+                const btn = event.currentTarget || event.target.closest('button');
+                const originalContent = btn.innerHTML;
+                btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
+                btn.disabled = true;
+
                 const res = await fetch("/api/fastio", {
-                    method: "POST",
+                    method: "DELETE",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "list", password: sessionPassword })
+                    body: JSON.stringify({ node_id: id, password: sessionPassword })
                 });
-                const data = await res.json();
-                list.innerHTML = "";
-                if (data && Array.isArray(data)) {
-                    const arr = data.items || data;
-                    if (arr.length === 0) list.innerHTML = "No files found.";
-
-                    arr.forEach(f => {
-                        const div = document.createElement("div");
-                        div.className = "sup-list-item";
-                        div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')">Delete</button>`;
-                        list.appendChild(div);
-                    });
-                } else if (data.items && Array.isArray(data.items)) {
-                    if (data.items.length === 0) list.innerHTML = "No files found.";
-                    data.items.forEach(f => {
-                        const div = document.createElement("div");
-                        div.className = "sup-list-item";
-                        div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')">Delete</button>`;
-                        list.appendChild(div);
-                    });
+                const d = await res.json();
+                if (res.ok && d.success) {
+                    loadFiles();
                 } else {
-                    list.innerHTML = "No files found or bad structured data returned.";
+                    alert("Error: " + (d.error || "Failed to delete"));
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
                 }
-            } catch (e) {
-                list.innerHTML = "Failed to load files.";
             }
-        }
-
-        async function deleteFile(id) {
-            if (!confirm("Permenantly delete this file from Fast.io?")) return;
-
-            const btn = event.target;
-            btn.textContent = "...";
-
-            const res = await fetch("/api/fastio", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ node_id: id, password: sessionPassword })
-            });
-            const d = await res.json();
-            if (res.ok && d.success) loadFiles();
-            else alert("Error: " + (d.error || "Failed to delete"));
-        }
-    </script>
+        </script>
 </body>
 
 </html>

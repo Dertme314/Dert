@@ -5,7 +5,9 @@ export default async function handler(req, res) {
     const apiKey = process.env.FAST_IO_API_KEY;
 
     const fetchFastIo = async (endpoint, options = {}) => {
-        return fetch(`https://api.fast.io/v1/workspaces/${workspaceId}${endpoint}`, {
+        const url = `https://api.fast.io/v1/workspaces/${workspaceId}${endpoint}`;
+        console.log("Calling Fast.io URL:", url);
+        return fetch(url, {
             ...options,
             headers: {
                 "Authorization": `Bearer ${apiKey}`,
@@ -18,8 +20,12 @@ export default async function handler(req, res) {
         const { node_id, password } = req.body;
         if (password !== process.env.UPLOAD_PASSWORD) return res.status(401).json({ error: "Unauthorized" });
         try {
-            const resp = await fetchFastIo(`/storage/node/${node_id}`, { method: 'DELETE' });
+            const resp = await fetchFastIo(`/nodes/${node_id}`, { method: 'DELETE' });
             if (!resp.ok) return res.status(resp.status).json({ error: "Delete failed" });
+
+            // Delete the corresponding entry from Vercel KV
+            await kv.del(`file:${node_id}`);
+
             return res.status(200).json({ success: true });
         } catch (e) {
             return res.status(500).json({ error: e.message });
@@ -39,17 +45,17 @@ export default async function handler(req, res) {
             }
 
             else if (action === "list") {
-                const resp = await fetchFastIo('/files');
+                const resp = await fetchFastIo('/nodes');
                 if (!resp.ok) return res.status(resp.status).json({ error: "Failed to list files from Fast.io." });
                 return res.status(200).json(await resp.json());
             }
 
             else if (action === "init") {
-                const { filename } = req.body;
-                const resp = await fetchFastIo('/upload', {
+                const { filename, size } = req.body;
+                const resp = await fetchFastIo('/uploads/chunked/init', {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "create", name: filename })
+                    body: JSON.stringify({ name: filename, size: size })
                 });
                 if (!resp.ok) return res.status(resp.status).json({ error: await resp.text() });
                 const data = await resp.json();
@@ -57,11 +63,15 @@ export default async function handler(req, res) {
             }
 
             else if (action === "chunk") {
-                const { upload_id, part_number, fileData } = req.body;
+                const { upload_id, part_number, fileData, startByte, endByte, totalSize } = req.body;
                 const buffer = Buffer.from(fileData, 'base64');
-                const resp = await fetchFastIo(`/upload/${upload_id}/chunk?order=${part_number}&size=${buffer.length}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/octet-stream" },
+                const resp = await fetchFastIo(`/uploads/chunked/${upload_id}/parts`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/octet-stream",
+                        "Content-Range": `bytes ${startByte}-${endByte}/${totalSize}`,
+                        "X-Part-Number": part_number.toString()
+                    },
                     body: buffer
                 });
                 if (!resp.ok) return res.status(resp.status).json({ error: await resp.text() });
@@ -71,14 +81,16 @@ export default async function handler(req, res) {
             else if (action === "complete") {
                 const { upload_id, filename, description, size } = req.body;
 
-                const resp = await fetchFastIo(`/upload/${upload_id}/complete`, {
+                const resp = await fetchFastIo(`/uploads/chunked/${upload_id}/complete`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "complete" })
+                    body: JSON.stringify({})
                 });
                 if (!resp.ok) return res.status(resp.status).json({ error: await resp.text() });
+                const completeData = await resp.json();
 
-                const fileId = Math.random().toString(36).substring(2, 10);
+                // If Fast.io returns the node ID, use it. Otherwise, generate a random one.
+                const fileId = completeData.id || Math.random().toString(36).substring(2, 10);
                 await kv.set(`file:${fileId}`, {
                     filename,
                     description,
