@@ -1177,7 +1177,6 @@
             <div class="page-inner">
                 <h2 class="page-title">Admin Dashboard</h2>
                 <p class="page-subtitle">File Management Server: Fast.io</p>
-                <br>
 
                 <div id="secret-upload-panel"
                     style="background: rgba(14, 14, 18, 0.95); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);">
@@ -1901,7 +1900,7 @@
                 btn.disabled = true;
 
                 try {
-                    const res = await fetch("/api/fastio", {
+                    const res = await fetch("/api/fastio.js", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ action: "auth", password: pwd })
@@ -1941,7 +1940,7 @@
 
                 try {
                     progTxt.textContent = "Initializing session...";
-                    const initRes = await fetch("/api/fastio", {
+                    const initRes = await fetch("/api/fastio.js", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ action: "init", filename: file.name, size: file.size, password: sessionPassword })
@@ -1969,7 +1968,7 @@
                             reader.onloadend = () => resolve(reader.result.split(',')[1]);
                         });
 
-                        const chunkRes = await fetch("/api/fastio", {
+                        const chunkRes = await fetch("/api/fastio.js", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({
@@ -1993,7 +1992,7 @@
                     progTxt.textContent = "Assembling on remote server...";
                     progBar.style.width = "99%";
 
-                    const completeRes = await fetch("/api/fastio", {
+                    const completeRes = await fetch("/api/fastio.js", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({
@@ -2032,7 +2031,7 @@
                 const list = document.getElementById("sec-file-list");
                 list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>Fetching...</div>";
                 try {
-                    const res = await fetch("/api/fastio", {
+                    const res = await fetch("/api/fastio.js", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ action: "list", password: sessionPassword })
@@ -2073,7 +2072,7 @@
                 btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
                 btn.disabled = true;
 
-                const res = await fetch("/api/fastio", {
+                const res = await fetch("/api/fastio.js", {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ node_id: id, password: sessionPassword })
