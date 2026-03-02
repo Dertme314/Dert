@@ -1667,6 +1667,241 @@
             }, { once: true });
         });
     </script>
+    <!-- SECRET ADMIN PANEL -->
+    <style>
+        #secret-upload-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background: rgba(14, 14, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            color: #fff;
+            flex-direction: column;
+            gap: 20px;
+            font-family: var(--sans);
+        }
+
+        #secret-upload-panel h2 {
+            margin: 0;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .sup-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .sup-form-group label {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .sup-input,
+        .sup-file {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            outline: none;
+            font-family: var(--sans);
+        }
+
+        .sup-btn {
+            background: #22c55e;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sup-btn:hover {
+            background: #16a34a;
+        }
+
+        .sup-list-container {
+            margin-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        .sup-list-title {
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        #sec-file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .sup-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .sup-del-btn {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .sup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 20px;
+            color: #888;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: 0.2s;
+        }
+
+        .sup-close:hover {
+            color: #fff;
+        }
+    </style>
+
+    <div id="secret-upload-panel">
+        <button class="sup-close"
+            onclick="document.getElementById('secret-upload-panel').style.display='none'">&times;</button>
+        <h2>File Manager</h2>
+
+        <div class="sup-form-group">
+            <label>Select File (< 4MB)</label>
+                    <input type="file" id="sec-file" class="sup-file">
+        </div>
+        <div class="sup-form-group">
+            <label>Description (Optional)</label>
+            <input type="text" id="sec-desc" class="sup-input" placeholder="e.g. My private project zip">
+        </div>
+        <div class="sup-form-group">
+            <label>Upload Password</label>
+            <input type="password" id="sec-pwd" class="sup-input" placeholder="••••••••">
+        </div>
+        <button class="sup-btn" onclick="uploadSecretFile()">Upload to Fast.io</button>
+
+        <div class="sup-list-container">
+            <div class="sup-list-title">My Files</div>
+            <div id="sec-file-list">Loading files...</div>
+        </div>
+    </div>
+
+    <script>
+        // Secret trigger logic
+        let secretBuffer = "";
+        const secretWord = "upload";
+        document.addEventListener("keydown", (e) => {
+            if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+            secretBuffer += e.key.toLowerCase();
+            if (secretBuffer.length > secretWord.length) secretBuffer = secretBuffer.slice(-secretWord.length);
+            if (secretBuffer === secretWord) {
+                secretBuffer = "";
+                const panel = document.getElementById("secret-upload-panel");
+                panel.style.display = panel.style.display === "none" ? "flex" : "none";
+                if (panel.style.display === "flex") loadFiles();
+            }
+        });
+
+        async function uploadSecretFile() {
+            const fn = document.getElementById("sec-file").files[0];
+            const desc = document.getElementById("sec-desc").value;
+            const pwd = document.getElementById("sec-pwd").value;
+            if (!fn || !pwd) return alert("Select file and enter password");
+
+            const btn = document.querySelector('.sup-btn');
+            btn.textContent = "Uploading...";
+            btn.disabled = true;
+
+            const reader = new FileReader();
+            reader.readAsDataURL(fn);
+            reader.onload = async () => {
+                const fileData = reader.result;
+                try {
+                    const res = await fetch("/api/upload", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ filename: fn.name, fileData, description: desc, password: pwd })
+                    });
+                    const d = await res.json();
+                    if (res.ok && d.success) {
+                        prompt("Uploaded! Link to share:", window.location.origin + d.url);
+                        loadFiles();
+                    } else {
+                        alert("Error: " + d.error);
+                    }
+                } catch (e) {
+                    alert("Failure: " + e.message);
+                }
+                btn.textContent = "Upload to Fast.io";
+                btn.disabled = false;
+            };
+        }
+
+        async function loadFiles() {
+            const list = document.getElementById("sec-file-list");
+            list.innerHTML = "Fetching...";
+            try {
+                const res = await fetch("/api/manage-files");
+                const data = await res.json();
+                list.innerHTML = "";
+                if (data && Array.isArray(data)) { // Fast.io often returns array directly, or { items: [] } depending on endpoint setup. Let's gracefully read it.
+                    const arr = data.items || data;
+                    arr.forEach(f => {
+                        const div = document.createElement("div");
+                        div.className = "sup-list-item";
+                        div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')">Delete</button>`;
+                        list.appendChild(div);
+                    });
+                } else {
+                    list.innerHTML = "No files found or bad structured data returned.";
+                }
+            } catch (e) {
+                list.innerHTML = "Failed to load files.";
+            }
+        }
+
+        async function deleteFile(id) {
+            const pwd = document.getElementById("sec-pwd").value || prompt("Enter admin password to delete:");
+            if (!pwd) return;
+            const res = await fetch("/api/manage-files", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ node_id: id, password: pwd })
+            });
+            const d = await res.json();
+            if (res.ok && d.success) loadFiles();
+            else alert("Error: " + (d.error || "Failed to delete"));
+        }
+    </script>
 </body>
 
 </html>
