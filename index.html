@@ -245,6 +245,12 @@
             pointer-events: none;
         }
 
+        body.admin-mode .contact-card,
+        body.admin-mode footer.global-footer,
+        body.admin-mode footer {
+            display: none !important;
+        }
+
         .layout {
             position: relative;
             z-index: 1;
@@ -1341,6 +1347,12 @@
                 var footer = document.querySelector('footer');
                 if (footer) {
                     footer.style.display = (tabId === "admin") ? "none" : "";
+                }
+
+                if (tabId === "admin") {
+                    document.body.classList.add("admin-mode");
+                } else {
+                    document.body.classList.remove("admin-mode");
                 }
 
                 if (tabId === "tracker" && !trackerLoaded) {
