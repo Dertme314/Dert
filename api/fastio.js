@@ -1,6 +1,7 @@
-import { kv } from "@vercel/kv";
+import { Redis } from "@upstash/redis";
 
 export default async function handler(req, res) {
+    const kv = Redis.fromEnv();
     const workspaceId = process.env.FAST_IO_WORKSPACE_ID;
     const apiKey = process.env.FAST_IO_API_KEY;
 
