@@ -1338,6 +1338,11 @@
                     }
                 });
 
+                var footer = document.querySelector('footer');
+                if (footer) {
+                    footer.style.display = (tabId === "admin") ? "none" : "";
+                }
+
                 if (tabId === "tracker" && !trackerLoaded) {
                     document.getElementById("tracker-iframe").src = "/tracker.html";
                     trackerLoaded = true;
