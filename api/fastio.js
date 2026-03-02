@@ -41,7 +41,19 @@ export default async function handler(req, res) {
 
         try {
             if (action === "auth") {
-                return res.status(200).json({ success: true });
+                try {
+                    const testResp = await fetchFastIo('/nodes');
+                    if (!testResp.ok) {
+                        const errText = await testResp.text();
+                        console.error("Fast.io /nodes Test Failed:", testResp.status, errText);
+                        return res.status(testResp.status).json({ success: false, error: "Fast.io Auth Failed: " + errText });
+                    }
+                    console.log("Fast.io /nodes Test Success");
+                    return res.status(200).json({ success: true, message: "Credentials verified." });
+                } catch (err) {
+                    console.error("Fast.io /nodes Test Exception:", err);
+                    return res.status(500).json({ success: false, error: "Fast.io Exception: " + err.message });
+                }
             }
 
             else if (action === "list") {
