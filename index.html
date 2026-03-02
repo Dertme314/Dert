@@ -1791,27 +1791,48 @@
     </style>
 
     <div id="secret-upload-panel">
-        <button class="sup-close"
-            onclick="document.getElementById('secret-upload-panel').style.display='none'">&times;</button>
+        <button class="sup-close" onclick="closeSecretPanel()">&times;</button>
         <h2>File Manager</h2>
 
-        <div class="sup-form-group">
-            <label>Select File (< 4MB)</label>
-                    <input type="file" id="sec-file" class="sup-file">
+        <!-- Step 1: Password Prompt -->
+        <div id="sup-auth-view">
+            <div class="sup-form-group">
+                <label>Admin Password</label>
+                <input type="password" id="sec-pwd-login" class="sup-input" placeholder="••••••••"
+                    onkeydown="if(event.key==='Enter') verifyAdmin()">
+            </div>
+            <button class="sup-btn" id="btn-login" onclick="verifyAdmin()">Login</button>
+            <div id="login-err" style="color:#ef4444; font-size:13px; margin-top:5px; display:none;"></div>
         </div>
-        <div class="sup-form-group">
-            <label>Description (Optional)</label>
-            <input type="text" id="sec-desc" class="sup-input" placeholder="e.g. My private project zip">
-        </div>
-        <div class="sup-form-group">
-            <label>Upload Password</label>
-            <input type="password" id="sec-pwd" class="sup-input" placeholder="••••••••">
-        </div>
-        <button class="sup-btn" onclick="uploadSecretFile()">Upload to Fast.io</button>
 
-        <div class="sup-list-container">
-            <div class="sup-list-title">My Files</div>
-            <div id="sec-file-list">Loading files...</div>
+        <!-- Step 2: Dashboard (Hidden until auth) -->
+        <div id="sup-dash-view" style="display: none;">
+            <div class="sup-form-group">
+                <label>Select File (Any Size)</label>
+                <input type="file" id="sec-file" class="sup-file">
+            </div>
+            <div class="sup-form-group">
+                <label>Description (Optional)</label>
+                <input type="text" id="sec-desc" class="sup-input" placeholder="e.g. My private project zip">
+            </div>
+            <button class="sup-btn" id="btn-upload" onclick="uploadSecretFile()">Upload to Fast.io</button>
+
+            <!-- Upload Progress Bar -->
+            <div id="sup-progress-container" style="display: none; margin-top: 10px;">
+                <div style="font-size: 13px; color: #aaa; margin-bottom: 4px;" id="sup-progress-text">Uploading: 0%
+                </div>
+                <div
+                    style="width: 100%; background: rgba(0,0,0,0.5); border-radius: 4px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div id="sup-progress-bar"
+                        style="width: 0%; height: 8px; background: #22c55e; border-radius: 4px; transition: width 0.2s;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="sup-list-container">
+                <div class="sup-list-title">My Files</div>
+                <div id="sec-file-list"></div>
+            </div>
         </div>
     </div>
 
@@ -1819,6 +1840,8 @@
         // Secret trigger logic
         let secretBuffer = "";
         const secretWord = "upload";
+        let sessionPassword = "";
+
         document.addEventListener("keydown", (e) => {
             if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
             secretBuffer += e.key.toLowerCase();
@@ -1827,55 +1850,178 @@
                 secretBuffer = "";
                 const panel = document.getElementById("secret-upload-panel");
                 panel.style.display = panel.style.display === "none" ? "flex" : "none";
-                if (panel.style.display === "flex") loadFiles();
+                if (panel.style.display === "flex") {
+                    document.getElementById("sec-pwd-login").focus();
+                }
             }
         });
 
-        async function uploadSecretFile() {
-            const fn = document.getElementById("sec-file").files[0];
-            const desc = document.getElementById("sec-desc").value;
-            const pwd = document.getElementById("sec-pwd").value;
-            if (!fn || !pwd) return alert("Select file and enter password");
+        function closeSecretPanel() {
+            document.getElementById('secret-upload-panel').style.display = 'none';
+        }
 
-            const btn = document.querySelector('.sup-btn');
-            btn.textContent = "Uploading...";
+        async function verifyAdmin() {
+            const pwd = document.getElementById("sec-pwd-login").value;
+            const errEl = document.getElementById("login-err");
+            const btn = document.getElementById("btn-login");
+
+            if (!pwd) return;
+            btn.textContent = "Verifying...";
             btn.disabled = true;
 
-            const reader = new FileReader();
-            reader.readAsDataURL(fn);
-            reader.onload = async () => {
-                const fileData = reader.result;
-                try {
-                    const res = await fetch("/api/upload", {
+            try {
+                const res = await fetch("/api/fastio", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "auth", password: pwd })
+                });
+
+                if (res.ok) {
+                    sessionPassword = pwd;
+                    document.getElementById("sup-auth-view").style.display = "none";
+                    document.getElementById("sup-dash-view").style.display = "block";
+                    loadFiles();
+                } else {
+                    errEl.textContent = "Incorrect password";
+                    errEl.style.display = "block";
+                }
+            } catch (e) {
+                errEl.textContent = "Error communicating with server.";
+                errEl.style.display = "block";
+            }
+            btn.textContent = "Login";
+            btn.disabled = false;
+        }
+
+        async function uploadSecretFile() {
+            const fileInput = document.getElementById("sec-file");
+            const file = fileInput.files[0];
+            const desc = document.getElementById("sec-desc").value;
+            if (!file) return alert("Please select a file.");
+
+            const btn = document.getElementById('btn-upload');
+            const progCon = document.getElementById('sup-progress-container');
+            const progBar = document.getElementById('sup-progress-bar');
+            const progTxt = document.getElementById('sup-progress-text');
+
+            btn.disabled = true;
+            progCon.style.display = "block";
+            progBar.style.width = "0%";
+
+            try {
+                // 1. Init Session
+                progTxt.textContent = "Initializing Fast.io upload session...";
+                const initRes = await fetch("/api/fastio", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "init", filename: file.name, size: file.size, password: sessionPassword })
+                });
+
+                const initData = await initRes.json();
+                if (!initRes.ok) throw new Error(initData.error || "Failed to init session");
+                const uploadId = initData.upload_id;
+
+                // 2. Chunking Process
+                const chunkSize = 3 * 1024 * 1024; // 3MB chunks
+                const totalChunks = Math.ceil(file.size / chunkSize);
+
+                for (let i = 0; i < totalChunks; i++) {
+                    const pct = Math.round((i / totalChunks) * 100);
+                    progTxt.textContent = `Uploading chunk ${i + 1}/${totalChunks} (${pct}%)`;
+                    progBar.style.width = pct + "%";
+
+                    const start = i * chunkSize;
+                    const end = Math.min(start + chunkSize, file.size);
+                    const chunkBlob = file.slice(start, end);
+
+                    // Convert chunk to base64 to send via JSON proxy safely
+                    const base64Chunk = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(chunkBlob);
+                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    });
+
+                    const chunkRes = await fetch("/api/fastio", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ filename: fn.name, fileData, description: desc, password: pwd })
+                        body: JSON.stringify({
+                            action: "chunk",
+                            upload_id: uploadId,
+                            part_number: i + 1,
+                            password: sessionPassword,
+                            fileData: base64Chunk
+                        })
                     });
-                    const d = await res.json();
-                    if (res.ok && d.success) {
-                        prompt("Uploaded! Link to share:", window.location.origin + d.url);
-                        loadFiles();
-                    } else {
-                        alert("Error: " + d.error);
+
+                    if (!chunkRes.ok) {
+                        const errData = await chunkRes.json();
+                        throw new Error(`Chunk ${i + 1} failed: ${errData.error}`);
                     }
-                } catch (e) {
-                    alert("Failure: " + e.message);
                 }
-                btn.textContent = "Upload to Fast.io";
-                btn.disabled = false;
-            };
+
+                progTxt.textContent = "Assembling file on Fast.io servers...";
+                progBar.style.width = "99%";
+
+                // 3. Complete Upload & Save Metadata
+                const completeRes = await fetch("/api/fastio", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "complete",
+                        upload_id: uploadId,
+                        filename: file.name,
+                        size: file.size,
+                        description: desc,
+                        password: sessionPassword
+                    })
+                });
+
+                const completeData = await completeRes.json();
+                if (!completeRes.ok) throw new Error(completeData.error || "Failed to finalize upload");
+
+                // Success
+                progBar.style.width = "100%";
+                progTxt.textContent = "Upload Complete!";
+                setTimeout(() => { progCon.style.display = "none"; }, 2000);
+
+                // Clear inputs
+                fileInput.value = "";
+                document.getElementById("sec-desc").value = "";
+
+                prompt("Successfully Uploaded! Share this link:", window.location.origin + completeData.url);
+                loadFiles();
+
+            } catch (e) {
+                alert("Upload Failure: " + e.message);
+                progCon.style.display = "none";
+            }
+
+            btn.textContent = "Upload to Fast.io";
+            btn.disabled = false;
         }
 
         async function loadFiles() {
             const list = document.getElementById("sec-file-list");
-            list.innerHTML = "Fetching...";
+            list.innerHTML = "Fetching from Fast.io...";
             try {
-                const res = await fetch("/api/manage-files");
+                // To fetch files, your manage-files endpoint doesn't strictly need the password currently for GET,
+                // but it's good practice. Currently manage-files GET is public so admin sees it fast.
+                const res = await fetch("/api/fastio");
                 const data = await res.json();
                 list.innerHTML = "";
-                if (data && Array.isArray(data)) { // Fast.io often returns array directly, or { items: [] } depending on endpoint setup. Let's gracefully read it.
+                if (data && Array.isArray(data)) {
                     const arr = data.items || data;
+                    if (arr.length === 0) list.innerHTML = "No files found.";
+
                     arr.forEach(f => {
+                        const div = document.createElement("div");
+                        div.className = "sup-list-item";
+                        div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')">Delete</button>`;
+                        list.appendChild(div);
+                    });
+                } else if (data.items && Array.isArray(data.items)) {
+                    if (data.items.length === 0) list.innerHTML = "No files found.";
+                    data.items.forEach(f => {
                         const div = document.createElement("div");
                         div.className = "sup-list-item";
                         div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')">Delete</button>`;
@@ -1890,12 +2036,15 @@
         }
 
         async function deleteFile(id) {
-            const pwd = document.getElementById("sec-pwd").value || prompt("Enter admin password to delete:");
-            if (!pwd) return;
-            const res = await fetch("/api/manage-files", {
+            if (!confirm("Permenantly delete this file from Fast.io?")) return;
+
+            const btn = event.target;
+            btn.textContent = "...";
+
+            const res = await fetch("/api/fastio", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ node_id: id, password: pwd })
+                body: JSON.stringify({ node_id: id, password: sessionPassword })
             });
             const d = await res.json();
             if (res.ok && d.success) loadFiles();
