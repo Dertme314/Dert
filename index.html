@@ -1667,7 +1667,7 @@
             }, { once: true });
         });
     </script>
-    <!-- SECRET ADMIN PANEL -->
+
     <style>
         #secret-upload-panel {
             display: none;
@@ -1794,7 +1794,7 @@
         <button class="sup-close" onclick="closeSecretPanel()">&times;</button>
         <h2>File Manager</h2>
 
-        <!-- Step 1: Password Prompt -->
+
         <div id="sup-auth-view">
             <div class="sup-form-group">
                 <label>Admin Password</label>
@@ -1805,7 +1805,7 @@
             <div id="login-err" style="color:#ef4444; font-size:13px; margin-top:5px; display:none;"></div>
         </div>
 
-        <!-- Step 2: Dashboard (Hidden until auth) -->
+
         <div id="sup-dash-view" style="display: none;">
             <div class="sup-form-group">
                 <label>Select File (Any Size)</label>
@@ -1817,7 +1817,7 @@
             </div>
             <button class="sup-btn" id="btn-upload" onclick="uploadSecretFile()">Upload to Fast.io</button>
 
-            <!-- Upload Progress Bar -->
+
             <div id="sup-progress-container" style="display: none; margin-top: 10px;">
                 <div style="font-size: 13px; color: #aaa; margin-bottom: 4px;" id="sup-progress-text">Uploading: 0%
                 </div>
@@ -1837,7 +1837,6 @@
     </div>
 
     <script>
-        // Secret trigger logic
         let secretBuffer = "";
         const secretWord = "upload";
         let sessionPassword = "";
@@ -1909,7 +1908,7 @@
             progBar.style.width = "0%";
 
             try {
-                // 1. Init Session
+
                 progTxt.textContent = "Initializing Fast.io upload session...";
                 const initRes = await fetch("/api/fastio", {
                     method: "POST",
@@ -1921,8 +1920,8 @@
                 if (!initRes.ok) throw new Error(initData.error || "Failed to init session");
                 const uploadId = initData.upload_id;
 
-                // 2. Chunking Process
-                const chunkSize = 3 * 1024 * 1024; // 3MB chunks
+
+                const chunkSize = 3 * 1024 * 1024;
                 const totalChunks = Math.ceil(file.size / chunkSize);
 
                 for (let i = 0; i < totalChunks; i++) {
@@ -1934,7 +1933,7 @@
                     const end = Math.min(start + chunkSize, file.size);
                     const chunkBlob = file.slice(start, end);
 
-                    // Convert chunk to base64 to send via JSON proxy safely
+
                     const base64Chunk = await new Promise((resolve) => {
                         const reader = new FileReader();
                         reader.readAsDataURL(chunkBlob);
@@ -1962,7 +1961,7 @@
                 progTxt.textContent = "Assembling file on Fast.io servers...";
                 progBar.style.width = "99%";
 
-                // 3. Complete Upload & Save Metadata
+
                 const completeRes = await fetch("/api/fastio", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -1979,12 +1978,12 @@
                 const completeData = await completeRes.json();
                 if (!completeRes.ok) throw new Error(completeData.error || "Failed to finalize upload");
 
-                // Success
+
                 progBar.style.width = "100%";
                 progTxt.textContent = "Upload Complete!";
                 setTimeout(() => { progCon.style.display = "none"; }, 2000);
 
-                // Clear inputs
+
                 fileInput.value = "";
                 document.getElementById("sec-desc").value = "";
 
@@ -2004,9 +2003,11 @@
             const list = document.getElementById("sec-file-list");
             list.innerHTML = "Fetching from Fast.io...";
             try {
-                // To fetch files, your manage-files endpoint doesn't strictly need the password currently for GET,
-                // but it's good practice. Currently manage-files GET is public so admin sees it fast.
-                const res = await fetch("/api/fastio");
+                const res = await fetch("/api/fastio", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "list", password: sessionPassword })
+                });
                 const data = await res.json();
                 list.innerHTML = "";
                 if (data && Array.isArray(data)) {

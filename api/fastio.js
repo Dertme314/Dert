@@ -4,7 +4,6 @@ export default async function handler(req, res) {
     const workspaceId = process.env.FAST_IO_WORKSPACE_ID;
     const apiKey = process.env.FAST_IO_API_KEY;
 
-    // Helper for fastio fetch
     const fetchFastIo = async (endpoint, options = {}) => {
         return fetch(`https://api.fast.io/v1/workspaces/${workspaceId}${endpoint}`, {
             ...options,
@@ -15,18 +14,6 @@ export default async function handler(req, res) {
         });
     };
 
-    // --- GET: List Files ---
-    if (req.method === "GET") {
-        try {
-            const resp = await fetchFastIo('/files');
-            if (!resp.ok) return res.status(resp.status).json({ error: "Failed to list files from Fast.io." });
-            return res.status(200).json(await resp.json());
-        } catch (e) {
-            return res.status(500).json({ error: e.message });
-        }
-    }
-
-    // --- DELETE: Remove File ---
     if (req.method === "DELETE") {
         const { node_id, password } = req.body;
         if (password !== process.env.UPLOAD_PASSWORD) return res.status(401).json({ error: "Unauthorized" });
@@ -39,11 +26,9 @@ export default async function handler(req, res) {
         }
     }
 
-    // --- POST: Auth & Multi-step Uploads ---
     if (req.method === "POST") {
         const { action, password } = req.body;
 
-        // Every POST action requires the master password
         if (password !== process.env.UPLOAD_PASSWORD) {
             return res.status(401).json({ success: false, error: "Unauthorized: Incorrect password." });
         }
@@ -51,6 +36,12 @@ export default async function handler(req, res) {
         try {
             if (action === "auth") {
                 return res.status(200).json({ success: true });
+            }
+
+            else if (action === "list") {
+                const resp = await fetchFastIo('/files');
+                if (!resp.ok) return res.status(resp.status).json({ error: "Failed to list files from Fast.io." });
+                return res.status(200).json(await resp.json());
             }
 
             else if (action === "init") {
@@ -80,7 +71,6 @@ export default async function handler(req, res) {
             else if (action === "complete") {
                 const { upload_id, filename, description, size } = req.body;
 
-                // Finalize Fast.io upload
                 const resp = await fetchFastIo(`/upload/${upload_id}/complete`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -88,7 +78,6 @@ export default async function handler(req, res) {
                 });
                 if (!resp.ok) return res.status(resp.status).json({ error: await resp.text() });
 
-                // Register in Vercel KV for download page
                 const fileId = Math.random().toString(36).substring(2, 10);
                 await kv.set(`file:${fileId}`, {
                     filename,
@@ -111,3 +100,4 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ error: "Method not allowed" });
 }
+
