@@ -8,8 +8,8 @@ export default async function handler(req, res) {
         console.error("Redis init failed:", err.message);
         // It will fail later if KV is used, but won't crash the auth/list endpoints
     }
-    const workspaceId = process.env.FAST_IO_WORKSPACE_ID;
-    const apiKey = process.env.FAST_IO_API_KEY;
+    const workspaceId = (process.env.FAST_IO_WORKSPACE_ID || '').trim();
+    const apiKey = (process.env.FAST_IO_API_KEY || '').trim();
 
     const fetchFastIo = async (endpoint, options = {}) => {
         const url = `https://api.fast.io/v1/workspaces/${workspaceId}${endpoint}`;
@@ -25,12 +25,14 @@ export default async function handler(req, res) {
 
     if (req.method === "DELETE") {
         const { node_id, password } = req.body;
-        if (password !== process.env.UPLOAD_PASSWORD) return res.status(401).json({ error: "Unauthorized" });
+        if (password !== process.env.UPLOAD_PASSWORD) {
+            return res.status(200).json({ success: false, error: "Unauthorized: Incorrect password." });
+        }
         try {
             const resp = await fetchFastIo(`/nodes/${node_id}`, { method: 'DELETE' });
             if (!resp.ok) return res.status(resp.status).json({ error: "Delete failed" });
 
-            await kv.del(`file:${node_id}`);
+            if (kv) await kv.del(`file:${node_id}`);
 
             return res.status(200).json({ success: true });
         } catch (e) {
@@ -42,7 +44,7 @@ export default async function handler(req, res) {
         const { action, password } = req.body;
 
         if (password !== process.env.UPLOAD_PASSWORD) {
-            return res.status(401).json({ success: false, error: "Unauthorized: Incorrect password." });
+            return res.status(200).json({ success: false, error: "Unauthorized: Incorrect password." });
         }
 
         try {
