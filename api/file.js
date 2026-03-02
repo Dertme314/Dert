@@ -1,7 +1,13 @@
 import { Redis } from "@upstash/redis";
 
 export default async function handler(req, res) {
-    const kv = Redis.fromEnv();
+    let kv;
+    try {
+        kv = Redis.fromEnv();
+    } catch (err) {
+        console.error("Redis init failed:", err.message);
+        return res.status(500).json({ error: "Database configuration missing" });
+    }
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: "Missing ID" });
 

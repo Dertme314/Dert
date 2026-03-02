@@ -1,7 +1,13 @@
 import { Redis } from "@upstash/redis";
 
 export default async function handler(req, res) {
-    const kv = Redis.fromEnv();
+    let kv;
+    try {
+        kv = Redis.fromEnv();
+    } catch (err) {
+        console.error("Redis init failed:", err.message);
+        // It will fail later if KV is used, but won't crash the auth/list endpoints
+    }
     const workspaceId = process.env.FAST_IO_WORKSPACE_ID;
     const apiKey = process.env.FAST_IO_API_KEY;
 

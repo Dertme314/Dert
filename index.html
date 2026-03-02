@@ -1912,7 +1912,12 @@
                         document.getElementById("sup-dash-view").style.display = "block";
                         loadFiles();
                     } else {
-                        errEl.textContent = "Incorrect password";
+                        try {
+                            const errData = await res.json();
+                            errEl.textContent = errData.error || "Server Error: " + res.status;
+                        } catch (e) {
+                            errEl.textContent = "Server Error: " + res.status;
+                        }
                         errEl.style.display = "block";
                     }
                 } catch (e) {
