@@ -23,7 +23,6 @@ export default async function handler(req, res) {
             const resp = await fetchFastIo(`/nodes/${node_id}`, { method: 'DELETE' });
             if (!resp.ok) return res.status(resp.status).json({ error: "Delete failed" });
 
-            // Delete the corresponding entry from Vercel KV
             await kv.del(`file:${node_id}`);
 
             return res.status(200).json({ success: true });
@@ -89,7 +88,6 @@ export default async function handler(req, res) {
                 if (!resp.ok) return res.status(resp.status).json({ error: await resp.text() });
                 const completeData = await resp.json();
 
-                // If Fast.io returns the node ID, use it. Otherwise, generate a random one.
                 const fileId = completeData.id || Math.random().toString(36).substring(2, 10);
                 await kv.set(`file:${fileId}`, {
                     filename,
