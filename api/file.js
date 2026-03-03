@@ -3,9 +3,9 @@ import IORedis from "ioredis";
 let redis;
 function getRedis() {
     if (!redis) {
-        redis = new IORedis(process.env.KV_REST_API_URL, {
+        redis = new IORedis(process.env.KV_URL || process.env.KV_REST_API_URL, {
             tls: { rejectUnauthorized: false },
-            maxRetriesPerRequest: 3,
+            connectTimeout: 10000,
         });
     }
     return redis;

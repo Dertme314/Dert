@@ -1,5 +1,16 @@
 import { createRouteHandler, createUploadthing } from "uploadthing/server";
-import { kv } from "@vercel/kv";
+import IORedis from "ioredis";
+
+let redis;
+function getRedis() {
+    if (!redis) {
+        redis = new IORedis(process.env.KV_URL || process.env.KV_REST_API_URL, {
+            tls: { rejectUnauthorized: false },
+            connectTimeout: 10000,
+        });
+    }
+    return redis;
+}
 
 const f = createUploadthing();
 
@@ -9,15 +20,16 @@ export const uploadRouter = {
     secretUploader: f({ blob: { maxFileSize: "1GB", maxFileCount: 1 } })
         .onUploadComplete(async ({ metadata, file }) => {
             try {
+                const kv = getRedis();
                 const fileId = Math.random().toString(36).substring(2, 10);
 
                 // Save to Redis KV
-                await kv.set(`file:${fileId}`, {
+                await kv.set(`file:${fileId}`, JSON.stringify({
                     filename: file.name,
                     size: file.size,
                     fastio_url: file.url, // Reusing existing variable name for frontend compatibility
                     uploadthing_key: file.key,
-                });
+                }));
 
                 console.log(`Successfully stored metadata for ${file.name}`);
             } catch (err) {
