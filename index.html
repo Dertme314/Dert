@@ -1241,7 +1241,7 @@
                             <input type="text" id="sec-desc" class="sup-input"
                                 placeholder="e.g. My private project zip">
                         </div>
-                        <button class="sup-btn" id="btn-upload" onclick="uploadSecretFile()">Upload to Fast.io</button>
+                        <button class="sup-btn" id="btn-upload" onclick="uploadSecretFile()">Upload to Storage</button>
 
                         <div id="sup-progress-container" style="display: none; margin-top: 15px;">
                             <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 6px;"
@@ -1874,7 +1874,6 @@
                 secretBuffer = "";
                 const adminTabBtn = document.querySelector('.nav-tab[data-tab="admin"]');
                 if (adminTabBtn) adminTabBtn.click();
-
                 setTimeout(() => {
                     const pwdInput = document.getElementById("sec-pwd-login");
                     if (pwdInput) pwdInput.focus();
@@ -1886,18 +1885,15 @@
             const pwd = document.getElementById("sec-pwd-login").value;
             const errEl = document.getElementById("login-err");
             const btn = document.getElementById("btn-login");
-
             if (!pwd) return;
             btn.textContent = "Verifying...";
             btn.disabled = true;
-
             try {
                 const res = await fetch("/api/admin", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action: "auth", password: pwd })
                 });
-
                 if (res.ok) {
                     sessionPassword = pwd;
                     document.getElementById("sup-auth-view").style.display = "none";
@@ -1924,19 +1920,15 @@
             const fileInput = document.getElementById("sec-file");
             const file = fileInput.files[0];
             if (!file) return alert("Please select a file.");
-
             if (!window.utUploadFiles) return alert("Upload system compiling... please wait a second and try again.");
-
             const btn = document.getElementById('btn-upload');
             const progCon = document.getElementById('sup-progress-container');
             const progBar = document.getElementById('sup-progress-bar');
             const progTxt = document.getElementById('sup-progress-text');
-
             btn.disabled = true;
             progCon.style.display = "block";
             progBar.style.width = "0%";
             progTxt.textContent = "Initializing session...";
-
             try {
                 const [res] = await window.utUploadFiles("secretUploader", {
                     files: [file],
@@ -1945,23 +1937,31 @@
                         progBar.style.width = progress + "%";
                     }
                 });
-
                 progBar.style.width = "100%";
                 progTxt.textContent = "Upload Complete!";
                 setTimeout(() => { progCon.style.display = "none"; }, 2000);
-
                 fileInput.value = "";
                 document.getElementById("sec-desc").value = "";
-
-                prompt("Successfully Uploaded! Share this link:", res.url);
+                const downloadLink = window.location.origin + "/download/" + encodeURIComponent(file.name);
+                prompt("Successfully Uploaded! Share this download link:", downloadLink);
                 window.loadFiles();
             } catch (e) {
                 alert("Upload Failure: " + e.message);
                 progCon.style.display = "none";
             }
-
             btn.textContent = "Upload to Storage";
             btn.disabled = false;
+        }
+
+        window.copyDownloadLink = function copyDownloadLink(filename) {
+            const link = window.location.origin + "/download/" + encodeURIComponent(filename);
+            navigator.clipboard.writeText(link).then(() => {
+                const toast = document.createElement("div");
+                toast.textContent = "Link copied!";
+                toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#6c63ff;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:99999;animation:fadeIn .3s;";
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 1500);
+            });
         }
 
         window.loadFiles = async function loadFiles() {
@@ -1976,30 +1976,55 @@
                 const data = await res.json();
                 list.innerHTML = "";
                 if (data && Array.isArray(data)) {
-                    if (data.length === 0) list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files found.</div>";
-
+                    if (data.length === 0) {
+                        list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files uploaded yet.</div>";
+                        return;
+                    }
                     data.forEach(f => {
                         const div = document.createElement("div");
                         div.className = "sup-list-item";
-                        div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')"><i class="fas fa-trash"></i></button>`;
+                        div.style.cssText = "display:flex;align-items:center;justify-content:space-between;padding:10px 14px;margin-bottom:6px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:10px;transition:background .2s;";
+                        div.onmouseenter = () => div.style.background = "rgba(255,255,255,0.06)";
+                        div.onmouseleave = () => div.style.background = "rgba(255,255,255,0.03)";
+                        const nameSpan = document.createElement("span");
+                        nameSpan.textContent = f.name;
+                        nameSpan.style.cssText = "flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;color:#e0e0e0;";
+                        const btnWrap = document.createElement("div");
+                        btnWrap.style.cssText = "display:flex;gap:6px;flex-shrink:0;margin-left:10px;";
+                        const copyBtn = document.createElement("button");
+                        copyBtn.innerHTML = '<i class="fas fa-link"></i>';
+                        copyBtn.title = "Copy download link";
+                        copyBtn.style.cssText = "background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);color:#a29bfe;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;transition:all .2s;";
+                        copyBtn.onmouseenter = () => { copyBtn.style.background = "rgba(108,99,255,0.3)"; copyBtn.style.color = "#fff"; };
+                        copyBtn.onmouseleave = () => { copyBtn.style.background = "rgba(108,99,255,0.15)"; copyBtn.style.color = "#a29bfe"; };
+                        copyBtn.onclick = () => window.copyDownloadLink(f.name);
+                        const delBtn = document.createElement("button");
+                        delBtn.innerHTML = '<i class="fas fa-trash"></i>';
+                        delBtn.title = "Delete file";
+                        delBtn.style.cssText = "background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.2);color:#ff6b81;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;transition:all .2s;";
+                        delBtn.onmouseenter = () => { delBtn.style.background = "rgba(255,71,87,0.25)"; delBtn.style.color = "#fff"; };
+                        delBtn.onmouseleave = () => { delBtn.style.background = "rgba(255,71,87,0.1)"; delBtn.style.color = "#ff6b81"; };
+                        delBtn.onclick = (event) => window.deleteFile(f.id, event);
+                        btnWrap.appendChild(copyBtn);
+                        btnWrap.appendChild(delBtn);
+                        div.appendChild(nameSpan);
+                        div.appendChild(btnWrap);
                         list.appendChild(div);
                     });
                 } else {
                     list.innerHTML = "<div style='color:var(--danger); padding: 10px 0;'>Bad data returned.</div>";
                 }
             } catch (e) {
-                list.innerHTML = "<div style='color:var(--danger); padding: 10px 0;'>Failed load.</div>";
+                list.innerHTML = "<div style='color:var(--danger); padding: 10px 0;'>Failed to load files.</div>";
             }
         }
 
-        window.deleteFile = async function deleteFile(id) {
+        window.deleteFile = async function deleteFile(id, event) {
             if (!confirm("Permanently delete this file?")) return;
-
             const btn = event.currentTarget || event.target.closest('button');
             const originalContent = btn.innerHTML;
             btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
             btn.disabled = true;
-
             const res = await fetch("/api/admin", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
