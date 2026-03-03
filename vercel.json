@@ -2,7 +2,11 @@
     "rewrites": [
         {
             "source": "/download/:name",
-            "destination": "/api/download?name=:name"
+            "destination": "/api/files?action=download&name=:name"
+        },
+        {
+            "source": "/file/:name",
+            "destination": "/api/files?action=view&name=:name"
         }
     ]
 }

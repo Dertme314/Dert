@@ -1384,7 +1384,7 @@
             });
         }
 
-        fetch("/api/pinned")
+        fetch("/api/public?action=pinned")
             .then(function (res) {
                 if (!res.ok) throw new Error("fail");
                 return res.json();
@@ -1453,7 +1453,7 @@
         })();
 
 
-        fetch("/api/visits")
+        fetch("/api/public?action=visits")
             .then(function (res) { return res.json(); })
             .then(function (data) {
                 var countEl = document.getElementById("visit-count");
