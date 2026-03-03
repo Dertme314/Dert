@@ -1,21 +1,9 @@
-import IORedis from "ioredis";
+import { kv } from "@vercel/kv";
 import { UTApi } from "uploadthing/server";
-
-let redis;
-function getRedis() {
-    if (!redis) {
-        redis = new IORedis(process.env.KV_REST_API_URL, {
-            tls: { rejectUnauthorized: false },
-            maxRetriesPerRequest: 3,
-        });
-    }
-    return redis;
-}
 
 const utapi = new UTApi({ token: process.env.UPLOADTHING_TOKEN });
 
 export default async function handler(req, res) {
-    const kv = getRedis();
 
     if (req.method === "DELETE") {
         const { node_id, password } = req.body;
@@ -51,30 +39,23 @@ export default async function handler(req, res) {
                 return res.status(200).json({ success: true, message: "Credentials verified." });
             }
             else if (action === "list") {
-                // Scan ioredis for keys matching 'file:*'
-                let cursor = '0';
-                let keys = [];
-                do {
-                    const [newCursor, foundKeys] = await kv.scan(cursor, 'MATCH', 'file:*', 'COUNT', 100);
-                    cursor = newCursor;
-                    keys.push(...foundKeys);
-                } while (cursor !== '0');
+                // Fetch all keys matching 'file:*' from Vercel KV
+                const keys = await kv.keys('file:*');
+                if (!keys || keys.length === 0) return res.status(200).json([]);
 
-                if (keys.length === 0) return res.status(200).json([]);
+                // Pre-pend keys for a multi-get operation if supported, or fetch individually
+                const results = [];
+                for (const key of keys) {
+                    const data = await kv.get(key);
+                    if (data) results.push({ id: key.replace('file:', ''), ...data });
+                }
 
-                const pipelines = keys.map(k => kv.get(k));
-                const results = await Promise.all(pipelines);
-
-                const files = results
-                    .filter(raw => raw)
-                    .map((raw, index) => {
-                        const meta = typeof raw === "string" ? JSON.parse(raw) : raw;
-                        // Map internal file data for frontend rendering
-                        return {
-                            id: keys[index].replace('file:', ''),
-                            name: meta.filename
-                        };
-                    });
+                const files = results.map(meta => {
+                    return {
+                        id: meta.id,
+                        name: meta.filename
+                    };
+                });
 
                 return res.status(200).json(files);
             }
