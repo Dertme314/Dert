@@ -6,6 +6,7 @@ function getRedis() {
         redis = new IORedis(process.env.KV_URL || process.env.KV_REST_API_URL, {
             tls: { rejectUnauthorized: false },
             connectTimeout: 10000,
+            enableOfflineQueue: false,
         });
     }
     return redis;

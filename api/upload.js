@@ -38,7 +38,7 @@ export const uploadRouter = {
         }),
 };
 
-const handler = createRouteHandler({
+const { GET, POST } = createRouteHandler({
     router: uploadRouter,
     config: {
         token: process.env.UPLOADTHING_TOKEN // V7 Token 
@@ -66,9 +66,9 @@ export default async function (req, res) {
     try {
         let response;
         if (req.method === "GET") {
-            response = await handler.GET(request);
+            response = await GET(request);
         } else if (req.method === "POST") {
-            response = await handler.POST(request);
+            response = await POST(request);
         } else {
             return res.status(405).json({ error: "Method Not Allowed" });
         }
