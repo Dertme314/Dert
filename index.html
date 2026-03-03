@@ -1855,12 +1855,13 @@
 
     <script type="module">
         import { genUploader } from "https://esm.sh/@uploadthing/browser@7.1.0";
-
         const { uploadFiles } = genUploader({
             url: "/api/upload",
-            package: "uploadthing" // Using standard package
+            package: "uploadthing"
         });
-
+        window.utUploadFiles = uploadFiles; // Expose natively
+    </script>
+    <script>
         let secretBuffer = "";
         const secretWord = "upload";
         let sessionPassword = "";
@@ -1924,6 +1925,8 @@
             const file = fileInput.files[0];
             if (!file) return alert("Please select a file.");
 
+            if (!window.utUploadFiles) return alert("Upload system compiling... please wait a second and try again.");
+
             const btn = document.getElementById('btn-upload');
             const progCon = document.getElementById('sup-progress-container');
             const progBar = document.getElementById('sup-progress-bar');
@@ -1935,8 +1938,7 @@
             progTxt.textContent = "Initializing session...";
 
             try {
-                // Performs client-side chunking/uploading automatically through the new SDK v7 integration
-                const [res] = await uploadFiles("secretUploader", {
+                const [res] = await window.utUploadFiles("secretUploader", {
                     files: [file],
                     onUploadProgress: ({ file, progress }) => {
                         progTxt.textContent = `Uploading ${file} (${progress}%)`;
