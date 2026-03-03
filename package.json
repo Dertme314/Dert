@@ -3,8 +3,9 @@
     "version": "1.0.0",
     "description": "Dert backend logic",
     "dependencies": {
-        "@upstash/redis": "^1.34.0",
         "@vercel/kv": "^3.0.0",
-        "ioredis": "^5.10.0"
+        "ioredis": "^5.10.0",
+        "uploadthing": "^7.5.0",
+        "@uploadthing/browser": "^7.1.0"
     }
 }

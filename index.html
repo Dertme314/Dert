@@ -1853,7 +1853,14 @@
         });
     </script>
 
-    <script>
+    <script type="module">
+        import { genUploader } from "https://esm.sh/@uploadthing/browser@7.1.0";
+
+        const { uploadFiles } = genUploader({
+            url: "/api/upload",
+            package: "uploadthing" // Using standard package
+        });
+
         let secretBuffer = "";
         const secretWord = "upload";
         let sessionPassword = "";
@@ -1874,7 +1881,7 @@
             }
         });
 
-        async function verifyAdmin() {
+        window.verifyAdmin = async function verifyAdmin() {
             const pwd = document.getElementById("sec-pwd-login").value;
             const errEl = document.getElementById("login-err");
             const btn = document.getElementById("btn-login");
@@ -1884,7 +1891,7 @@
             btn.disabled = true;
 
             try {
-                const res = await fetch("/api/fastio", {
+                const res = await fetch("/api/admin", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action: "auth", password: pwd })
@@ -1894,7 +1901,7 @@
                     sessionPassword = pwd;
                     document.getElementById("sup-auth-view").style.display = "none";
                     document.getElementById("sup-dash-view").style.display = "block";
-                    loadFiles();
+                    window.loadFiles();
                 } else {
                     try {
                         const errData = await res.json();
@@ -1912,10 +1919,9 @@
             btn.disabled = false;
         }
 
-        async function uploadSecretFile() {
+        window.uploadSecretFile = async function uploadSecretFile() {
             const fileInput = document.getElementById("sec-file");
             const file = fileInput.files[0];
-            const desc = document.getElementById("sec-desc").value;
             if (!file) return alert("Please select a file.");
 
             const btn = document.getElementById('btn-upload');
@@ -1926,76 +1932,17 @@
             btn.disabled = true;
             progCon.style.display = "block";
             progBar.style.width = "0%";
+            progTxt.textContent = "Initializing session...";
 
             try {
-                progTxt.textContent = "Initializing session...";
-                const initRes = await fetch("/api/fastio", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "init", filename: file.name, size: file.size, password: sessionPassword })
-                });
-
-                const initData = await initRes.json();
-                if (!initRes.ok) throw new Error(initData.error || "Failed to init session");
-                const uploadId = initData.upload_id;
-
-                const chunkSize = 3 * 1024 * 1024;
-                const totalChunks = Math.ceil(file.size / chunkSize);
-
-                for (let i = 0; i < totalChunks; i++) {
-                    const pct = Math.round((i / totalChunks) * 100);
-                    progTxt.textContent = `Uploading chunk ${i + 1}/${totalChunks} (${pct}%)`;
-                    progBar.style.width = pct + "%";
-
-                    const start = i * chunkSize;
-                    const end = Math.min(start + chunkSize, file.size);
-                    const chunkBlob = file.slice(start, end);
-
-                    const base64Chunk = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.readAsDataURL(chunkBlob);
-                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-                    });
-
-                    const chunkRes = await fetch("/api/fastio", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            action: "chunk",
-                            upload_id: uploadId,
-                            part_number: i + 1,
-                            password: sessionPassword,
-                            fileData: base64Chunk,
-                            startByte: start,
-                            endByte: end - 1,
-                            totalSize: file.size
-                        })
-                    });
-
-                    if (!chunkRes.ok) {
-                        const errData = await chunkRes.json();
-                        throw new Error(`Chunk ${i + 1} failed: ${errData.error}`);
+                // Performs client-side chunking/uploading automatically through the new SDK v7 integration
+                const [res] = await uploadFiles("secretUploader", {
+                    files: [file],
+                    onUploadProgress: ({ file, progress }) => {
+                        progTxt.textContent = `Uploading ${file} (${progress}%)`;
+                        progBar.style.width = progress + "%";
                     }
-                }
-
-                progTxt.textContent = "Assembling on remote server...";
-                progBar.style.width = "99%";
-
-                const completeRes = await fetch("/api/fastio", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        action: "complete",
-                        upload_id: uploadId,
-                        filename: file.name,
-                        size: file.size,
-                        description: desc,
-                        password: sessionPassword
-                    })
                 });
-
-                const completeData = await completeRes.json();
-                if (!completeRes.ok) throw new Error(completeData.error || "Failed finalization");
 
                 progBar.style.width = "100%";
                 progTxt.textContent = "Upload Complete!";
@@ -2004,23 +1951,22 @@
                 fileInput.value = "";
                 document.getElementById("sec-desc").value = "";
 
-                prompt("Successfully Uploaded! Share this link:", window.location.origin + completeData.url);
-                loadFiles();
-
+                prompt("Successfully Uploaded! Share this link:", res.url);
+                window.loadFiles();
             } catch (e) {
                 alert("Upload Failure: " + e.message);
                 progCon.style.display = "none";
             }
 
-            btn.textContent = "Upload to Fast.io";
+            btn.textContent = "Upload to Storage";
             btn.disabled = false;
         }
 
-        async function loadFiles() {
+        window.loadFiles = async function loadFiles() {
             const list = document.getElementById("sec-file-list");
             list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>Fetching...</div>";
             try {
-                const res = await fetch("/api/fastio", {
+                const res = await fetch("/api/admin", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action: "list", password: sessionPassword })
@@ -2028,18 +1974,9 @@
                 const data = await res.json();
                 list.innerHTML = "";
                 if (data && Array.isArray(data)) {
-                    const arr = data.items || data;
-                    if (arr.length === 0) list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files found.</div>";
+                    if (data.length === 0) list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files found.</div>";
 
-                    arr.forEach(f => {
-                        const div = document.createElement("div");
-                        div.className = "sup-list-item";
-                        div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')"><i class="fas fa-trash"></i></button>`;
-                        list.appendChild(div);
-                    });
-                } else if (data.items && Array.isArray(data.items)) {
-                    if (data.items.length === 0) list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>No files found.</div>";
-                    data.items.forEach(f => {
+                    data.forEach(f => {
                         const div = document.createElement("div");
                         div.className = "sup-list-item";
                         div.innerHTML = `<span>${f.name}</span> <button class="sup-del-btn" onclick="deleteFile('${f.id}')"><i class="fas fa-trash"></i></button>`;
@@ -2053,7 +1990,7 @@
             }
         }
 
-        async function deleteFile(id) {
+        window.deleteFile = async function deleteFile(id) {
             if (!confirm("Permanently delete this file?")) return;
 
             const btn = event.currentTarget || event.target.closest('button');
@@ -2061,14 +1998,14 @@
             btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
             btn.disabled = true;
 
-            const res = await fetch("/api/fastio", {
+            const res = await fetch("/api/admin", {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ node_id: id, password: sessionPassword })
             });
             const d = await res.json();
             if (res.ok && d.success) {
-                loadFiles();
+                window.loadFiles();
             } else {
                 alert("Error: " + (d.error || "Failed to delete"));
                 btn.innerHTML = originalContent;
