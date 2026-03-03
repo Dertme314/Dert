@@ -33,15 +33,16 @@ export const uploadRouter = {
         }),
 };
 
-const { GET, POST } = createRouteHandler({
+// createRouteHandler in v7 returns a single unified handler function
+const handler = createRouteHandler({
     router: uploadRouter,
     config: {
-        token: process.env.UPLOADTHING_TOKEN // V7 Token 
+        token: process.env.UPLOADTHING_TOKEN
     }
 });
 
 export default async function (req, res) {
-    // Create standard Web Request from Vercel Node req
+    // Build a standard Web Request from Vercel's Node.js req object
     const protocol = req.headers['x-forwarded-proto'] || 'https';
     const host = req.headers.host || 'localhost';
     const url = new URL(req.url, `${protocol}://${host}`);
@@ -51,7 +52,7 @@ export default async function (req, res) {
         headers: req.headers,
     };
 
-    // Vercel parses application/json automatically into req.body. Convert it back to a string payload.
+    // Vercel auto-parses JSON into req.body. Convert it back for UploadThing.
     if (req.method !== 'GET' && req.method !== 'HEAD' && req.body) {
         fetchOptions.body = typeof req.body === 'object' ? JSON.stringify(req.body) : req.body;
     }
@@ -59,14 +60,8 @@ export default async function (req, res) {
     const request = new Request(url, fetchOptions);
 
     try {
-        let response;
-        if (req.method === "GET") {
-            response = await GET(request);
-        } else if (req.method === "POST") {
-            response = await POST(request);
-        } else {
-            return res.status(405).json({ error: "Method Not Allowed" });
-        }
+        // Call the unified handler directly — it routes GET/POST internally
+        const response = await handler(request);
 
         const responseBody = await response.text();
 
