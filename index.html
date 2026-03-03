@@ -1953,11 +1953,12 @@
             btn.disabled = false;
         }
 
-        window.copyDownloadLink = function copyDownloadLink(filename) {
-            const link = window.location.origin + "/download/" + encodeURIComponent(filename);
+        window.copyDownloadLink = function copyDownloadLink(filename, type) {
+            const path = type === 'preview' ? "/file/" : "/download/";
+            const link = window.location.origin + path + encodeURIComponent(filename);
             navigator.clipboard.writeText(link).then(() => {
                 const toast = document.createElement("div");
-                toast.textContent = "Link copied!";
+                toast.textContent = type === 'preview' ? "Preview link copied!" : "Direct link copied!";
                 toast.style.cssText = "position:fixed;bottom:20px;right:20px;background:#6c63ff;color:#fff;padding:10px 20px;border-radius:8px;font-size:14px;z-index:99999;animation:fadeIn .3s;";
                 document.body.appendChild(toast);
                 setTimeout(() => toast.remove(), 1500);
@@ -1991,13 +1992,23 @@
                         nameSpan.style.cssText = "flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;color:#e0e0e0;";
                         const btnWrap = document.createElement("div");
                         btnWrap.style.cssText = "display:flex;gap:6px;flex-shrink:0;margin-left:10px;";
-                        const copyBtn = document.createElement("button");
-                        copyBtn.innerHTML = '<i class="fas fa-link"></i>';
-                        copyBtn.title = "Copy download link";
-                        copyBtn.style.cssText = "background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);color:#a29bfe;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;transition:all .2s;";
-                        copyBtn.onmouseenter = () => { copyBtn.style.background = "rgba(108,99,255,0.3)"; copyBtn.style.color = "#fff"; };
-                        copyBtn.onmouseleave = () => { copyBtn.style.background = "rgba(108,99,255,0.15)"; copyBtn.style.color = "#a29bfe"; };
-                        copyBtn.onclick = () => window.copyDownloadLink(f.name);
+
+                        const previewBtn = document.createElement("button");
+                        previewBtn.innerHTML = '<i class="fas fa-eye"></i>';
+                        previewBtn.title = "Copy Preview Page Link";
+                        previewBtn.style.cssText = "background:rgba(108,99,255,0.15);border:1px solid rgba(108,99,255,0.3);color:#a29bfe;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;transition:all .2s;";
+                        previewBtn.onmouseenter = () => { previewBtn.style.background = "rgba(108,99,255,0.3)"; previewBtn.style.color = "#fff"; };
+                        previewBtn.onmouseleave = () => { previewBtn.style.background = "rgba(108,99,255,0.15)"; previewBtn.style.color = "#a29bfe"; };
+                        previewBtn.onclick = () => window.copyDownloadLink(f.name, 'preview');
+
+                        const directBtn = document.createElement("button");
+                        directBtn.innerHTML = '<i class="fas fa-link"></i>';
+                        directBtn.title = "Copy Direct Download Link";
+                        directBtn.style.cssText = "background:rgba(0,184,148,0.15);border:1px solid rgba(0,184,148,0.3);color:#00b894;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;transition:all .2s;";
+                        directBtn.onmouseenter = () => { directBtn.style.background = "rgba(0,184,148,0.3)"; directBtn.style.color = "#fff"; };
+                        directBtn.onmouseleave = () => { directBtn.style.background = "rgba(0,184,148,0.15)"; directBtn.style.color = "#00b894"; };
+                        directBtn.onclick = () => window.copyDownloadLink(f.name, 'direct');
+
                         const delBtn = document.createElement("button");
                         delBtn.innerHTML = '<i class="fas fa-trash"></i>';
                         delBtn.title = "Delete file";
@@ -2005,7 +2016,9 @@
                         delBtn.onmouseenter = () => { delBtn.style.background = "rgba(255,71,87,0.25)"; delBtn.style.color = "#fff"; };
                         delBtn.onmouseleave = () => { delBtn.style.background = "rgba(255,71,87,0.1)"; delBtn.style.color = "#ff6b81"; };
                         delBtn.onclick = (event) => window.deleteFile(f.id, event);
-                        btnWrap.appendChild(copyBtn);
+
+                        btnWrap.appendChild(previewBtn);
+                        btnWrap.appendChild(directBtn);
                         btnWrap.appendChild(delBtn);
                         div.appendChild(nameSpan);
                         div.appendChild(btnWrap);
