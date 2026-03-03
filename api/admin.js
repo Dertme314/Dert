@@ -1,17 +1,10 @@
-import IORedis from "ioredis";
+import { createClient } from "@supabase/supabase-js";
 import { UTApi } from "uploadthing/server";
 
-let redis;
-function getRedis() {
-    if (!redis) {
-        redis = new IORedis(process.env.KV_URL || process.env.KV_REST_API_URL, {
-            tls: { rejectUnauthorized: false },
-            connectTimeout: 10000,
-            enableOfflineQueue: false,
-        });
-    }
-    return redis;
-}
+// Initialize Supabase Client
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const utapi = new UTApi({ token: process.env.UPLOADTHING_TOKEN });
 
@@ -22,22 +15,34 @@ export default async function handler(req, res) {
 
     if (req.method === "OPTIONS") return res.status(200).end();
 
-    const kv = getRedis();
-
     if (req.method === "DELETE") {
         const { node_id, password } = req.body;
+
         if (password !== process.env.UPLOAD_PASSWORD) {
             return res.status(401).json({ success: false, error: "Unauthorized: Incorrect password." });
         }
+
         try {
-            const raw = await kv.get(`file:${node_id}`);
-            if (raw) {
-                const metadata = typeof raw === "string" ? JSON.parse(raw) : raw;
-                if (metadata.uploadthing_key) {
-                    await utapi.deleteFiles(metadata.uploadthing_key);
-                }
+            // Fetch metadata from Supabase to get the UploadThing key
+            const { data: fileRecord, error: fetchError } = await supabase
+                .from('files')
+                .select('uploadthing_key')
+                .eq('id', node_id)
+                .single();
+
+            if (fileRecord && fileRecord.uploadthing_key) {
+                // Delete the physical file from UploadThing bucket
+                await utapi.deleteFiles(fileRecord.uploadthing_key);
             }
-            await kv.del(`file:${node_id}`);
+
+            // Delete the metadata record from Supabase table
+            const { error: deleteError } = await supabase
+                .from('files')
+                .delete()
+                .eq('id', node_id);
+
+            if (deleteError) throw deleteError;
+
             return res.status(200).json({ success: true });
         } catch (e) {
             return res.status(500).json({ error: e.message });
@@ -55,19 +60,20 @@ export default async function handler(req, res) {
             if (action === "auth") return res.status(200).json({ success: true, message: "Credentials verified." });
 
             if (action === "list") {
-                const [cursor, keys] = await kv.scan('0', 'MATCH', 'file:*', 'COUNT', 100);
+                // Fetch all file records from Supabase Postgres
+                const { data: filesData, error } = await supabase
+                    .from('files')
+                    .select('id, filename')
+                    .order('created_at', { ascending: false });
 
-                if (!keys || keys.length === 0) {
-                    return res.status(200).json([]);
-                }
+                if (error) throw error;
+                if (!filesData || filesData.length === 0) return res.status(200).json([]);
 
-                const results = await kv.mget(...keys);
-                const files = results
-                    .filter(Boolean)
-                    .map((raw, index) => {
-                        const meta = typeof raw === "string" ? JSON.parse(raw) : raw;
-                        return { id: keys[index].replace('file:', ''), name: meta.filename || "Unnamed File" };
-                    });
+                // Map format for frontend UI compatibility
+                const files = filesData.map(record => ({
+                    id: record.id,
+                    name: record.filename || "Unnamed File"
+                }));
 
                 return res.status(200).json(files);
             }

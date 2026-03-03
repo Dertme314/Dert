@@ -1,28 +1,26 @@
-import IORedis from "ioredis";
+import { createClient } from "@supabase/supabase-js";
 
-let redis;
-function getRedis() {
-    if (!redis) {
-        redis = new IORedis(process.env.KV_URL || process.env.KV_REST_API_URL, {
-            tls: { rejectUnauthorized: false },
-            connectTimeout: 10000,
-            enableOfflineQueue: false,
-        });
-    }
-    return redis;
-}
+// Initialize Supabase Client
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default async function handler(req, res) {
-    const kv = getRedis();
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: "Missing ID" });
 
     try {
-        const raw = await kv.get(`file:${id}`);
-        if (!raw) return res.status(404).json({ error: "File not found" });
+        const { data: fileRecord, error: fetchError } = await supabase
+            .from('files')
+            .select('*')
+            .eq('id', id)
+            .single();
 
-        const metadata = typeof raw === "string" ? JSON.parse(raw) : raw;
-        return res.status(200).json(metadata);
+        if (fetchError || !fileRecord) {
+            return res.status(404).json({ error: "File not found" });
+        }
+
+        return res.status(200).json(fileRecord);
     } catch (e) {
         return res.status(500).json({ error: e.message });
     }

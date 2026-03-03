@@ -1,16 +1,10 @@
 import { createRouteHandler, createUploadthing } from "uploadthing/server";
-import IORedis from "ioredis";
+import { createClient } from "@supabase/supabase-js";
 
-let redis;
-function getRedis() {
-    if (!redis) {
-        redis = new IORedis(process.env.KV_URL || process.env.KV_REST_API_URL, {
-            tls: { rejectUnauthorized: false },
-            connectTimeout: 10000,
-        });
-    }
-    return redis;
-}
+// Initialize Supabase Client
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const f = createUploadthing();
 
@@ -20,20 +14,21 @@ export const uploadRouter = {
     secretUploader: f({ blob: { maxFileSize: "1GB", maxFileCount: 1 } })
         .onUploadComplete(async ({ metadata, file }) => {
             try {
-                const kv = getRedis();
-                const fileId = Math.random().toString(36).substring(2, 10);
+                // Save to Supabase Postgres Table
+                const { error } = await supabase
+                    .from('files')
+                    .insert({
+                        filename: file.name,
+                        size: file.size,
+                        fastio_url: file.url, // Reusing existing variable name for frontend compatibility
+                        uploadthing_key: file.key
+                    });
 
-                // Save to Redis KV
-                await kv.set(`file:${fileId}`, JSON.stringify({
-                    filename: file.name,
-                    size: file.size,
-                    fastio_url: file.url, // Reusing existing variable name for frontend compatibility
-                    uploadthing_key: file.key,
-                }));
+                if (error) throw error;
 
                 console.log(`Successfully stored metadata for ${file.name}`);
             } catch (err) {
-                console.error("KV Error during webhook:", err);
+                console.error("Supabase Error during webhook:", err);
             }
         }),
 };
