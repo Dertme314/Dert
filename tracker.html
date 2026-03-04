@@ -1430,6 +1430,35 @@
             }
 
 
+            const hardcodedExploits = [
+                {
+                    name: 'Raze external', version: '?',
+                    statusText: 'Updated', price: 'Free (Key System)',
+                    category: 'Windows External Exploit',
+                    features: ['No Key'],
+                    pros: ['Not detected'],
+                    neutralNotes: ['Key system required'],
+                    cons: [],
+                    updated: true, keySystem: true,
+                    lastUpdate: 'Unknown',
+                    website: 'https://razelol.vercel.app/', discord: 'https://discord.gg/8hTbxmW2hg',
+                    suncPercentage: 0, uncPercentage: 0,
+                },
+                {
+                    name: 'Raze executor', version: '?',
+                    statusText: 'Updated', price: 'Free (Key System)',
+                    category: 'Windows Script Executor',
+                    features: ['Decompiler', 'Multi-instance'],
+                    pros: ['94% sUNC', 'Has decompiler', 'Multi-instance support', 'Bypasses Client Modification Bans', '99% UNC'],
+                    neutralNotes: ['Vulnerable to Banwaves (Detected)', 'Key system required'],
+                    cons: [],
+                    updated: true, keySystem: true,
+                    lastUpdate: 'Unknown',
+                    website: 'https://razelol.vercel.app/', discord: 'https://discord.gg/8hTbxmW2hg',
+                    suncPercentage: 94, uncPercentage: 99,
+                },
+            ];
+
             let exploitsData = [];
 
             function showLoading() {
@@ -1446,6 +1475,8 @@
                     if (!r.ok) throw new Error('API returned ' + r.status);
                     const raw = await r.json();
                     exploitsData = (Array.isArray(raw) ? raw : []).filter(e => !e.hidden).map(mapExploit);
+                    const existingNames = new Set(exploitsData.map(e => e.name.toLowerCase()));
+                    hardcodedExploits.forEach(h => { if (!existingNames.has(h.name.toLowerCase())) exploitsData.push(h); });
                     totalExploitCountSpan.textContent = exploitsData.length;
                     updateStats();
                     populateCategories();
