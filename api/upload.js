@@ -5,8 +5,13 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY
 const f = createUploadthing();
 
 export const uploadRouter = {
-    secretUploader: f({ blob: { maxFileSize: "1GB", maxFileCount: 1 } })
-        .onUploadComplete(async ({ metadata, file }) => {
+    secretUploader: f({
+        blob: { maxFileSize: "1GB", maxFileCount: 1 },
+        // Explicitly allow common executable types just in case "blob" is being picky
+        "application/x-msdownload": { maxFileSize: "1GB", maxFileCount: 1 },
+        "application/vnd.microsoft.portable-executable": { maxFileSize: "1GB", maxFileCount: 1 }
+    })
+        .onUploadComplete(async ({ file }) => {
             try {
                 const { error } = await supabase
                     .from('files')
@@ -29,21 +34,34 @@ const handler = createRouteHandler({
     config: { token: process.env.UPLOADTHING_TOKEN }
 });
 
+// Helper: collect raw body as Buffer to ensure no mangling during proxy
+function getRawBody(req) {
+    return new Promise((resolve, reject) => {
+        const chunks = [];
+        req.on('data', (chunk) => chunks.push(chunk));
+        req.on('end', () => resolve(Buffer.concat(chunks)));
+        req.on('error', reject);
+    });
+}
+
 export default async function (req, res) {
     const protocol = req.headers['x-forwarded-proto'] || 'https';
     const host = req.headers.host || 'localhost';
     const url = new URL(req.url, `${protocol}://${host}`);
 
-    const fetchOptions = {
+    const init = {
         method: req.method,
         headers: req.headers,
     };
 
-    if (req.method !== 'GET' && req.method !== 'HEAD' && req.body) {
-        fetchOptions.body = typeof req.body === 'object' ? JSON.stringify(req.body) : req.body;
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+        const rawBody = await getRawBody(req);
+        if (rawBody.length > 0) {
+            init.body = rawBody;
+        }
     }
 
-    const request = new Request(url, fetchOptions);
+    const request = new Request(url, init);
 
     try {
         const response = await handler(request);
@@ -59,5 +77,6 @@ export default async function (req, res) {
 }
 
 export const config = {
-    api: { bodyParser: false }
+    api: { bodyParser: false },
+    maxDuration: 60 // Extend timeout for hobby tier (up to 60s on Pro/Enterprise, but helps stability)
 };
