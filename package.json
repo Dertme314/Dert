@@ -5,6 +5,6 @@
     "type": "module",
     "dependencies": {
         "@supabase/supabase-js": "^2.39.3",
-        "uploadthing": "^7.5.0"
+        "uploadthing": "^7.7.4"
     }
 }
