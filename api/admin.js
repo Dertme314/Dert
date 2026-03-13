@@ -6,7 +6,7 @@ const utapi = new UTApi({ token: process.env.UPLOADTHING_TOKEN });
 
 export default async function handler(req, res) {
     const origin = req.headers.origin || '';
-    const allowed = ['https://dert.qzz.io', 'https://derts.vercel.app'];
+    const allowed = ['https://dert.qzz.io', 'https://dertjustwhy.ca', 'https://derts.vercel.app'];
     if (allowed.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }

@@ -454,7 +454,100 @@
         .hero-cta {
             display: flex;
             gap: 12px;
+            margin-bottom: 24px;
         }
+
+        /* ------------------ DISCORD CARD ------------------ */
+        .discord-wrap {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            margin-bottom: 24px;
+        }
+        .discord-wrap.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .discord-card {
+            background: rgba(20, 20, 25, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 250px;
+            max-width: 320px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            text-align: left;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .discord-card:hover {
+            border-color: rgba(88, 101, 242, 0.4);
+            background: rgba(20, 20, 25, 0.85);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 16px rgba(88, 101, 242, 0.15);
+        }
+        .dc-avatar {
+            position: relative;
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+        }
+        .dc-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #1a1a20;
+            background: #2b2d31;
+        }
+        .dc-status {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #1a1a20;
+            background: #747f8d; /* offline */
+        }
+        .dc-status.online { background: #23a559; }
+        .dc-status.idle { background: #f0b232; }
+        .dc-status.dnd { background: #f23f43; }
+        
+        .dc-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow: hidden;
+            flex: 1;
+        }
+        .dc-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 2px;
+        }
+        .dc-name i {
+            color: #5865F2;
+            font-size: 13px;
+        }
+        .dc-activity {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+        /* -------------------------------------------------- */
 
         .btn {
             display: inline-flex;
@@ -1067,6 +1160,21 @@
                             <i class="fas fa-link"></i> Bio Link
                         </a>
                     </div>
+                    
+                    <div id="discord-wrap" class="discord-wrap">
+                        <a href="https://discord.com/users/817078537366143026" target="_blank" class="discord-card" id="discord-card">
+                            <div class="dc-avatar">
+                                <img src="https://avatars.githubusercontent.com/u/203884500?v=4" id="dc-avatar-img" alt="Discord Avatar">
+                                <div class="dc-status" id="dc-status-dot"></div>
+                            </div>
+                            <div class="dc-info">
+                                <div class="dc-name">
+                                    <span id="dc-username">Loading...</span>
+                                </div>
+                                <div class="dc-activity" id="dc-activity-text">Loading status...</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
                 <div class="hero-right">
                     <canvas id="planet-canvas"></canvas>
@@ -1267,7 +1375,7 @@
     </div> <!-- End .layout -->
 
     <footer class="global-footer">
-        <p>&copy; 2025 derts.vercel.app</p>
+        <p>&copy; 2025 dertjustwhy.ca</p>
     </footer>
 
     <div class="visitor-counter" title="total visitors since february 26 2026">
@@ -2052,6 +2160,94 @@
                 btn.disabled = false;
             }
         }
+    </script>
+
+    <!-- Lanyard Discord Presence -->
+    <script>
+        (function() {
+            const userId = "817078537366143026";
+            let socket = null;
+            let heartbeatInterval = null;
+
+            const wrap = document.getElementById("discord-wrap");
+            const avatarImg = document.getElementById("dc-avatar-img");
+            const statusDot = document.getElementById("dc-status-dot");
+            const usernameEl = document.getElementById("dc-username");
+            const activityText = document.getElementById("dc-activity-text");
+
+            function connect() {
+                socket = new WebSocket("wss://api.lanyard.rest/socket");
+
+                socket.onopen = () => {
+                    console.log("Connected to Lanyard");
+                };
+
+                socket.onmessage = (event) => {
+                    const msg = JSON.parse(event.data);
+                    
+                    if (msg.op === 1) {
+                        heartbeatInterval = setInterval(() => {
+                            socket.send(JSON.stringify({ op: 3 }));
+                        }, msg.d.heartbeat_interval);
+
+                        socket.send(JSON.stringify({
+                            op: 2,
+                            d: { subscribe_to_id: userId }
+                        }));
+                    } else if (msg.t === "INIT_STATE" || msg.t === "PRESENCE_UPDATE") {
+                        updateDiscordUI(msg.d);
+                    }
+                };
+
+                socket.onclose = () => {
+                    clearInterval(heartbeatInterval);
+                    setTimeout(connect, 5000);
+                };
+            }
+
+            function updateDiscordUI(data) {
+                if(!data || !data.discord_user) return;
+                
+                const user = data.discord_user;
+                
+                if (user.avatar) {
+                    avatarImg.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
+                } else {
+                    avatarImg.src = "https://avatars.githubusercontent.com/u/203884500?v=4";
+                }
+
+                usernameEl.textContent = user.username || user.display_name;
+                statusDot.className = "dc-status " + data.discord_status;
+
+                let customStatus = "";
+                if (data.activities && data.activities.length > 0) {
+                    const custom = data.activities.find(a => a.type === 4);
+                    if (custom && custom.state) {
+                        customStatus = custom.state;
+                    }
+                }
+
+                if (data.listening_to_spotify && data.spotify) {
+                    activityText.innerHTML = `Listening to <strong>${data.spotify.song}</strong>`;
+                } else if (data.activities && data.activities.length > 0) {
+                    const game = data.activities.find(a => a.type === 0);
+                    
+                    if (game) {
+                        activityText.textContent = `Playing ${game.name}`;
+                    } else if (customStatus) {
+                        activityText.textContent = customStatus;
+                    } else {
+                        activityText.textContent = data.discord_status.charAt(0).toUpperCase() + data.discord_status.slice(1);
+                    }
+                } else {
+                    activityText.textContent = data.discord_status.charAt(0).toUpperCase() + data.discord_status.slice(1);
+                }
+                
+                wrap.classList.add("visible");
+            }
+
+            connect();
+        })();
     </script>
 </body>
 
