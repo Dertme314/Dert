@@ -1,74 +1,32 @@
 {
     "redirects": [
         {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "movie.dertjustwhy.ca" }],
+            "source": "/movie/:path*",
             "destination": "https://dert-movie.vercel.app/:path*",
             "permanent": true
         },
         {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "movie.derts.vercel.app" }],
-            "destination": "https://dert-movie.vercel.app/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "ai.dertjustwhy.ca" }],
+            "source": "/ai/:path*",
             "destination": "https://dert-ai.vercel.app/:path*",
             "permanent": true
         },
         {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "ai.derts.vercel.app" }],
-            "destination": "https://dert-ai.vercel.app/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "rdd.dertjustwhy.ca" }],
+            "source": "/rdd/:path*",
             "destination": "https://rdd.dert.vercel.app/:path*",
             "permanent": true
         },
         {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "rdd.derts.vercel.app" }],
-            "destination": "https://rdd.dert.vercel.app/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "omniencoder.dertjustwhy.ca" }],
+            "source": "/omniencoder/:path*",
             "destination": "https://omniencoder.vercel.app/:path*",
             "permanent": true
         },
         {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "omniencoder.derts.vercel.app" }],
-            "destination": "https://omniencoder.vercel.app/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "fdert.dertjustwhy.ca" }],
+            "source": "/fdert/:path*",
             "destination": "https://fdert.vercel.app/:path*",
             "permanent": true
         },
         {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "fdert.derts.vercel.app" }],
-            "destination": "https://fdert.vercel.app/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "message.dertjustwhy.ca" }],
-            "destination": "https://messagesfun.vercel.app/:path*",
-            "permanent": true
-        },
-        {
-            "source": "/:path*",
-            "has": [{ "type": "host", "value": "message.derts.vercel.app" }],
+            "source": "/message/:path*",
             "destination": "https://messagesfun.vercel.app/:path*",
             "permanent": true
         }
