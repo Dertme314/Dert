@@ -1954,14 +1954,7 @@
         });
     </script>
 
-    <script type="module">
-        import { genUploader } from "https://esm.sh/uploadthing@7.7.4/client";
-        const { uploadFiles } = genUploader({
-            url: "/api/upload",
-            package: "uploadthing"
-        });
-        window.utUploadFiles = uploadFiles;
-    </script>
+    <!-- Uploading now uses XMLHttpRequest directly to proxy endpoints -->
     <script>
         let secretBuffer = "";
         const secretWord = "upload";
@@ -2001,12 +1994,8 @@
                     document.getElementById("sup-dash-view").style.display = "block";
                     window.loadFiles();
                 } else {
-                    try {
-                        const errData = await res.json();
-                        errEl.textContent = errData.error || "Server Error: " + res.status;
-                    } catch (e) {
-                        errEl.textContent = "Server Error: " + res.status;
-                    }
+                    const errData = await res.json().catch(() => ({}));
+                    errEl.textContent = errData.error || "Unauthorized: Invalid Admin Password";
                     errEl.style.display = "block";
                 }
             } catch (e) {
@@ -2021,7 +2010,7 @@
             const fileInput = document.getElementById("sec-file");
             const file = fileInput.files[0];
             if (!file) return alert("Please select a file.");
-            if (!window.utUploadFiles) return alert("Upload system compiling... please wait a second and try again.");
+            
             const btn = document.getElementById('btn-upload');
             const progCon = document.getElementById('sup-progress-container');
             const progBar = document.getElementById('sup-progress-bar');
@@ -2029,29 +2018,62 @@
             btn.disabled = true;
             progCon.style.display = "block";
             progBar.style.width = "0%";
-            progTxt.textContent = "Initializing session...";
+            progTxt.textContent = "Uploading...";
+
             try {
-                const [res] = await window.utUploadFiles("secretUploader", {
-                    files: [file],
-                    onUploadProgress: ({ file, progress }) => {
-                        progTxt.textContent = `Uploading ${file} (${progress}%)`;
+                const formData = new FormData();
+                formData.append("file", file);
+
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/api/upload", true);
+                xhr.setRequestHeader("x-admin-password", sessionPassword);
+
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable) {
+                        const progress = Math.round((e.loaded / e.total) * 100);
+                        progTxt.textContent = `Uploading ${file.name} (${progress}%)`;
                         progBar.style.width = progress + "%";
                     }
-                });
-                progBar.style.width = "100%";
-                progTxt.textContent = "Upload Complete!";
-                setTimeout(() => { progCon.style.display = "none"; }, 2000);
-                fileInput.value = "";
-                document.getElementById("sec-desc").value = "";
-                const downloadLink = window.location.origin + "/download/" + encodeURIComponent(file.name);
-                prompt("Successfully Uploaded! Share this download link:", downloadLink);
-                window.loadFiles();
+                };
+
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        let finalFileName = file.name;
+                        try {
+                            const data = JSON.parse(xhr.responseText);
+                            if (data.filename) finalFileName = data.filename;
+                        } catch(e) {}
+                        progBar.style.width = "100%";
+                        progTxt.textContent = "Upload Complete!";
+                        setTimeout(() => { progCon.style.display = "none"; }, 2000);
+                        fileInput.value = "";
+                        document.getElementById("sec-desc").value = "";
+                        const downloadLink = window.location.origin + "/file/" + encodeURIComponent(finalFileName);
+                        prompt("Successfully Uploaded! Share this preview link:", downloadLink);
+                        window.loadFiles();
+                    } else {
+                        alert("Upload Failure: " + xhr.responseText);
+                        progCon.style.display = "none";
+                    }
+                    btn.textContent = "Upload to Storage";
+                    btn.disabled = false;
+                };
+
+                xhr.onerror = () => {
+                    alert("Upload Error. Please check your network.");
+                    progCon.style.display = "none";
+                    btn.textContent = "Upload to Storage";
+                    btn.disabled = false;
+                };
+
+                xhr.send(formData);
+
             } catch (e) {
                 alert("Upload Failure: " + e.message);
                 progCon.style.display = "none";
+                btn.textContent = "Upload to Storage";
+                btn.disabled = false;
             }
-            btn.textContent = "Upload to Storage";
-            btn.disabled = false;
         }
 
         window.copyDownloadLink = function copyDownloadLink(filename, type) {
@@ -2075,7 +2097,10 @@
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action: "list", password: sessionPassword })
                 });
+                if (!res.ok) throw new Error("bad token");
+                
                 const data = await res.json();
+                
                 list.innerHTML = "";
                 if (data && Array.isArray(data)) {
                     if (data.length === 0) {
@@ -2139,16 +2164,25 @@
             const originalContent = btn.innerHTML;
             btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
             btn.disabled = true;
-            const res = await fetch("/api/admin", {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ node_id: id, password: sessionPassword })
-            });
-            const d = await res.json();
-            if (res.ok && d.success) {
-                window.loadFiles();
-            } else {
-                alert("Error: " + (d.error || "Failed to delete"));
+            
+            // Send DELETE request to proxy route
+            try {
+                const res = await fetch("/api/admin", {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ node_id: id, password: sessionPassword })
+                });
+                
+                const d = await res.json();
+                if (res.ok && d.success) {
+                    window.loadFiles();
+                } else {
+                    alert("Error: " + (d.error || "Failed to delete"));
+                    btn.innerHTML = originalContent;
+                    btn.disabled = false;
+                }
+            } catch(e) {
+                alert("Error deleting file: " + e.message);
                 btn.innerHTML = originalContent;
                 btn.disabled = false;
             }

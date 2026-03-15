@@ -3,8 +3,5 @@
     "version": "1.0.0",
     "description": "Dert backend logic",
     "type": "module",
-    "dependencies": {
-        "@supabase/supabase-js": "^2.39.3",
-        "uploadthing": "^7.7.4"
-    }
+    "dependencies": {}
 }

@@ -34,11 +34,11 @@
     "rewrites": [
         {
             "source": "/download/:name",
-            "destination": "/api/files?action=download&name=:name"
+            "destination": "http://40.233.88.173:3001/files/:name"
         },
         {
             "source": "/file/:name",
-            "destination": "/api/files?action=view&name=:name"
+            "destination": "/api/view?name=:name"
         }
     ]
 }
