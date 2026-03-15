@@ -12,7 +12,7 @@
         },
         {
             "source": "/rdd/:path*",
-            "destination": "https://rdd.dert.vercel.app/:path*",
+            "destination": "https://rdd-dert.vercel.app/:path*",
             "permanent": true
         },
         {
