@@ -2024,7 +2024,7 @@
                 formData.append("file", file);
 
                 const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/api/upload", true);
+                xhr.open("POST", "http://files.dertjustwhy.ca:3001/api/upload-web", true);
                 xhr.setRequestHeader("x-admin-password", sessionPassword);
 
                 xhr.upload.onprogress = (e) => {
