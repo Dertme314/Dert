@@ -33,6 +33,22 @@
     ],
     "rewrites": [
         {
+            "source": "/upload",
+            "destination": "http://40.233.88.173:3001/api/upload"
+        },
+        {
+            "source": "/api/files/(.*)",
+            "destination": "http://40.233.88.173:3001/api/files/$1"
+        },
+        {
+            "source": "/api/files",
+            "destination": "http://40.233.88.173:3001/api/files"
+        },
+        {
+            "source": "/files/(.*)",
+            "destination": "http://40.233.88.173:3001/files/$1"
+        },
+        {
             "source": "/download/:name",
             "destination": "http://40.233.88.173:3001/files/:name"
         },

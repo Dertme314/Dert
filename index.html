@@ -1983,10 +1983,10 @@
             btn.textContent = "Verifying...";
             btn.disabled = true;
             try {
-                const res = await fetch("/api/admin", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "auth", password: pwd })
+                // We verify login by attempting to hit the file list endpoint with the key directly
+                const res = await fetch("/api/files", {
+                    method: "GET",
+                    headers: { "x-api-key": pwd }
                 });
                 if (res.ok) {
                     sessionPassword = pwd;
@@ -1994,8 +1994,7 @@
                     document.getElementById("sup-dash-view").style.display = "block";
                     window.loadFiles();
                 } else {
-                    const errData = await res.json().catch(() => ({}));
-                    errEl.textContent = errData.error || "Unauthorized: Invalid Admin Password";
+                    errEl.textContent = "Unauthorized: Invalid API Key";
                     errEl.style.display = "block";
                 }
             } catch (e) {
@@ -2025,8 +2024,8 @@
                 formData.append("file", file);
 
                 const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/api/upload", true);
-                xhr.setRequestHeader("x-admin-password", sessionPassword);
+                xhr.open("POST", "/upload", true);
+                xhr.setRequestHeader("x-api-key", sessionPassword);
 
                 xhr.upload.onprogress = (e) => {
                     if (e.lengthComputable) {
@@ -2092,14 +2091,16 @@
             const list = document.getElementById("sec-file-list");
             list.innerHTML = "<div style='color:var(--text-muted); padding: 10px 0;'>Fetching...</div>";
             try {
-                const res = await fetch("/api/admin", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ action: "list", password: sessionPassword })
+                const res = await fetch("/api/files", {
+                    method: "GET",
+                    headers: { "x-api-key": sessionPassword }
                 });
                 if (!res.ok) throw new Error("bad token");
                 
-                const data = await res.json();
+                const serverData = await res.json();
+                
+                // Map the new server format to what the UI expects
+                const data = serverData.map(f => ({ id: f.name, name: f.name })).reverse();
                 
                 list.innerHTML = "";
                 if (data && Array.isArray(data)) {
@@ -2165,19 +2166,18 @@
             btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i>";
             btn.disabled = true;
             
-            // Send DELETE request to proxy route
+            // Send DELETE request directly to VM via proxy
             try {
-                const res = await fetch("/api/admin", {
+                const res = await fetch("/api/files/" + encodeURIComponent(id), {
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ node_id: id, password: sessionPassword })
+                    headers: { "x-api-key": sessionPassword }
                 });
                 
-                const d = await res.json();
-                if (res.ok && d.success) {
+                if (res.ok) {
                     window.loadFiles();
                 } else {
-                    alert("Error: " + (d.error || "Failed to delete"));
+                    const text = await res.text();
+                    alert("Error: " + text);
                     btn.innerHTML = originalContent;
                     btn.disabled = false;
                 }
