@@ -11,7 +11,7 @@ export default async function handler(req) {
         });
     }
 
-    const url = "http://files.dertjustwhy.ca:3001/api/upload";
+    const url = "https://files.dertjustwhy.ca/api/upload";
     
     // Clone headers and inject the real secret API key
     const headers = new Headers(req.headers);
