@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         const icon = getFileIcon(file.name);
         const ext = (file.name.split('.').pop() || 'file').toUpperCase();
         const date = new Date(file.uploaded || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        const downloadUrl = file.url || `https://files.dertjustwhy.ca/files/${encodeURIComponent(file.name)}`;
+        const downloadUrl = `/download/${encodeURIComponent(file.name)}`;
         const directLink = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/download/${encodeURIComponent(file.name)}`;
 
         return res.status(200).send(`<!DOCTYPE html>

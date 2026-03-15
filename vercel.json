@@ -34,15 +34,15 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "http://files.dertjustwhy.ca:3001/api/$1"
+            "destination": "https://files.dertjustwhy.ca/api/$1"
         },
         {
             "source": "/files/(.*)",
-            "destination": "http://files.dertjustwhy.ca:3001/files/$1"
+            "destination": "https://files.dertjustwhy.ca/files/$1"
         },
         {
             "source": "/download/:name",
-            "destination": "http://40.233.88.173:3001/files/:name"
+            "destination": "https://files.dertjustwhy.ca/files/:name"
         },
         {
             "source": "/file/:name",
