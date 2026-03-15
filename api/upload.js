@@ -1,43 +1,37 @@
-export const config = {
-    api: { bodyParser: false }
-};
+export const config = { runtime: 'edge' };
 
-function getRawBody(req) {
-    return new Promise((resolve, reject) => {
-        const chunks = [];
-        req.on('data', chunk => chunks.push(chunk));
-        req.on('end', () => resolve(Buffer.concat(chunks)));
-        req.on('error', reject);
-    });
-}
+export default async function handler(req) {
+    if (req.method !== 'POST') return new Response('Method Not Allowed', { status: 405 });
 
-export default async function handler(req, res) {
-    if (req.method !== 'POST') return res.status(405).end();
-
-    const clientPwd = req.headers['x-admin-password'];
+    const clientPwd = req.headers.get('x-admin-password');
     if (clientPwd !== process.env.UPLOAD_PASSWORD) {
-        return res.status(401).json({ error: "Unauthorized" });
+        return new Response(JSON.stringify({ error: "Unauthorized" }), { 
+            status: 401,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 
-    const rawBody = await getRawBody(req);
     const url = "http://40.233.88.173:3001/api/upload";
-
-    const headers = { ...req.headers };
-    delete headers['host'];
-    delete headers['x-admin-password'];
-    headers['x-api-key'] = process.env.API_KEY || 'longsecurekey';
+    
+    // Clone headers and inject the real secret API key
+    const headers = new Headers(req.headers);
+    headers.delete('host');
+    headers.delete('x-admin-password');
+    headers.set('x-api-key', process.env.API_KEY || 'longsecurekey');
 
     try {
         const response = await fetch(url, {
             method: "POST",
             headers: headers,
-            body: rawBody
+            body: req.body // Edge runtime allows streaming the request body directly
         });
 
-        const data = await response.text();
-        // Proxy exact response back to client
-        res.status(response.status).send(data);
+        // Proxy the response back to the client
+        return response;
     } catch (e) {
-        res.status(500).json({ error: e.message });
+        return new Response(JSON.stringify({ error: e.message }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 }
