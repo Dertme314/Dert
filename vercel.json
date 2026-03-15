@@ -34,11 +34,11 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "http://40.233.88.173:3001/api/$1"
+            "destination": "http://files.dertjustwhy.ca:3001/api/$1"
         },
         {
             "source": "/files/(.*)",
-            "destination": "http://40.233.88.173:3001/files/$1"
+            "destination": "http://files.dertjustwhy.ca:3001/files/$1"
         },
         {
             "source": "/download/:name",

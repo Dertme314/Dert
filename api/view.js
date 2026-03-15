@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 
     try {
         const apiKey = process.env.API_KEY || "longsecurekey";
-        const fetchRes = await fetch("http://40.233.88.173:3001/api/files", {
+        const fetchRes = await fetch("http://files.dertjustwhy.ca:3001/api/files", {
             headers: { "x-api-key": apiKey }
         });
 
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         const icon = getFileIcon(file.name);
         const ext = (file.name.split('.').pop() || 'file').toUpperCase();
         const date = new Date(file.uploaded || Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        const downloadUrl = file.url || `http://40.233.88.173:3001/files/${encodeURIComponent(file.name)}`;
+        const downloadUrl = file.url || `http://files.dertjustwhy.ca:3001/files/${encodeURIComponent(file.name)}`;
         const directLink = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host}/download/${encodeURIComponent(file.name)}`;
 
         return res.status(200).send(`<!DOCTYPE html>

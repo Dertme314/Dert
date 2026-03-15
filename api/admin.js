@@ -18,7 +18,7 @@ export default async function handler(req, res) {
             return res.status(401).json({ success: false, error: "Unauthorized" });
         }
         try {
-            const response = await fetch(`http://40.233.88.173:3001/api/files/${encodeURIComponent(node_id)}`, {
+            const response = await fetch(`http://files.dertjustwhy.ca:3001/api/files/${encodeURIComponent(node_id)}`, {
                 method: "DELETE",
                 headers: { "x-api-key": apiKey }
             });
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
         if (action === "list") {
             try {
-                const fetchRes = await fetch("http://40.233.88.173:3001/api/files", {
+                const fetchRes = await fetch("http://files.dertjustwhy.ca:3001/api/files", {
                     headers: { "x-api-key": apiKey }
                 });
                 
