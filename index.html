@@ -1979,7 +1979,7 @@
             }
         });
 
-        document.addEventListener("DOMContentLoaded", function () {
+        (function initAdminSession() {
             if (sessionStorage.getItem("admin_tab_visible") === "1") {
                 const adminTabBtn = document.querySelector('.nav-tab[data-tab="admin"]');
                 if (adminTabBtn) adminTabBtn.style.display = "";
@@ -2007,7 +2007,7 @@
                     sessionPassword = "";
                 });
             }
-        });
+        })();
 
         window.verifyAdmin = async function verifyAdmin() {
             const pwd = document.getElementById("sec-pwd-login").value;
