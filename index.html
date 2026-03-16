@@ -1958,7 +1958,7 @@
     <script>
         let secretBuffer = "";
         const secretWord = "upload";
-        let sessionPassword = "";
+        let sessionPassword = sessionStorage.getItem("admin_pwd") || "";
 
         document.addEventListener("keydown", (e) => {
             if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
@@ -1967,11 +1967,45 @@
             if (secretBuffer === secretWord) {
                 secretBuffer = "";
                 const adminTabBtn = document.querySelector('.nav-tab[data-tab="admin"]');
-                if (adminTabBtn) adminTabBtn.click();
+                if (adminTabBtn) {
+                    adminTabBtn.style.display = "";
+                    sessionStorage.setItem("admin_tab_visible", "1");
+                    adminTabBtn.click();
+                }
                 setTimeout(() => {
                     const pwdInput = document.getElementById("sec-pwd-login");
                     if (pwdInput) pwdInput.focus();
                 }, 100);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            if (sessionStorage.getItem("admin_tab_visible") === "1") {
+                const adminTabBtn = document.querySelector('.nav-tab[data-tab="admin"]');
+                if (adminTabBtn) adminTabBtn.style.display = "";
+            }
+            const savedPwd = sessionStorage.getItem("admin_pwd");
+            if (savedPwd) {
+                sessionPassword = savedPwd;
+                fetch("/api/admin", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ action: "auth", password: savedPwd })
+                }).then(function(res) {
+                    if (res.ok) {
+                        const authView = document.getElementById("sup-auth-view");
+                        const dashView = document.getElementById("sup-dash-view");
+                        if (authView) authView.style.display = "none";
+                        if (dashView) dashView.style.display = "block";
+                        if (typeof window.loadFiles === 'function') window.loadFiles();
+                    } else {
+                        sessionStorage.removeItem("admin_pwd");
+                        sessionPassword = "";
+                    }
+                }).catch(function() {
+                    sessionStorage.removeItem("admin_pwd");
+                    sessionPassword = "";
+                });
             }
         });
 
@@ -1990,6 +2024,7 @@
                 });
                 if (res.ok) {
                     sessionPassword = pwd;
+                    sessionStorage.setItem("admin_pwd", pwd);
                     document.getElementById("sup-auth-view").style.display = "none";
                     document.getElementById("sup-dash-view").style.display = "block";
                     window.loadFiles();
