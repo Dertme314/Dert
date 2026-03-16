@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     if (req.method === "OPTIONS") return res.status(200).end();
 
     const apiKey = process.env.API_KEY || "longsecurekey";
-    
+
     if (req.method === "DELETE") {
         const { node_id, password } = req.body;
         if (password !== process.env.UPLOAD_PASSWORD) {
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
             } else {
                 return res.status(response.status).json({ error: "Failed to delete" });
             }
-        } catch(e) {
+        } catch (e) {
             return res.status(500).json({ error: e.message });
         }
     }
@@ -46,17 +46,17 @@ export default async function handler(req, res) {
                 const fetchRes = await fetch("https://files.dertjustwhy.ca/api/files", {
                     headers: { "x-api-key": apiKey }
                 });
-                
+
                 if (!fetchRes.ok) throw new Error("Server error");
-                
+
                 const files = await fetchRes.json();
-                const uiData = files.map(f => ({ id: f.name, name: f.name })).reverse();
+                const uiData = files.map(f => ({ id: f.name, name: f.name, size: f.size })).reverse();
                 return res.status(200).json(uiData);
             } catch (e) {
                 return res.status(500).json({ error: e.message });
             }
         }
     }
-    
+
     return res.status(405).json({ error: "Method not allowed" });
 }
