@@ -2758,7 +2758,7 @@
                             </div>
                             <div class="file-info">
                                 <div class="file-name">${f.name}</div>
-                                <div class="file-meta">${fileType.toUpperCase()} • ${formatFileSize(f.size || 0)}</div>
+                                <div class="file-meta">${fileType.toUpperCase()} • ${formatFileSize(f.size)}</div>
                             </div>
                             <div class="file-actions">
                                 <button class="file-action-btn preview" title="Copy Preview Link">
@@ -2778,7 +2778,7 @@
                         div.querySelector('.delete').onclick = (event) => window.deleteFile(f.id, event);
                         div.querySelector('.file-checkbox').onchange = () => updateBulkActions();
 
-                        totalSize += (f.size || 0);
+                        if (f.size) totalSize += f.size;
                         list.appendChild(div);
                     });
 
@@ -2824,7 +2824,7 @@
         }
 
         function formatFileSize(bytes) {
-            if (bytes === 0) return '0 B';
+            if (!bytes || bytes === 0) return 'Unknown';
             const k = 1024;
             const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
