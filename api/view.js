@@ -48,7 +48,7 @@ export default async function handler(req, res) {
             return res.status(404).send(`<!DOCTYPE html><html><head><title>Not Found</title></head><body style="background:#0a0a0c;color:#fff;font-family:sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;"><div style="text-align:center;"><h1 style="font-size:48px;margin-bottom:8px;">404</h1><p style="color:#888;">File "<strong>${safe}</strong>" was not found.</p><a href="/" style="color:#6c63ff;margin-top:16px;display:inline-block;">Go Home</a></div></body></html>`);
         }
 
-        const safe = escapeHtml(file.name);
+        const safe = escapeHtml(file.name.replace(/^\d+-\d+-/, ''));
         const size = formatBytes(file.size);
         const icon = getFileIcon(file.name);
         const ext = (file.name.split('.').pop() || 'file').toUpperCase();

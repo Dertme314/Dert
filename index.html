@@ -2757,7 +2757,7 @@
                                 <i class="fas fa-${fileIcon}"></i>
                             </div>
                             <div class="file-info">
-                                <div class="file-name">${f.name}</div>
+                                <div class="file-name">${f.name.replace(/^\d+-\d+-/, '')}</div>
                                 <div class="file-meta">${fileType.toUpperCase()} • ${formatFileSize(f.size)}</div>
                             </div>
                             <div class="file-actions">
